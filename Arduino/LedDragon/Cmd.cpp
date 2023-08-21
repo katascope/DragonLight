@@ -65,6 +65,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("{ \\ } : Servo Min/Center/Max"));
       Serial.println(F("@code : Time code"));
       Serial.println(F("[ b | n | v] : Brightness Full | Normal | Half"));
+      Serial.println(F("[_ + - = ~] Neg Pos Dec Inc Rst"));
       Serial.println(F("z:default mode x:test"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
@@ -316,6 +317,10 @@ void UserCommandInputDirect(FxController &fxc, int data)
     case 'Y': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
     case 'U': UserCommandExecute(fxc, Cmd_ColorParty);break;
     case 'I': UserCommandExecute(fxc, Cmd_ColorHeat);break;
+
+    case 'N': UserCommandExecute(fxc, Cmd_ColorWhiteMagenta);break;
+    case 'O': UserCommandExecute(fxc, Cmd_ColorCyanBlue);break;
+    case 'P': UserCommandExecute(fxc, Cmd_ColorGreenMagenta);break;
 
     case '_': UserCommandExecute(fxc, Cmd_SpeedNeg);break;
     case '+': UserCommandExecute(fxc, Cmd_SpeedPos);break;

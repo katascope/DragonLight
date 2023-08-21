@@ -59,6 +59,9 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
+  UserCommandExecute(fxController, Cmd_Brightness_Half); 
+  UserCommandExecute(fxController, Cmd_ColorDark); 
+  
   fxController.fxState = STARTUP_STATE;
 
   if (fxController.fxState == FxState_TestPattern)
@@ -91,8 +94,6 @@ void setup() {
 #endif  
 
 
-UserCommandExecute(fxController, Cmd_Brightness_Half); 
-UserCommandExecute(fxController, Cmd_ColorDark); 
 
   Serial.println("Setup complete.");
 }
@@ -115,8 +116,8 @@ void loop()
   if (fxController.fxState == FxState_TestPattern)
   {
     UserCommandExecute(fxController, Cmd_ColorRainbow);
-    UserCommandExecute(fxController, Cmd_SpeedPos);
-    UserCommandExecute(fxController, Cmd_Speed1);    
+    UserCommandExecute(fxController, Cmd_SpeedNeg);
+    UserCommandExecute(fxController, Cmd_Speed3);    
   }  
   else if (fxController.fxState == FxState_PlayingTrack)
   {
