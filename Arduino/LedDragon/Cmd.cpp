@@ -352,7 +352,7 @@ bool StringsEqual(String a, String b)
 {
   if (a.length() != b.length())
   {
-    Serial.println("Different length");
+    Serial.println(F("Different length"));
     return false;
   }
   for (int i=0;i<a.length();i++)

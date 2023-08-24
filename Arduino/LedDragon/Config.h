@@ -13,6 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define PREE      0
 #define JACKET    0
 #define LAMP      1
+#define TESTER    0
 
 #if SUIT_JACKET
 static const char *DeviceName = "LightSuitAngelTest";
@@ -37,13 +38,16 @@ static const char *DeviceName = "Pree";
 #define BRIGHTNESS          50  //Default brightness
 #define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
 #define ENABLE_LCD          0 //OLED 1306 driver
-#define ENABLE_ULTRASOUND   0 //HC-SR04 ultrasound
 #define ENABLE_IMU          0 //builtin imu
-#define ENABLE_SERVOS       1 //PCA9685
 #define ENABLE_SAFETY       0
 #define ENABLE_TRACK_CHECK  1
 #define ENABLE_BLE          1
 #define ENABLE_STATUS       1 //Print status to serial
+#define ENABLE_NEOPIXEL     1
+#define ENABLE_MULTISTRIP   1   //Enable multiple LED strips
+#define LED_PIN             3
+#define DEBUG_BLE           1
+#define SERIAL_BAUD_RATE    115200
 
 #if LEAD
 #define NUM_LEDS_0          53
@@ -54,6 +58,28 @@ static const char *DeviceName = "Pree";
 #define NUM_LEDS_5          48
 #define NUM_LEDS_6          61 //legs
 #define NUM_LEDS_7          61
+#endif
+
+#if TESTER
+static const char *DeviceName = "Tester";
+#define NUM_LEDS_0          30
+#define NUM_LEDS_1          10
+#define NUM_LEDS_2          10
+#define NUM_LEDS_3          10
+#define NUM_LEDS_4          10 //arms
+#define NUM_LEDS_5          10
+#define NUM_LEDS_6          10 //legs
+#define NUM_LEDS_7          10
+#undef LED_PIN
+#define LED_PIN             3
+#undef ENABLE_BLE
+#define ENABLE_BLE          0
+#undef STARTUP_STATE
+#define STARTUP_STATE       FxState_TestPattern
+#undef NUM_STRIPS
+#define NUM_STRIPS          1
+#undef ENABLE_MULTISTRIP
+#define ENABLE_MULTISTRIP   0
 #endif
 
 #if LEDDRAGON
@@ -100,11 +126,7 @@ static const char *DeviceName = "Pree";
 #define NUM_LEDS_7          35
 #endif
 
-#define ENABLE_NEOPIXEL     1
-#define ENABLE_MULTISTRIP   1   //Enable multiple LED strips
-#define LED_PIN             3
-#define DEBUG_BLE           1
-#define SERIAL_BAUD_RATE    115200
+
 
 #if LAMP
 #define NUM_LEDS_0          300
@@ -123,8 +145,6 @@ static const char *DeviceName = "Pree";
 #define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
 #undef NUM_LEDS0
 #define NUM_LEDS_0          300
-#undef ENABLE_BLE
-#define ENABLE_BLE          1
 #undef NUM_STRIPS
 #define NUM_STRIPS          8
 #undef ENABLE_MULTISTRIP

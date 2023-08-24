@@ -66,7 +66,7 @@ void setup() {
 
   if (fxController.fxState == FxState_TestPattern)
   { 
-    Serial.println("Setting test pattern.");
+    Serial.println(F("Setting test pattern."));
     FxEventProcess(fxController, fx_palette_drb);
   }
 
@@ -95,7 +95,7 @@ void setup() {
 
 
 
-  Serial.println("Setup complete.");
+  Serial.println(F("Setup complete."));
 }
 
 void loop()

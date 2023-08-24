@@ -49,6 +49,13 @@ const unsigned long SongTrackTest[] PROGMEM =
   _TRACK_END(45000)
 };
 
+#if TESTER
+const unsigned long SongTrack[] PROGMEM =
+{
+    _TRACK_BEGIN
+    _TRACK_END(127000)
+};
+#else
 //Multistrip
 const unsigned long SongTrack[] PROGMEM =
 {
@@ -379,6 +386,7 @@ const unsigned long SongTrack[] PROGMEM =
     //the end
     _TRACK_END(127000)
 };
+#endif
 
 const PROGMEM int numSongTracks = sizeof(SongTrack) / (sizeof(unsigned long) * 2);
 

@@ -15,7 +15,6 @@ void State_Poll_TestPattern(FxController &fxc)
 
   FxEventProcess(fxc, fx_strip_all);
   FxEventProcess(fxc, fx_transition_fast);
-  //Serial.println("Polling test pattern");
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip]->paletteSpeed = 0;
