@@ -12,10 +12,6 @@ void UpdatePalette(FxController &fxc);
 unsigned long GetTime();
 void ComplexUserCommandInput(FxController &fxc, String data);
 
-//static CaptureTextMode captureMode = CaptureNone;
-//static char captureBuffer[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0};
-//static int captureCount = 0;
-
 void UpdatePalette(struct FxController &fxController)
 {
   FxProcessSideFX(fxController);
@@ -58,19 +54,6 @@ void UserCommandExecute(FxController &fxc, int cmd)
 {
   switch (cmd)
   {
-    case Cmd_Help:
-      Serial.println(F("? : Help Menu"));
-      Serial.println(F("+ - : Rotate Pos/Neg"));
-      Serial.println(F("( * ) : Track Start/StartFrom/Stop"));
-      Serial.println(F("{ \\ } : Servo Min/Center/Max"));
-      Serial.println(F("@code : Time code"));
-      Serial.println(F("[ b | n | v] : Brightness Full | Normal | Half"));
-      Serial.println(F("[_ + - = ~] Neg Pos Dec Inc Rst"));
-      Serial.println(F("z:default mode x:test"));
-      Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
-      Serial.println(F("q:strip0 w:strip1 e:strip2 r:strip3 t:strip4 y:strip5 u:strip6 i:strip7 p:All"));
-      Serial.println(F("Q:lava W:cloud E:cm R:rb T:rainbow Y:rainbowstripe U:party I:heat"));         
-      break;
     case Cmd_State_Default: fxc.fxState = FxState_Default;break;
     case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
       
@@ -100,15 +83,18 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_ColorOrange:   InstantEvent(fxc, fx_palette_orange,   FxPaletteUpdateType::Once); break;
     case Cmd_ColorHalf:     InstantEvent(fxc, fx_palette_half,     FxPaletteUpdateType::Once); break;
 
-    case Cmd_ColorWhiteMagenta: InstantEvent(fxc, fx_palette_wm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteCyan:    InstantEvent(fxc, fx_palette_wc,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteYellow:  InstantEvent(fxc, fx_palette_wy,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteBlue:    InstantEvent(fxc, fx_palette_wb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRedBlue:      InstantEvent(fxc, fx_palette_rb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyanMagenta:  InstantEvent(fxc, fx_palette_cm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyanBlue:     InstantEvent(fxc, fx_palette_cb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorBlueMagenta:  InstantEvent(fxc, fx_palette_bm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorGreenMagenta: InstantEvent(fxc, fx_palette_gm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteMagenta:    InstantEvent(fxc, fx_palette_wm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteCyan:       InstantEvent(fxc, fx_palette_wc,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteYellow:     InstantEvent(fxc, fx_palette_wy,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteBlue:       InstantEvent(fxc, fx_palette_wb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRedBlue:         InstantEvent(fxc, fx_palette_rb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyanMagenta:     InstantEvent(fxc, fx_palette_cm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyanBlue:        InstantEvent(fxc, fx_palette_cb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorBlueMagenta:     InstantEvent(fxc, fx_palette_bm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorGreenMagenta:    InstantEvent(fxc, fx_palette_gm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDarkRedBlue:     InstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDarkCyanMagenta: InstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once); break;
+    
 
     case Cmd_ColorPulseDark:     InstantEvent(fxc, fx_palette_pulse_dark,     FxPaletteUpdateType::Once); break;
     case Cmd_ColorPulseWhite:    InstantEvent(fxc, fx_palette_pulse_white,    FxPaletteUpdateType::Once); break;
@@ -179,86 +165,38 @@ void UserCommandExecute(FxController &fxc, int cmd)
     }
     
 #endif  
-
+    case Cmd_Help:
+      Serial.println(F("? : Help Menu"));
+      Serial.println(F("[ ! @] default/test"));
+      Serial.println(F("( * ) : Track Start/StartFrom/Stop"));
+      Serial.println(F("@code : Time code"));
+      Serial.println(F("[ % | ^ | &] : Brightness Half/Normal/Full"));
+      Serial.println(F("[_ + - = ~] Neg Pos Dec Inc Rst"));
+      Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
+      Serial.println(F("[Q to P] Strips Q:strip0 W:strip1 E:strip2 R:strip3 T:strip4 Y:strip5 U:strip6 I:strip7 O:None P:All"));
+      Serial.println(F("Mix1 z:lava x:cloud c:rainbow v:rainbowstripe b:party n:heat"));
+      Serial.println(F("Mix2 Z:wm X:rb C:cm V:cb B:gm"));
+      Serial.println(F("Pulse1 a:white s:red d:yellow e:green f:cyan g:blue j:magenta k:orange l:half"));
+      Serial.println(F("Pulse2 A:white S:red D:yellow E:green F:cyan G:blue J:magenta K:orange L:half"));
+      Serial.println(F("[< >] Particles Off/On"));
+      break;
     default: break;
   }
 }
-/*
-void processCapturedText(FxController &fxc)
-{
-  if (captureMode == CaptureTimeCode)
-  { 
-    captureMode = CaptureNone;
-    Serial.print(F("TimeCodeBuf( "));
-    for (int i = 0; i < captureCount; i++)
-    {
-      Serial.print((char)captureBuffer[i]);    
-      Serial.print(F(" "));
-    }
-    Serial.print(F(")"));
-    captureBuffer[captureCount] = 0;
-    Serial.print(F("=\""));
-    Serial.print(captureBuffer);
-    Serial.print(F("\""));
-    unsigned long tc = atol(captureBuffer);
-    Serial.print(F("TC:"));
-    Serial.print(tc);
-    int prevmatch = GetPreviousTimeCodeMatch(tc);    
-    setTimecodeLastMatched(SongTrack_timecode(prevmatch));
-    setTimecodeSongOffset(tc);  
-    Serial.print(F(" vs t="));
-    Serial.print(GetTime());
-    Serial.print(F(", to="));
-    Serial.print(getTimecodeTimeOffset());
-    setTimecodeTimeOffset(millis());
-    Serial.print(F(", "));
-    Serial.print(getTimecodeLastMatched());
-    Serial.print(F("="));
-    Serial.print(getTimecodeSongOffset());
-    Serial.print(F(",P:"));
-    Serial.print(prevmatch);
-    Serial.println(F(""));
 
-    trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
-  }
-}
-*/
 void UserCommandInputDirect(FxController &fxc, int data)
 {
-  /*if (captureMode == CaptureTimeCode && data != 10 && data != 13)
-  {
-    if (captureCount < 15)
-    {
-      Serial.print(F("CC="));
-      Serial.print(data);
-      captureBuffer[captureCount] = (char)data;
-      captureBuffer[captureCount+1] = 0;
-      captureCount++;
-    }
-    return;
-  }*/
-
   switch (data)
   {
-   /* case '@':
-      Serial.print(F("Capturing TimeCode"));
-      captureCount = 0;
-      //capturedTimeCode = "";
-      captureMode = CaptureTimeCode;
-      break;*/
     case '?': UserCommandExecute(fxc, Cmd_Help); break;
-
-    case 'z': UserCommandExecute(fxc, Cmd_State_Default);break;
-    case 'x': UserCommandExecute(fxc, Cmd_State_Test);break;
     
-    case 'v': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
-    case 'b': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
-    case 'n': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
+    case '!': UserCommandExecute(fxc, Cmd_State_Default);break;
+    case '@': UserCommandExecute(fxc, Cmd_State_Test);break;
+    
+    case '%': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
+    case '^': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
+    case '&': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
 
-    case '{': UserCommandExecute(fxc, Cmd_ServoMin); break;
-    case '\\':UserCommandExecute(fxc, Cmd_ServoCenter); break;
-    case '}': UserCommandExecute(fxc, Cmd_ServoMax); break;
-        
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
     case '(': UserCommandExecute(fxc, Cmd_PlayStop); break;
@@ -274,54 +212,52 @@ void UserCommandInputDirect(FxController &fxc, int data)
     case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
     case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
 
-    case 'a': UserCommandExecute(fxc, Cmd_ColorPulseDark); break;
-    case 's': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
-    case 'd': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
-    case 'f': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;
-    case 'g': UserCommandExecute(fxc, Cmd_ColorPulseGreen); break;
-    case 'h': UserCommandExecute(fxc, Cmd_ColorPulseCyan); break;
-    case 'j': UserCommandExecute(fxc, Cmd_ColorPulseBlue); break;
-    case 'k': UserCommandExecute(fxc, Cmd_ColorPulseMagenta); break;
-    case 'l': UserCommandExecute(fxc, Cmd_ColorPulseOrange); break;
-    case 'm': UserCommandExecute(fxc, Cmd_ColorPulseHalf); break;
+    case 'a': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
+    case 's': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
+    case 'd': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;
+    case 'f': UserCommandExecute(fxc, Cmd_ColorPulseGreen); break;
+    case 'g': UserCommandExecute(fxc, Cmd_ColorPulseCyan); break;
+    case 'h': UserCommandExecute(fxc, Cmd_ColorPulseBlue); break;
+    case 'j': UserCommandExecute(fxc, Cmd_ColorPulseMagenta); break;
+    case 'k': UserCommandExecute(fxc, Cmd_ColorPulseOrange); break;
+    case 'l': UserCommandExecute(fxc, Cmd_ColorPulseHalf); break;
     
-    case 'A': UserCommandExecute(fxc, Cmd_ColorPulse2Dark); break;
-    case 'S': UserCommandExecute(fxc, Cmd_ColorPulse2White); break;
-    case 'D': UserCommandExecute(fxc, Cmd_ColorPulse2Red); break;
-    case 'F': UserCommandExecute(fxc, Cmd_ColorPulse2Yellow); break;
-    case 'G': UserCommandExecute(fxc, Cmd_ColorPulse2Green); break;
-    case 'H': UserCommandExecute(fxc, Cmd_ColorPulse2Cyan); break;
-    case 'J': UserCommandExecute(fxc, Cmd_ColorPulse2Blue); break;    
-    case 'K': UserCommandExecute(fxc, Cmd_ColorPulse2Magenta); break;
-    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
-    case 'M': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
+    case 'A': UserCommandExecute(fxc, Cmd_ColorPulse2White); break;
+    case 'S': UserCommandExecute(fxc, Cmd_ColorPulse2Red); break;
+    case 'D': UserCommandExecute(fxc, Cmd_ColorPulse2Yellow); break;
+    case 'F': UserCommandExecute(fxc, Cmd_ColorPulse2Green); break;
+    case 'G': UserCommandExecute(fxc, Cmd_ColorPulse2Cyan); break;
+    case 'H': UserCommandExecute(fxc, Cmd_ColorPulse2Blue); break;    
+    case 'J': UserCommandExecute(fxc, Cmd_ColorPulse2Magenta); break;
+    case 'K': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
+    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
     
-    //case 'q': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
-//    case 'w': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
-    case 'q': UserCommandExecute(fxc, Cmd_Strip0);break;
-    case 'w': UserCommandExecute(fxc, Cmd_Strip1);break;
-    case 'e': UserCommandExecute(fxc, Cmd_Strip2);break;
-    case 'r': UserCommandExecute(fxc, Cmd_Strip3);break;
-    case 't': UserCommandExecute(fxc, Cmd_Strip4);break;
-    case 'y': UserCommandExecute(fxc, Cmd_Strip5);break;
-    case 'u': UserCommandExecute(fxc, Cmd_Strip6);break;
-    case 'i': UserCommandExecute(fxc, Cmd_Strip7);break;
-    case 'o': UserCommandExecute(fxc, Cmd_StripNone);break;
-    case 'p': UserCommandExecute(fxc, Cmd_StripAll);break;
+    case 'Q': UserCommandExecute(fxc, Cmd_Strip0);break;
+    case 'W': UserCommandExecute(fxc, Cmd_Strip1);break;
+    case 'E': UserCommandExecute(fxc, Cmd_Strip2);break;
+    case 'R': UserCommandExecute(fxc, Cmd_Strip3);break;
+    case 'T': UserCommandExecute(fxc, Cmd_Strip4);break;
+    case 'Y': UserCommandExecute(fxc, Cmd_Strip5);break;
+    case 'U': UserCommandExecute(fxc, Cmd_Strip6);break;
+    case 'I': UserCommandExecute(fxc, Cmd_Strip7);break;
+    case 'O': UserCommandExecute(fxc, Cmd_StripNone);break;
+    case 'P': UserCommandExecute(fxc, Cmd_StripAll);break;
 
-    case 'Q': UserCommandExecute(fxc, Cmd_ColorLava);break;
-    case 'W': UserCommandExecute(fxc, Cmd_ColorCloud);break;
-    case 'E': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
-    case 'R': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
-    case 'T': UserCommandExecute(fxc, Cmd_ColorRainbow);break;
-    case 'Y': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
-    case 'U': UserCommandExecute(fxc, Cmd_ColorParty);break;
-    case 'I': UserCommandExecute(fxc, Cmd_ColorHeat);break;
+    case 'z': UserCommandExecute(fxc, Cmd_ColorLava);break;
+    case 'x': UserCommandExecute(fxc, Cmd_ColorCloud);break;
+    case 'c': UserCommandExecute(fxc, Cmd_ColorRainbow);break;
+    case 'v': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
+    case 'b': UserCommandExecute(fxc, Cmd_ColorParty);break;
+    case 'n': UserCommandExecute(fxc, Cmd_ColorHeat);break;
 
-    case 'N': UserCommandExecute(fxc, Cmd_ColorWhiteMagenta);break;
-    case 'O': UserCommandExecute(fxc, Cmd_ColorCyanBlue);break;
-    case 'P': UserCommandExecute(fxc, Cmd_ColorGreenMagenta);break;
-
+    case 'Z': UserCommandExecute(fxc, Cmd_ColorWhiteMagenta);break;
+    case 'X': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
+    case 'C': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
+    case 'V': UserCommandExecute(fxc, Cmd_ColorCyanBlue);break;
+    case 'B': UserCommandExecute(fxc, Cmd_ColorGreenMagenta);break;
+    case 'N': UserCommandExecute(fxc, Cmd_ColorDarkCyanMagenta);break;
+    case 'M': UserCommandExecute(fxc, Cmd_ColorDarkRedBlue);break;
+    
     case '_': UserCommandExecute(fxc, Cmd_SpeedNeg);break;
     case '+': UserCommandExecute(fxc, Cmd_SpeedPos);break;
     case '-': UserCommandExecute(fxc, Cmd_SpeedDec);break;
@@ -348,44 +284,9 @@ void UserCommandInput(FxController &fxc, int data)
   UserCommandInputDirect(fxc,data);
 }
 
-bool StringsEqual(String a, String b)
-{
-  if (a.length() != b.length())
-  {
-    Serial.println(F("Different length"));
-    return false;
-  }
-  for (int i=0;i<a.length();i++)
-  {
-    if (a[i] != b[i]) return false;
-  }
-  return true;
-}
-
 void ComplexUserCommandInput(FxController &fxc, String data)
 {
   //Remove carriage returns; 
   if (data[data.length()-1]=='\n') data.remove(data.length()-1,1);
   if (data[data.length()-1]=='\r') data.remove(data.length()-1,1);
-
-  if (data.equals(F("??")))
-  {
-    Serial.println(F("Add u/d"));
-    Serial.println(F(" lamp/ready/auto"));
-    Serial.println(F(" dn/up/butt/grr"));
-    Serial.println(F("--------------------------"));
-    Serial.println(F("Combo:"));
-    Serial.println(F(" (*+h/e/w) all hips/elbows/wrists"));
-    Serial.println(F("Combo:"));
-    Serial.println(F(" (l+h/e/w) left hips/elbows/wrists"));
-    Serial.println(F(" (r+h/e/w) right hips/elbows/wrists"));
-    Serial.println(F(" (f+h/e/w) front hips/elbows/wrists"));
-    Serial.println(F(" (b+h/e/w) back hips/elbows/wrists"));
-    Serial.println(F("Specific:"));
-    Serial.println(F(" (fl+h/e/w) front left hip/elbow/wrist"));
-    Serial.println(F(" (fr+h/e/w) front right hip/elbow/wirst"));
-    Serial.println(F(" (bl+h/e/w) back left hip/elbow/wrist"));
-    Serial.println(F(" (br+h/e/w) back right hip/elbow/wrist"));
-  }
-
 }

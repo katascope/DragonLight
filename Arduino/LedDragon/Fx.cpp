@@ -65,17 +65,17 @@ void FxDisplayStatus(FxController &fxc)
 void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
 {
   int numleds = fxController.strip[strip]->numleds;
-      if (fxController.strip[strip]->transitionType == Transition_Instant)
-      {
-        LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
-        CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-        CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
-      }
-      else
-      {
-        CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-        LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
-      }
+  if (fxController.strip[strip]->transitionType == Transition_Instant)
+  {
+    LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
+    CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+    CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
+  }
+  else
+  {
+    CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+    LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+  }
 }
 
 void CreateSingleColor(FxController &fxc, uint8_t r, uint8_t g, uint8_t b)

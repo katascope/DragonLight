@@ -140,6 +140,7 @@ public:
       switch (i)
       {
         case 0: strip[i] = new FxStripController(NUM_LEDS_0); break;
+#if ENABLE_MULTISTRIP        
         case 1: strip[i] = new FxStripController(NUM_LEDS_1); break;
         case 2: strip[i] = new FxStripController(NUM_LEDS_2); break;
         case 3: strip[i] = new FxStripController(NUM_LEDS_3); break;
@@ -147,6 +148,7 @@ public:
         case 5: strip[i] = new FxStripController(NUM_LEDS_5); break;
         case 6: strip[i] = new FxStripController(NUM_LEDS_6); break;
         case 7: strip[i] = new FxStripController(NUM_LEDS_7); break;
+#endif        
       }
     }
   }

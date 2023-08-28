@@ -5,14 +5,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEDDRAGON 0 //Generally LightSuit*A silver
+#define LEDDRAGON 1 
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define FOXBOT    0 //Generally LightSuit*B gold
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      1
+#define LAMP      0
 #define TESTER    0
 
 #if SUIT_JACKET
@@ -29,6 +29,8 @@ static const char *DeviceName = "LightSuitAngelB";
 static const char *DeviceName = "Mree";
 #elif PREE
 static const char *DeviceName = "Pree";
+#else
+static const char *DeviceName = "UnkDevice";
 #endif
 
 
@@ -62,7 +64,7 @@ static const char *DeviceName = "Pree";
 
 #if TESTER
 static const char *DeviceName = "Tester";
-#define NUM_LEDS_0          30
+#define NUM_LEDS_0          60
 #define NUM_LEDS_1          10
 #define NUM_LEDS_2          10
 #define NUM_LEDS_3          10
@@ -83,14 +85,14 @@ static const char *DeviceName = "Tester";
 #endif
 
 #if LEDDRAGON
-#define NUM_LEDS_0          99
-#define NUM_LEDS_1          99
-#define NUM_LEDS_2          99
-#define NUM_LEDS_3          99
-#define NUM_LEDS_4          99
-#define NUM_LEDS_5          99
-#define NUM_LEDS_6          99
-#define NUM_LEDS_7          99
+#define NUM_LEDS_0          299
+#define NUM_LEDS_1          299
+#define NUM_LEDS_2          299
+#define NUM_LEDS_3          299
+#define NUM_LEDS_4          299
+#define NUM_LEDS_5          299
+#define NUM_LEDS_6          299
+#define NUM_LEDS_7          299
 #endif
 
 #if FOLLOW

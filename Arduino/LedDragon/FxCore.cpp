@@ -296,15 +296,15 @@ void PrintFxTransitionName(FxTransitionType t)
 {
   switch (t)
   {
-    case Transition_Instant:        Serial.print(F("Fast")); return;
-    case Transition_TimedFade:      Serial.print(F("Fade")); return;
-    case Transition_TimedWipePos:   Serial.print(F("Wip+")); return;
-    case Transition_TimedWipeNeg:   Serial.print(F("Wip-")); return;
-    case Transition_TimedWipeOutIn: Serial.print(F("WipOI")); return;
-    case Transition_TimedWipeInOut: Serial.print(F("WipIO")); return;
+    case Transition_Instant:         Serial.print(F("Fast")); return;
+    case Transition_TimedFade:       Serial.print(F("Fade")); return;
+    case Transition_TimedWipePos:    Serial.print(F("Wip+")); return;
+    case Transition_TimedWipeNeg:    Serial.print(F("Wip-")); return;
+    case Transition_TimedWipeOutIn:  Serial.print(F("WipOI")); return;
+    case Transition_TimedWipeInOut:  Serial.print(F("WipIO")); return;
     case Transition_TimedWipeRandom: Serial.print(F("WipRnd")); return;
-    case Transition_TimedFadeSin:   Serial.print(F("FadeSin")); return;
-    case Transition_TimedFadeCos:   Serial.print(F("FadeCos")); return;
+    case Transition_TimedFadeSin:    Serial.print(F("FadeSin")); return;
+    case Transition_TimedFadeCos:    Serial.print(F("FadeCos")); return;
     default: Serial.print(F("Unknown"));
   }
 }

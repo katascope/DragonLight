@@ -7,20 +7,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <Arduino.h>
 struct FxController;
 
-enum CaptureTextMode
-{
-  CaptureNone,
-  CaptureTimeCode
-};
-
 enum UserCommand
 {
   Cmd_Unk,
   Cmd_Help,
-
-  Cmd_ServoMin,
-  Cmd_ServoCenter,
-  Cmd_ServoMax,
 
   Cmd_Brightness_Max,
   Cmd_Brightness_Normal,
@@ -53,6 +43,8 @@ enum UserCommand
   Cmd_ColorCyanBlue,
   Cmd_ColorBlueMagenta,
   Cmd_ColorGreenMagenta,
+  Cmd_ColorDarkRedBlue,
+  Cmd_ColorDarkCyanMagenta,
   
   Cmd_ColorPulseDark, 
   Cmd_ColorPulseWhite,
