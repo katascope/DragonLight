@@ -276,6 +276,13 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
 void State_Poll(FxController &fxc)
 {
   if (fxc.fxState == FxState_TestPattern)
+  {
+    FxInstantEvent(fxc, fx_palette_rainbow, FxPaletteUpdateType::Once); 
+    FxInstantEvent(fxc, fx_speed_neg,       FxPaletteUpdateType::Once);
+    FxInstantEvent(fxc, fx_speed_3,         FxPaletteUpdateType::Once);
+   }
+
+  if (fxc.fxState == FxState_MultiTestPattern)
     State_Poll_TestPattern(fxc);
 
   if (fxc.fxState == FxState_PlayingTrack)

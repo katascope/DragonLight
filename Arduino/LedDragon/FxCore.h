@@ -54,9 +54,10 @@ enum FxPaletteUpdateType
 
 enum FxState
 {
-  FxState_Default        = 0,
-  FxState_TestPattern    = 1,
-  FxState_PlayingTrack   = 2
+  FxState_Default          = 0,
+  FxState_TestPattern      = 1,
+  FxState_MultiTestPattern = 2,
+  FxState_PlayingTrack     = 3,
 };
 
 enum FxStripMask

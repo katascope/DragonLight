@@ -113,38 +113,10 @@ void neopixelSetPalette(int slot, int numleds, uint32_t *palette, int paletteInd
   {
     if (offset >= numleds)
      offset=0;    
-
     uint32_t rgb = palette[i];
     r = (rgb >> 16) & 0xFF;
     g = (rgb >> 8) & 0xFF;
     b = (rgb >> 0) & 0xFF;
-
-//shimmer effect, unstable
-/*    int scale = 32;
-    if (r < 255-scale && r > scale && g < 255-scale
-       && g > scale && b < 255-scale && b > scale) 
-       {
-        int s = random(-scale,scale);
-        r += s;
-        g += s;
-        b += s;
-       }
-*/
-//pulsar effect
-/*
-    if (i %NUM_LEDS==0) 
-    {
-      r=g=0;
-      b=255;
-    }*/
-
-    //rgb=LEDRGB(r,g,b);
-
-    if (offset < 4)
-    {
-    //  rgb = CRGB_WHITE;
-    }
-    
     neopixelSetPixel(slot,offset,rgb);
     offset++;    
   }
@@ -179,11 +151,11 @@ void neopixelSetPalette(int slot, int numleds, uint32_t *palette, int paletteInd
 #include "Track.h"
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = 25;//LED_PWR;
-BLEService lightsuitService( BLE_UUID_LIGHTSUIT_SERVICE );
-BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
-BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
-BLECharCharacteristic commandCharacteristic( BLE_UUID_LIGHTSUIT_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
-BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_LIGHTSUIT_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
+BLEService mainService( BLE_UUID_SERVICE );
+BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
+BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
+BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
+BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
 
 //BLEDevice * central = NULL;
 void blePeripheralConnectHandler(BLEDevice c) {
@@ -215,18 +187,18 @@ bool bleSetup()
   // set advertised local name and service UUID:
   BLE.setDeviceName( DeviceName );
   BLE.setLocalName( DeviceName );
-  BLE.setAdvertisedService( lightsuitService );
+  BLE.setAdvertisedService( mainService );
 
   // BLE add characteristics
-  lightsuitService.addCharacteristic( authenticateCharacteristic );
-  lightsuitService.addCharacteristic( commandCharacteristic );
-  lightsuitService.addCharacteristic( playCharacteristic );
+  mainService.addCharacteristic( authenticateCharacteristic );
+  mainService.addCharacteristic( commandCharacteristic );
+  mainService.addCharacteristic( playCharacteristic );
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
   
   // add service
-  BLE.addService( lightsuitService );
+  BLE.addService( mainService );
 
   // set the initial value for the characeristics:
   commandCharacteristic.writeValue( 0 );

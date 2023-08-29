@@ -12,124 +12,86 @@ void UpdatePalette(FxController &fxc);
 unsigned long GetTime();
 void ComplexUserCommandInput(FxController &fxc, String data);
 
-void UpdatePalette(struct FxController &fxController)
-{
-  FxProcessSideFX(fxController);
-  
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    if ((int)fxController.strip[strip]->fxPaletteUpdateType != 0)
-    {
-      fxController.strip[strip]->paletteIndex = fxController.strip[strip]->paletteIndex + (fxController.strip[strip]->paletteSpeed * fxController.strip[strip]->paletteDirection);
-      if (fxController.strip[strip]->paletteIndex >= fxController.strip[strip]->numleds)
-        fxController.strip[strip]->paletteIndex -= fxController.strip[strip]->numleds;
-      if (fxController.strip[strip]->paletteIndex < 0)
-        fxController.strip[strip]->paletteIndex = fxController.strip[strip]->numleds - 1;
-    }
-#if ENABLE_NEOPIXEL
-    neopixelSetPalette(strip, fxController.strip[strip]->numleds, fxController.strip[strip]->palette, fxController.strip[strip]->paletteIndex);
-#endif    
-  }
-}
-
-void InstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
-{
-  fxc.fxState = FxState_Default;
-
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    if (fxc.stripMask & (1<<strip)) 
-    {
-      fxc.strip[strip]->fxPaletteUpdateType = paletteUpdateType;
-      fxc.strip[strip]->transitionType = Transition_Instant;
-    }    
-  }
-
-  //if (event != fx_nothing) PrintFxEventName(event);
-  FxEventProcess(fxc, event);
-  UpdatePalette(fxc);
-}
-
 void UserCommandExecute(FxController &fxc, int cmd)
 {
   switch (cmd)
   {
-    case Cmd_State_Default: fxc.fxState = FxState_Default;break;
-    case Cmd_State_Test:    fxc.fxState = FxState_TestPattern;break;
+    case Cmd_State_Default:  fxc.fxState = FxState_Default;break;
+    case Cmd_State_Test:     fxc.fxState = FxState_TestPattern;break;
+    case Cmd_State_MultiTest:fxc.fxState = FxState_MultiTestPattern;break;
       
     case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd); break;
     case Cmd_PlayFrom:      fxc.fxState = FxState_PlayingTrack;break;
     case Cmd_PlayStop:      trackStop(fxc); break;
 
-    case Cmd_SpeedNeg:      InstantEvent(fxc, fx_speed_neg, FxPaletteUpdateType::Once); break;
-    case Cmd_SpeedPos:      InstantEvent(fxc, fx_speed_pos, FxPaletteUpdateType::Once); break;
-    case Cmd_SpeedDec:      InstantEvent(fxc, fx_speed_dec, FxPaletteUpdateType::Once); break;
-    case Cmd_SpeedInc:      InstantEvent(fxc, fx_speed_inc, FxPaletteUpdateType::Once); break;
-    case Cmd_SpeedRst:      InstantEvent(fxc, fx_speed_0,   FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedNeg:      FxInstantEvent(fxc, fx_speed_neg, FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedPos:      FxInstantEvent(fxc, fx_speed_pos, FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedDec:      FxInstantEvent(fxc, fx_speed_dec, FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedInc:      FxInstantEvent(fxc, fx_speed_inc, FxPaletteUpdateType::Once); break;
+    case Cmd_SpeedRst:      FxInstantEvent(fxc, fx_speed_0,   FxPaletteUpdateType::Once); break;
 
-    case Cmd_Speed1:        InstantEvent(fxc, fx_speed_1,   FxPaletteUpdateType::Once); break;
-    case Cmd_Speed2:        InstantEvent(fxc, fx_speed_2,   FxPaletteUpdateType::Once); break;
-    case Cmd_Speed3:        InstantEvent(fxc, fx_speed_3,   FxPaletteUpdateType::Once); break;
-    case Cmd_Speed4:        InstantEvent(fxc, fx_speed_4,   FxPaletteUpdateType::Once); break;
+    case Cmd_Speed1:        FxInstantEvent(fxc, fx_speed_1,   FxPaletteUpdateType::Once); break;
+    case Cmd_Speed2:        FxInstantEvent(fxc, fx_speed_2,   FxPaletteUpdateType::Once); break;
+    case Cmd_Speed3:        FxInstantEvent(fxc, fx_speed_3,   FxPaletteUpdateType::Once); break;
+    case Cmd_Speed4:        FxInstantEvent(fxc, fx_speed_4,   FxPaletteUpdateType::Once); break;
     
-    case Cmd_ColorDark:     InstantEvent(fxc, fx_palette_dark,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhite:    InstantEvent(fxc, fx_palette_white,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRed:      InstantEvent(fxc, fx_palette_red,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorYellow:   InstantEvent(fxc, fx_palette_yellow,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorGreen:    InstantEvent(fxc, fx_palette_green,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyan:     InstantEvent(fxc, fx_palette_cyan,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorBlue:     InstantEvent(fxc, fx_palette_blue,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorMagenta:  InstantEvent(fxc, fx_palette_magenta,  FxPaletteUpdateType::Once); break;
-    case Cmd_ColorOrange:   InstantEvent(fxc, fx_palette_orange,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorHalf:     InstantEvent(fxc, fx_palette_half,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDark:     FxInstantEvent(fxc, fx_palette_dark,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhite:    FxInstantEvent(fxc, fx_palette_white,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRed:      FxInstantEvent(fxc, fx_palette_red,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorYellow:   FxInstantEvent(fxc, fx_palette_yellow,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorGreen:    FxInstantEvent(fxc, fx_palette_green,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyan:     FxInstantEvent(fxc, fx_palette_cyan,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorBlue:     FxInstantEvent(fxc, fx_palette_blue,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorMagenta:  FxInstantEvent(fxc, fx_palette_magenta,  FxPaletteUpdateType::Once); break;
+    case Cmd_ColorOrange:   FxInstantEvent(fxc, fx_palette_orange,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorHalf:     FxInstantEvent(fxc, fx_palette_half,     FxPaletteUpdateType::Once); break;
 
-    case Cmd_ColorWhiteMagenta:    InstantEvent(fxc, fx_palette_wm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteCyan:       InstantEvent(fxc, fx_palette_wc,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteYellow:     InstantEvent(fxc, fx_palette_wy,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorWhiteBlue:       InstantEvent(fxc, fx_palette_wb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRedBlue:         InstantEvent(fxc, fx_palette_rb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyanMagenta:     InstantEvent(fxc, fx_palette_cm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCyanBlue:        InstantEvent(fxc, fx_palette_cb,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorBlueMagenta:     InstantEvent(fxc, fx_palette_bm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorGreenMagenta:    InstantEvent(fxc, fx_palette_gm,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorDarkRedBlue:     InstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorDarkCyanMagenta: InstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once); break;
-    
+    case Cmd_ColorWhiteMagenta:    FxInstantEvent(fxc, fx_palette_wm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteCyan:       FxInstantEvent(fxc, fx_palette_wc,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteYellow:     FxInstantEvent(fxc, fx_palette_wy,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorWhiteBlue:       FxInstantEvent(fxc, fx_palette_wb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRedBlue:         FxInstantEvent(fxc, fx_palette_rb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyanMagenta:     FxInstantEvent(fxc, fx_palette_cm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCyanBlue:        FxInstantEvent(fxc, fx_palette_cb,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorBlueMagenta:     FxInstantEvent(fxc, fx_palette_bm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorGreenMagenta:    FxInstantEvent(fxc, fx_palette_gm,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDarkRedBlue:     FxInstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorDarkCyanMagenta: FxInstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once); break;    
 
-    case Cmd_ColorPulseDark:     InstantEvent(fxc, fx_palette_pulse_dark,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseWhite:    InstantEvent(fxc, fx_palette_pulse_white,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseRed:      InstantEvent(fxc, fx_palette_pulse_red,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseYellow:   InstantEvent(fxc, fx_palette_pulse_yellow,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseGreen:    InstantEvent(fxc, fx_palette_pulse_green,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseCyan:     InstantEvent(fxc, fx_palette_pulse_cyan,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseBlue:     InstantEvent(fxc, fx_palette_pulse_blue,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseMagenta:  InstantEvent(fxc, fx_palette_pulse_magenta,  FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseOrange:   InstantEvent(fxc, fx_palette_pulse_orange,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulseHalf:     InstantEvent(fxc, fx_palette_pulse_half,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Dark:     InstantEvent(fxc, fx_palette_pulse2_dark,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2White:    InstantEvent(fxc, fx_palette_pulse2_white,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Red:      InstantEvent(fxc, fx_palette_pulse2_red,      FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Yellow:   InstantEvent(fxc, fx_palette_pulse2_yellow,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Green:    InstantEvent(fxc, fx_palette_pulse2_green,    FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Cyan:     InstantEvent(fxc, fx_palette_pulse2_cyan,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Blue:     InstantEvent(fxc, fx_palette_pulse2_blue,     FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Magenta:  InstantEvent(fxc, fx_palette_pulse2_magenta,  FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Orange:   InstantEvent(fxc, fx_palette_pulse2_orange,   FxPaletteUpdateType::Once); break;
-    case Cmd_ColorPulse2Half:     InstantEvent(fxc, fx_palette_pulse2_half,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseDark:      FxInstantEvent(fxc, fx_palette_pulse_dark,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseWhite:     FxInstantEvent(fxc, fx_palette_pulse_white,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseRed:       FxInstantEvent(fxc, fx_palette_pulse_red,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseYellow:    FxInstantEvent(fxc, fx_palette_pulse_yellow,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseGreen:     FxInstantEvent(fxc, fx_palette_pulse_green,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseCyan:      FxInstantEvent(fxc, fx_palette_pulse_cyan,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseBlue:      FxInstantEvent(fxc, fx_palette_pulse_blue,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseMagenta:   FxInstantEvent(fxc, fx_palette_pulse_magenta,  FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseOrange:    FxInstantEvent(fxc, fx_palette_pulse_orange,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulseHalf:      FxInstantEvent(fxc, fx_palette_pulse_half,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Dark:     FxInstantEvent(fxc, fx_palette_pulse2_dark,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2White:    FxInstantEvent(fxc, fx_palette_pulse2_white,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Red:      FxInstantEvent(fxc, fx_palette_pulse2_red,      FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Yellow:   FxInstantEvent(fxc, fx_palette_pulse2_yellow,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Green:    FxInstantEvent(fxc, fx_palette_pulse2_green,    FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Cyan:     FxInstantEvent(fxc, fx_palette_pulse2_cyan,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Blue:     FxInstantEvent(fxc, fx_palette_pulse2_blue,     FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Magenta:  FxInstantEvent(fxc, fx_palette_pulse2_magenta,  FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Orange:   FxInstantEvent(fxc, fx_palette_pulse2_orange,   FxPaletteUpdateType::Once); break;
+    case Cmd_ColorPulse2Half:     FxInstantEvent(fxc, fx_palette_pulse2_half,   FxPaletteUpdateType::Once); break;
        
-    case Cmd_ColorLava:           InstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
-    case Cmd_ColorCloud:          InstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
-    case Cmd_ColorOcean:          InstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
-    case Cmd_ColorForest:         InstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRainbow:        InstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once); break;
-    case Cmd_ColorRainbowstripe:  InstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once); break;
-    case Cmd_ColorParty:          InstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
-    case Cmd_ColorHeat:           InstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
+    case Cmd_ColorLava:           FxInstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
+    case Cmd_ColorCloud:          FxInstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorOcean:          FxInstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorForest:         FxInstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRainbow:        FxInstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once); break;
+    case Cmd_ColorRainbowstripe:  FxInstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once); break;
+    case Cmd_ColorParty:          FxInstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
+    case Cmd_ColorHeat:           FxInstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
 
-    case Cmd_StripAll:            InstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once); break;
-    case Cmd_StripNone:           InstantEvent(fxc, fx_strip_none,    FxPaletteUpdateType::Once); break;
-    case Cmd_StripOdds:           InstantEvent(fxc, fx_strip_odds,    FxPaletteUpdateType::Once); break;
-    case Cmd_StripEvens:          InstantEvent(fxc, fx_strip_evens,   FxPaletteUpdateType::Once); break;
+    case Cmd_StripAll:            FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once); break;
+    case Cmd_StripNone:           FxInstantEvent(fxc, fx_strip_none,    FxPaletteUpdateType::Once); break;
+    case Cmd_StripOdds:           FxInstantEvent(fxc, fx_strip_odds,    FxPaletteUpdateType::Once); break;
+    case Cmd_StripEvens:          FxInstantEvent(fxc, fx_strip_evens,   FxPaletteUpdateType::Once); break;
     case Cmd_Strip0: fxc.stripMask = LEDS_0; break;
     case Cmd_Strip1: fxc.stripMask = LEDS_1; break;
     case Cmd_Strip2: fxc.stripMask = LEDS_2; break;
@@ -142,7 +104,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Particles_On:  fxc.SetParticlesRunning(true);break;
     case Cmd_Particles_Off: fxc.SetParticlesRunning(false);break;
 
-    case Cmd_TransitionFast: InstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
+    case Cmd_TransitionFast: FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
 #if ENABLE_NEOPIXEL
 
     case Cmd_Brightness_Max: 
@@ -192,6 +154,7 @@ void UserCommandInputDirect(FxController &fxc, int data)
     
     case '!': UserCommandExecute(fxc, Cmd_State_Default);break;
     case '@': UserCommandExecute(fxc, Cmd_State_Test);break;
+    case '#': UserCommandExecute(fxc, Cmd_State_MultiTest);break;
     
     case '%': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
     case '^': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
@@ -231,6 +194,17 @@ void UserCommandInputDirect(FxController &fxc, int data)
     case 'J': UserCommandExecute(fxc, Cmd_ColorPulse2Magenta); break;
     case 'K': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
     case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
+
+    case 'q': fxc.stripMask = DRAGON_TORSO_LEFT|DRAGON_TORSO_RIGHT; break;
+    case 'w': fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT; break;
+    case 'e': fxc.stripMask = DRAGON_HEAD; break;
+    case 'r': fxc.stripMask = DRAGON_TAIL; break;
+    case 't': fxc.stripMask = LEDS_0; break;
+    case 'y': fxc.stripMask = LEDS_0; break;
+    case 'u': fxc.stripMask = LEDS_0; break;
+    case 'i': fxc.stripMask = LEDS_0; break;
+    case 'o': fxc.stripMask = LEDS_0; break;
+    case 'p': fxc.stripMask = LEDS_0; break;
     
     case 'Q': UserCommandExecute(fxc, Cmd_Strip0);break;
     case 'W': UserCommandExecute(fxc, Cmd_Strip1);break;

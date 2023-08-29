@@ -71,6 +71,11 @@ public:
         return true;
     return false;
   }
+  void SetParticlesLoc(int loc)
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      particles[i].loc = loc;
+  }
   void SetParticlesRunning(bool state)
   {
     for (int i=0;i<NUM_PARTICLES;i++)
@@ -95,9 +100,7 @@ public:
   void SetParticleMode(FxParticleMode mode)
   {
     for (int i=0;i<NUM_PARTICLES;i++)
-    {
       particles[i].mode = mode;
-    }
     RandomizeParticles();
   }
   void RandomizeParticles()
@@ -160,6 +163,12 @@ public:
           return true;
     return false;
   }
+  void SetParticlesLoc(int loc)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetParticlesLoc(loc);
+  }
   void SetParticlesRunning(bool isRunning)
   {
     for (int s=0;s<NUM_STRIPS;s++)
@@ -193,6 +202,8 @@ public:
   
 };
 
+void FxUpdatePalette(struct FxController &fxc);
+void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType);
 void FxProcessSideFX(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);

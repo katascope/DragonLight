@@ -18,6 +18,7 @@ enum UserCommand
 
   Cmd_State_Default,
   Cmd_State_Test,
+  Cmd_State_MultiTest,
   
   Cmd_PlayFromStart,
   Cmd_PlayFrom,

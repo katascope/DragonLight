@@ -8,6 +8,44 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Fx.h"
 #include "Track.h"
 
+void FxUpdatePalette(struct FxController &fxc)
+{
+  FxProcessSideFX(fxc);
+  
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if ((int)fxc.strip[strip]->fxPaletteUpdateType != 0)
+    {
+      fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
+      if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
+        fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
+      if (fxc.strip[strip]->paletteIndex < 0)
+        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
+    }
+#if ENABLE_NEOPIXEL
+    neopixelSetPalette(strip, fxc.strip[strip]->numleds, fxc.strip[strip]->palette, fxc.strip[strip]->paletteIndex);
+#endif    
+  }
+}
+
+void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
+{
+  fxc.fxState = FxState_Default;
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip]->fxPaletteUpdateType = paletteUpdateType;
+      fxc.strip[strip]->transitionType = Transition_Instant;
+    }    
+  }
+
+  //if (event != fx_nothing) PrintFxEventName(event);
+  FxEventProcess(fxc, event);
+  FxUpdatePalette(fxc);
+}
+
 void FxDisplayStatus(FxController &fxc)
 {
   Serial.print(F("["));
@@ -331,7 +369,7 @@ void FxEventProcess(FxController &fxc,int event)
   
   switch (event)
   {
-    case fx_strip_all:   fxc.stripMask = (unsigned int)(LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); break;
+    case fx_strip_all:   fxc.stripMask = (unsigned int)(LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); fxc.SetParticlesLoc(0);break;
     case fx_strip_odds:  fxc.stripMask = (unsigned int)(LEDS_1|LEDS_3|LEDS_5|LEDS_7); break;
     case fx_strip_evens: fxc.stripMask = (unsigned int)(LEDS_0|LEDS_2|LEDS_4|LEDS_6); break;
     case fx_strip_none:  fxc.stripMask = (unsigned int)0; break;

@@ -39,8 +39,6 @@ static const char *DeviceName = "UnkDevice";
 #define NUM_STRIPS          8
 #define BRIGHTNESS          50  //Default brightness
 #define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
-#define ENABLE_LCD          0 //OLED 1306 driver
-#define ENABLE_IMU          0 //builtin imu
 #define ENABLE_SAFETY       0
 #define ENABLE_TRACK_CHECK  1
 #define ENABLE_BLE          1
@@ -93,6 +91,12 @@ static const char *DeviceName = "Tester";
 #define NUM_LEDS_5          299
 #define NUM_LEDS_6          299
 #define NUM_LEDS_7          299
+#define DRAGON_HEAD         LEDS_2|LEDS_3
+#define DRAGON_TORSO_LEFT   LEDS_0
+#define DRAGON_TORSO_RIGHT  LEDS_1
+#define DRAGON_WING_LEFT    LEDS_4
+#define DRAGON_WING_RIGHT   LEDS_5
+#define DRAGON_TAIL         LEDS_6|LEDS_7
 #endif
 
 #if FOLLOW

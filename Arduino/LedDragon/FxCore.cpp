@@ -69,6 +69,7 @@ void PrintFxStateName(FxState s)
   {
     case FxState_Default:        Serial.print(F("Norm")); break;
     case FxState_TestPattern:    Serial.print(F("Test")); break;
+    case FxState_MultiTestPattern:    Serial.print(F("MultiTest")); break;
     case FxState_PlayingTrack:   Serial.print(F("Play")); break;
     default: Serial.print(F("Unk"));
   }
