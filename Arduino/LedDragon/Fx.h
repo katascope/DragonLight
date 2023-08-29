@@ -32,7 +32,7 @@ public:
   }
 };
 
-class FxStripController
+class FxStrip
 {
 public:  
   int numleds = 0;
@@ -49,7 +49,7 @@ public:
 
   FxParticle particles[NUM_PARTICLES];
 public:
-  FxStripController(int nl)
+  FxStrip(int nl)
   { 
     numleds = nl;
     palette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
@@ -122,7 +122,7 @@ public:
   FxTrackEndAction fxTrackEndAction;
   unsigned long lastTimeLedUpdate = 0;  
   unsigned char stripMask = 255;
-  FxStripController *strip[NUM_STRIPS];
+  FxStrip *strip[NUM_STRIPS];
   int select = 0;
   public:
   bool IsAnimating()
@@ -142,15 +142,15 @@ public:
       strip[i] = NULL;
       switch (i)
       {
-        case 0: strip[i] = new FxStripController(NUM_LEDS_0); break;
+        case 0: strip[i] = new FxStrip(NUM_LEDS_0); break;
 #if ENABLE_MULTISTRIP        
-        case 1: strip[i] = new FxStripController(NUM_LEDS_1); break;
-        case 2: strip[i] = new FxStripController(NUM_LEDS_2); break;
-        case 3: strip[i] = new FxStripController(NUM_LEDS_3); break;
-        case 4: strip[i] = new FxStripController(NUM_LEDS_4); break;
-        case 5: strip[i] = new FxStripController(NUM_LEDS_5); break;
-        case 6: strip[i] = new FxStripController(NUM_LEDS_6); break;
-        case 7: strip[i] = new FxStripController(NUM_LEDS_7); break;
+        case 1: strip[i] = new FxStrip(NUM_LEDS_1); break;
+        case 2: strip[i] = new FxStrip(NUM_LEDS_2); break;
+        case 3: strip[i] = new FxStrip(NUM_LEDS_3); break;
+        case 4: strip[i] = new FxStrip(NUM_LEDS_4); break;
+        case 5: strip[i] = new FxStrip(NUM_LEDS_5); break;
+        case 6: strip[i] = new FxStrip(NUM_LEDS_6); break;
+        case 7: strip[i] = new FxStrip(NUM_LEDS_7); break;
 #endif        
       }
     }
@@ -207,6 +207,5 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
 void FxProcessSideFX(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);
-void CreateSinglePulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) ;
 
 #endif

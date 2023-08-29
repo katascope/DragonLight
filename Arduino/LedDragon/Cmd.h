@@ -103,12 +103,15 @@ enum UserCommand
   Cmd_Strip6,
   Cmd_Strip7,
 
+  Cmd_PlayTrack0,
+  Cmd_PlayTrack1,
+  Cmd_PlayTrack2,
+  Cmd_PlayTrack3,
   Cmd_TransitionFast
 };
 
 void UserCommandExecute(FxController &fxc, int cmd);
 void UserCommandInput(FxController &fxc, int data);
-
 void ComplexUserCommandInput(FxController &fxc, String data);
 
 #endif

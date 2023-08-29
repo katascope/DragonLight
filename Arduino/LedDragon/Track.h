@@ -49,11 +49,40 @@ const unsigned long SongTrackTest[] PROGMEM =
   _TRACK_END(45000)
 };
 
-#if TESTER
-const unsigned long SongTrack[] PROGMEM =
+#if LEDDRAGON
+const unsigned long SongTrackRGB[] PROGMEM =
 {
     _TRACK_BEGIN
-    _TRACK_END(127000)
+     _FADE_TO(1000, fx_palette_red)
+     _FADE_TO(2000, fx_palette_green)
+     _FADE_TO(3000, fx_palette_blue)
+    _TRACK_END(4000)
+};
+const unsigned long SongTrackCMY[] PROGMEM =
+{
+    _TRACK_BEGIN
+     _FADE_TO(1000, fx_palette_cyan)
+     _FADE_TO(2000, fx_palette_magenta)
+     _FADE_TO(3000, fx_palette_yellow)
+    _TRACK_END(4000)
+};
+const unsigned long SongTrackWD[] PROGMEM =
+{
+    _TRACK_BEGIN
+     _FADE_TO(1000, fx_palette_white)
+     _FADE_TO(2500, fx_palette_dark)
+    _TRACK_END(4000)
+};
+const unsigned long SongTrackRYGCBM[] PROGMEM =
+{
+    _TRACK_BEGIN
+     _FADE_TO(500, fx_palette_red)
+     _FADE_TO(5000, fx_palette_yellow)
+     _FADE_TO(10000, fx_palette_green)
+     _FADE_TO(15000, fx_palette_cyan)
+     _FADE_TO(20000, fx_palette_blue)
+     _FADE_TO(25000, fx_palette_magenta)
+    _TRACK_END(30000)
 };
 #else
 //Multistrip
@@ -388,8 +417,8 @@ const unsigned long SongTrack[] PROGMEM =
 };
 #endif
 
-const PROGMEM int numSongTracks = sizeof(SongTrack) / (sizeof(unsigned long) * 2);
-
+void SetSongTrackContext(int id);
+int GetNumSongTracks();
 unsigned long SongTrack_timecode(int i);
 unsigned long SongTrack_event(int i);
 

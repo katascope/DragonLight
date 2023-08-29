@@ -8,6 +8,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "FxCore.h"
 #include "Fx.h"
 #include "Track.h"
+#include "Time.h"
 
 void State_Poll_TestPattern(FxController &fxc)
 {
@@ -175,7 +176,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
       fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
     }
 
-    for (int i = 0; i < numSongTracks; i++)
+    for (int i = 0; i < GetNumSongTracks(); i++)
       if (SongTrack_timecode(i) == matchedTimecode)
       {
         /*

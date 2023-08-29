@@ -8,24 +8,52 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Fx.h"
 #include "Track.h"
 #include "FxCore.h"
+#include "Time.h"
 
-unsigned long SongTrack_timecode(int i) { return pgm_read_dword(&(SongTrack[i*2+0])); } 
-unsigned long SongTrack_event(int i) {  return pgm_read_dword(&(SongTrack[i*2+1])); }
+int songTrackContext = 0;
+void SetSongTrackContext(int id) { songTrackContext = id; }
+int GetNumSongTracks()
+{
+  switch (songTrackContext)
+  {
+    case 0: return sizeof(SongTrackRGB) / (sizeof(unsigned long) * 2); 
+    case 1: return sizeof(SongTrackCMY) / (sizeof(unsigned long) * 2); 
+    case 2: return sizeof(SongTrackWD) / (sizeof(unsigned long) * 2); 
+    case 3: return sizeof(SongTrackRYGCBM) / (sizeof(unsigned long) * 2); 
+  }
+}
+unsigned long SongTrack_read(int i, int o)
+{
+  switch (songTrackContext)
+  {
+    case 0: return pgm_read_dword(&(SongTrackRGB[i*2+o])); 
+    case 1: return pgm_read_dword(&(SongTrackCMY[i*2+o])); 
+    case 2: return pgm_read_dword(&(SongTrackWD[i*2+o])); 
+    case 3: return pgm_read_dword(&(SongTrackRYGCBM[i*2+o])); 
+  }
+}
+unsigned long SongTrack_timecode(int i) { return SongTrack_read(i,0); }
+unsigned long SongTrack_event(int i)    { return SongTrack_read(i,1); }
 
-unsigned long GetFinalTimeCodeEntry() { return SongTrack_timecode(numSongTracks-1); }
+/*
+int GetNumSongTracks()                  { return sizeof(SongTrackRGB) / (sizeof(unsigned long) * 2); }
+unsigned long SongTrack_timecode(int i) { return pgm_read_dword(&(SongTrackRGB[i*2+0])); } 
+unsigned long SongTrack_event(int i)    { return pgm_read_dword(&(SongTrackRGB[i*2+1])); }
+*/
+unsigned long GetFinalTimeCodeEntry() { return SongTrack_timecode(GetNumSongTracks()-1); }
 int GetNextTimeCodeMatch(int currentMatch) { 
   unsigned long tc = SongTrack_timecode(currentMatch); 
-  for (int i=0;i<numSongTracks;i++) if (SongTrack_timecode(i) > tc) return i; return 0; 
+  for (int i=0;i<GetNumSongTracks();i++) if (SongTrack_timecode(i) > tc) return i; return 0; 
 }
-int GetCurrentTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) <= timecode) match = i; } return match; }
-int GetPreviousTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<numSongTracks;i++) { if (SongTrack_timecode(i) < timecode) match = i; } return match; }
+int GetCurrentTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<GetNumSongTracks();i++) { if (SongTrack_timecode(i) <= timecode) match = i; } return match; }
+int GetPreviousTimeCodeMatch(unsigned long timecode) { int match = 0; for (int i=0;i<GetNumSongTracks();i++) { if (SongTrack_timecode(i) < timecode) match = i; } return match; }
 
 void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned long nextMatchedTimecode)
 {
     float tc = (float)matchedTimecode;// / (float)1000.0f;
     Serial.print(tc);
     Serial.print(F(" :"));
-    for (int i=0;i<numSongTracks;i++)
+    for (int i=0;i<GetNumSongTracks();i++)
     {
       if (SongTrack_timecode(i) == matchedTimecode)
       {
@@ -36,7 +64,7 @@ void FxTrackSay(unsigned long timecode, unsigned long matchedTimecode,unsigned l
     Serial.print(F(", next("));
     Serial.print(nextMatchedTimecode);
     Serial.print(F(")= "));
-    for (int i=0;i<numSongTracks;i++)
+    for (int i=0;i<GetNumSongTracks();i++)
     {
       if (SongTrack_timecode(i) == nextMatchedTimecode)
       {
@@ -88,7 +116,7 @@ void trackStop(FxController &fxc)
 bool trackHasLinearTime()
 {
   int lasttc = 0;
-  for (int i=0;i<numSongTracks;i++) 
+  for (int i=0;i<GetNumSongTracks();i++) 
   {
     unsigned long tc = SongTrack_timecode(i);
     //unsigned long evt = SongTrack_time(i);

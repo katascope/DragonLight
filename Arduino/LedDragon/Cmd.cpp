@@ -20,7 +20,8 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_State_Test:     fxc.fxState = FxState_TestPattern;break;
     case Cmd_State_MultiTest:fxc.fxState = FxState_MultiTestPattern;break;
       
-    case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd); break;
+    case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+    //case Cmd_PlayFromStart: trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd); break;
     case Cmd_PlayFrom:      fxc.fxState = FxState_PlayingTrack;break;
     case Cmd_PlayStop:      trackStop(fxc); break;
 
@@ -104,6 +105,11 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Particles_On:  fxc.SetParticlesRunning(true);break;
     case Cmd_Particles_Off: fxc.SetParticlesRunning(false);break;
 
+    case Cmd_PlayTrack0: SetSongTrackContext(0); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+    case Cmd_PlayTrack1: SetSongTrackContext(1); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+    case Cmd_PlayTrack2: SetSongTrackContext(2); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+    case Cmd_PlayTrack3: SetSongTrackContext(3); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
+
     case Cmd_TransitionFast: FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once); break;
 #if ENABLE_NEOPIXEL
 
@@ -146,7 +152,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
   }
 }
 
-void UserCommandInputDirect(FxController &fxc, int data)
+void UserCommandInput(FxController &fxc, int data)
 {
   switch (data)
   {
@@ -175,7 +181,11 @@ void UserCommandInputDirect(FxController &fxc, int data)
     case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
     case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
 
-    case 'a': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
+    case 'a': UserCommandExecute(fxc, Cmd_PlayTrack0); break;
+    case 's': UserCommandExecute(fxc, Cmd_PlayTrack1); break;
+    case 'd': UserCommandExecute(fxc, Cmd_PlayTrack2); break;
+    case 'f': UserCommandExecute(fxc, Cmd_PlayTrack3); break;
+    /*case 'a': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
     case 's': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
     case 'd': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;
     case 'f': UserCommandExecute(fxc, Cmd_ColorPulseGreen); break;
@@ -193,7 +203,7 @@ void UserCommandInputDirect(FxController &fxc, int data)
     case 'H': UserCommandExecute(fxc, Cmd_ColorPulse2Blue); break;    
     case 'J': UserCommandExecute(fxc, Cmd_ColorPulse2Magenta); break;
     case 'K': UserCommandExecute(fxc, Cmd_ColorPulse2Orange); break;
-    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;
+    case 'L': UserCommandExecute(fxc, Cmd_ColorPulse2Half); break;*/
 
     case 'q': fxc.stripMask = DRAGON_TORSO_LEFT|DRAGON_TORSO_RIGHT; break;
     case 'w': fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT; break;
@@ -251,11 +261,6 @@ void UserCommandInputDirect(FxController &fxc, int data)
       Serial.println(data);
       break;
   }
-}
-
-void UserCommandInput(FxController &fxc, int data)
-{
-  UserCommandInputDirect(fxc,data);
 }
 
 void ComplexUserCommandInput(FxController &fxc, String data)

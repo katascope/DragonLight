@@ -7,6 +7,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Devices.h"
 #include "Fx.h"
 #include "Track.h"
+#include "Time.h"
 
 void FxUpdatePalette(struct FxController &fxc)
 {
@@ -223,8 +224,6 @@ void CreateQuadPulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t b) {
                       LEDRGB(r/2,g/2,b/2),LEDRGB(r,g,b),LEDRGB(r/2,g/2,b/2),LEDRGB(0,0,0));
 }
 
-
-
 void sequence_linear(unsigned int arr[], int n)
 {
   for (unsigned int i=0;i < n;i++)
@@ -365,7 +364,6 @@ void FxEventProcess(FxController &fxc,int event)
     FxSelectLeds(fxc);
     return;
   }
-
   
   switch (event)
   {

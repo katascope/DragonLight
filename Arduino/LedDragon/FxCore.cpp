@@ -6,7 +6,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <Arduino.h>
 #include "FxCore.h"
 
-static TimeCode timeController;
 uint32_t LEDRGB(uint8_t r, uint8_t g, uint8_t b) { return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b; }
 unsigned char lerp(float mux, unsigned char a, unsigned char b) { return (unsigned char)(a * (1.0 - mux) + b * mux); }
 uint32_t LerpRGB(float t, unsigned char r1, unsigned char g1, unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2) { return LEDRGB(lerp(t, r1, r2),lerp(t, g1, g2),lerp(t, b1, b2)); }
@@ -344,41 +343,6 @@ void CopyPalette(int numleds, uint32_t *dst, uint32_t *src)
     dst[i] = src[i];
 }
 
-
-
-unsigned long GetTime() { return (unsigned long)((signed long)millis() - (signed long)getTimecodeTimeOffset() + getTimecodeSongOffset()); }
-
-void setTimecodeLastMatched(unsigned long match)
-{
-//  Serial.print(F("Set match="));
-//  Serial.println(match);
-  timeController.lastMatchedTimecode = match;
-}
-
-unsigned long getTimecodeLastMatched()
-{
-  return timeController.lastMatchedTimecode;
-}
-
-signed long getTimecodeTimeOffset()
-{
-  return timeController.timeOffset;
-}
-
-signed long getTimecodeSongOffset()
-{
-  return timeController.songOffset;
-}
-
-signed long setTimecodeTimeOffset(signed long tc)
-{
-  timeController.timeOffset = tc;  
-}
-
-signed long setTimecodeSongOffset(signed long tc)
-{
-  timeController.songOffset = tc;  
-}
 
 
   

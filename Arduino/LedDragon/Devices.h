@@ -15,6 +15,7 @@ void neopixelSetPixel(int slot, int offset, uint32_t rgb);
 #endif
 //////////////// NeoPixel Section ////////////////
 
+//////////////// BLE Section /////////////////////
 #if ENABLE_BLE
 #include "Fx.h"
 // BLE UUIDs
@@ -23,8 +24,6 @@ void neopixelSetPixel(int slot, int offset, uint32_t rgb);
 #define BLE_UUID_CHARACTERISTIC_STATUS        "D01C9106-91BD-4998-9554-85264D33ACB2"
 #define BLE_UUID_CHARACTERISTIC_COMMAND       "220154BF-1DCE-4F03-85F0-7BA905D2D6B0"
 #define BLE_UUID_CHARACTERISTIC_PLAY          "3B140EF5-0A72-4891-AD38-83B5A2595622"
-
-// BLE Functions
 bool bleSetup();
 void blePoll(FxController &fxc);
 #endif
