@@ -110,29 +110,31 @@ void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, uns
     if (fxController.strip[strip]->transitionType == Transition_Instant)
     {
       LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
-      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
       CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
     }
-    else
-    {
-      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-      LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
-    }
+    else LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
   }  
-  else if (fxController.strip[strip]->paletteType == FxPaletteType::Literal)
+  else if (fxController.strip[strip]->paletteType == FxPaletteType::Literal
+        || fxController.strip[strip]->paletteType == FxPaletteType::Literal2
+        || fxController.strip[strip]->paletteType == FxPaletteType::Literal3
+        || fxController.strip[strip]->paletteType == FxPaletteType::Literal4)
   {
+    int steps = 1;
+    switch (fxController.strip[strip]->paletteType)
+    {
+      case FxPaletteType::Literal:  steps=1;break;
+      case FxPaletteType::Literal2: steps=2;break;
+      case FxPaletteType::Literal3: steps=3;break;
+      case FxPaletteType::Literal4: steps=4;break;
+    }
     if (fxController.strip[strip]->transitionType == Transition_Instant)
     {
-      LiteralPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
-      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+      LiteralPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize,steps);
       CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
     }
-    else
-    {
-      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-      LiteralPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
-    }
-  }
+    else LiteralPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize,steps);
+  }  
+  CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
 }
 
 void CreateSingleColor(FxController &fxc, uint8_t r, uint8_t g, uint8_t b)
@@ -782,9 +784,10 @@ void FxEventProcess(FxController &fxc,int event)
       fxc.SetPaletteType(FxPaletteType::Smoothed);      
       break;
       
-     case fx_palette_type_literal:
-      fxc.SetPaletteType(FxPaletteType::Literal);
-      break;
+    case fx_palette_type_literal:  fxc.SetPaletteType(FxPaletteType::Literal); break;
+    case fx_palette_type_literal2: fxc.SetPaletteType(FxPaletteType::Literal2); break;
+    case fx_palette_type_literal3: fxc.SetPaletteType(FxPaletteType::Literal3); break;
+    case fx_palette_type_literal4: fxc.SetPaletteType(FxPaletteType::Literal4); break;
       
  }
 }

@@ -105,6 +105,9 @@ enum UserCommand
 
   Cmd_PalTypeSmoothed,
   Cmd_PalTypeLiteral,
+  Cmd_PalTypeLiteral2,
+  Cmd_PalTypeLiteral3,
+  Cmd_PalTypeLiteral4,
 
   Cmd_PlayTrack0,
   Cmd_PlayTrack1,

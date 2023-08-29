@@ -291,6 +291,9 @@ enum FxEvent
 
   fx_palette_type_smoothed,
   fx_palette_type_literal,
+  fx_palette_type_literal2,
+  fx_palette_type_literal3,
+  fx_palette_type_literal4,
     
   fx_strip_all,  //Target all strips
   fx_strip_none, //Target no strips, why?
@@ -351,7 +354,10 @@ struct Fx {
 enum FxPaletteType
 {
   Smoothed       = 0,
-  Literal        = 1
+  Literal        = 1,
+  Literal2       = 2,
+  Literal3       = 3,
+  Literal4       = 4,
 };
 
 enum FxTransitionType
@@ -419,7 +425,7 @@ unsigned char lerp(float mux, unsigned char a, unsigned char b);
 uint32_t LerpRGB(float t, unsigned char r1, unsigned char g1, unsigned char b1, unsigned char r2, unsigned char g2, unsigned char b2);
 uint32_t LerpRGB(float t, uint32_t rgb1, uint32_t rgb2);
 void LerpPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize);
-void LiteralPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize);
+void LiteralPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize, int steps);
 void CopyPalette(int numleds, uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);

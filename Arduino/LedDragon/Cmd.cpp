@@ -105,8 +105,11 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Particles_On:  fxc.SetParticlesRunning(true);break;
     case Cmd_Particles_Off: fxc.SetParticlesRunning(false);break;
 
-    case Cmd_PalTypeSmoothed: FxInstantEvent(fxc, fx_palette_type_smoothed, FxPaletteUpdateType::Once); break;
-    case Cmd_PalTypeLiteral:  FxInstantEvent(fxc, fx_palette_type_literal,  FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeSmoothed: FxInstantEvent(fxc, fx_palette_type_smoothed,  FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeLiteral:  FxInstantEvent(fxc, fx_palette_type_literal,   FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeLiteral2: FxInstantEvent(fxc, fx_palette_type_literal2,  FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeLiteral3: FxInstantEvent(fxc, fx_palette_type_literal3,  FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeLiteral4: FxInstantEvent(fxc, fx_palette_type_literal4,  FxPaletteUpdateType::Once); break;
 
     case Cmd_PlayTrack0: SetSongTrackContext(0); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
     case Cmd_PlayTrack1: SetSongTrackContext(1); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;

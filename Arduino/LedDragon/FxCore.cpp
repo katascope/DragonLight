@@ -337,18 +337,24 @@ void LerpPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, ui
     }
 }
 
-void LiteralPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize)
+void LiteralPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize, int steps)
 {
     if (microPaletteSize == 0) //Nothing TO do..
         return;
 
-    unsigned int srcOffset = 0;
+    float srcOffset = 0.0f;
     for (unsigned int dstOffset = 0; dstOffset < paletteSize; dstOffset++)
     {
       if (srcOffset >= microPaletteSize)
-        srcOffset = 0;        
-      palette[dstOffset] = microPalette[srcOffset];
-      srcOffset++;
+        srcOffset = 0.0f;
+      palette[dstOffset] = microPalette[(int)srcOffset];
+      switch (steps)
+      {
+        case 1: srcOffset += 1.0f;break;
+        case 2: srcOffset += 0.5f;break;
+        case 3: srcOffset += 0.25f;break;
+        case 4: srcOffset += 0.125f;break;
+      }
     }
 }
 

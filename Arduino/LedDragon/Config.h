@@ -34,7 +34,7 @@ static const char *DeviceName = "UnkDevice";
 #endif
 
 
-#define STARTUP_STATE       FxState_TestPattern    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
+#define STARTUP_STATE       FxState_Default    //FxState_Default;//FxState_TestPattern;//FxState_PlayingTrack;//
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
 #define BRIGHTNESS          50  //Default brightness
@@ -48,6 +48,23 @@ static const char *DeviceName = "UnkDevice";
 #define LED_PIN             3
 #define DEBUG_BLE           1
 #define SERIAL_BAUD_RATE    115200
+
+#if LEDDRAGON
+#define NUM_LEDS_0          299
+#define NUM_LEDS_1          299
+#define NUM_LEDS_2          299
+#define NUM_LEDS_3          299
+#define NUM_LEDS_4          299
+#define NUM_LEDS_5          299
+#define NUM_LEDS_6          299
+#define NUM_LEDS_7          299
+#define DRAGON_HEAD         LEDS_2|LEDS_3
+#define DRAGON_TORSO_LEFT   LEDS_0
+#define DRAGON_TORSO_RIGHT  LEDS_1
+#define DRAGON_WING_LEFT    LEDS_4
+#define DRAGON_WING_RIGHT   LEDS_5
+#define DRAGON_TAIL         LEDS_6|LEDS_7
+#endif
 
 #if LEAD
 #define NUM_LEDS_0          53
@@ -80,23 +97,6 @@ static const char *DeviceName = "Tester";
 #define NUM_STRIPS          1
 #undef ENABLE_MULTISTRIP
 #define ENABLE_MULTISTRIP   0
-#endif
-
-#if LEDDRAGON
-#define NUM_LEDS_0          299
-#define NUM_LEDS_1          299
-#define NUM_LEDS_2          299
-#define NUM_LEDS_3          299
-#define NUM_LEDS_4          299
-#define NUM_LEDS_5          299
-#define NUM_LEDS_6          299
-#define NUM_LEDS_7          299
-#define DRAGON_HEAD         LEDS_2|LEDS_3
-#define DRAGON_TORSO_LEFT   LEDS_0
-#define DRAGON_TORSO_RIGHT  LEDS_1
-#define DRAGON_WING_LEFT    LEDS_4
-#define DRAGON_WING_RIGHT   LEDS_5
-#define DRAGON_TAIL         LEDS_6|LEDS_7
 #endif
 
 #if FOLLOW
