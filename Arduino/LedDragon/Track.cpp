@@ -90,7 +90,7 @@ void trackStart(FxController &fxc,unsigned long tc, unsigned long tcOffset, FxTr
     fxc.strip[strip]->paletteSpeed = 0;
     fxc.strip[strip]->paletteDirection = 1;
     fxc.strip[strip]->transitionType = Transition_Instant;
-    fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Once;    
+    fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Once;    
   }
   fxc.transitionMux = 0;
   fxc.fxTrackEndAction = trackEndAction;
@@ -106,7 +106,7 @@ void trackStop(FxController &fxc)
   fxc.fxState = FxState_Default;
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {    
-    fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None; 
+    fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None; 
     fxc.strip[strip]->SetParticlesRunning(false);
   }
   fxc.stripMask = 0xFF;

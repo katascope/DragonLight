@@ -19,7 +19,7 @@ void State_Poll_TestPattern(FxController &fxc)
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip]->paletteSpeed = 0;
-      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
+      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Always;
     }
 
     FxEventProcess(fxc, fx_strip_all);//fx_strip + LEDS_0);
@@ -173,7 +173,7 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
       {
         CopyPalette(fxc.strip[strip]->numleds, fxc.strip[strip]->palette, fxc.strip[strip]->nextPalette);
       }
-      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Always;
+      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Always;
     }
 
     for (int i = 0; i < GetNumSongTracks(); i++)

@@ -38,7 +38,8 @@ public:
   int numleds = 0;
   unsigned char brightness = BRIGHTNESS;
   FxTransitionType transitionType = Transition_Instant;  
-  FxPaletteUpdateType fxPaletteUpdateType = FxPaletteUpdateType::None;
+  FxPaletteType paletteType = FxPaletteType::Literal;
+  FxPaletteUpdateType paletteUpdateType = FxPaletteUpdateType::None;
   uint32_t *palette;
   uint32_t *nextPalette;
   uint32_t *initialPalette;
@@ -70,6 +71,10 @@ public:
       if (particles[i].on) 
         return true;
     return false;
+  }
+  void SetPaletteType(FxPaletteType pt)
+  {
+    paletteType = pt;
   }
   void SetParticlesLoc(int loc)
   {
@@ -162,6 +167,12 @@ public:
         if (strip[s]->HasRunning())
           return true;
     return false;
+  }
+  void SetPaletteType(FxPaletteType paletteType)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetPaletteType(paletteType);
   }
   void SetParticlesLoc(int loc)
   {

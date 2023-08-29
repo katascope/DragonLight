@@ -105,6 +105,9 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_Particles_On:  fxc.SetParticlesRunning(true);break;
     case Cmd_Particles_Off: fxc.SetParticlesRunning(false);break;
 
+    case Cmd_PalTypeSmoothed: FxInstantEvent(fxc, fx_palette_type_smoothed, FxPaletteUpdateType::Once); break;
+    case Cmd_PalTypeLiteral:  FxInstantEvent(fxc, fx_palette_type_literal,  FxPaletteUpdateType::Once); break;
+
     case Cmd_PlayTrack0: SetSongTrackContext(0); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
     case Cmd_PlayTrack1: SetSongTrackContext(1); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
     case Cmd_PlayTrack2: SetSongTrackContext(2); trackStart(fxc, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::LoopAtEnd); break;
@@ -165,6 +168,9 @@ void UserCommandInput(FxController &fxc, int data)
     case '%': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
     case '^': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
     case '&': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
+
+    case ',': UserCommandExecute(fxc, Cmd_PalTypeSmoothed); break;
+    case '.': UserCommandExecute(fxc, Cmd_PalTypeLiteral);  break;
 
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;

@@ -53,10 +53,14 @@ const unsigned long SongTrackTest[] PROGMEM =
 const unsigned long SongTrackRGB[] PROGMEM =
 {
     _TRACK_BEGIN
+     100, fx_palette_type_smoothed,
      _FADE_TO(1000, fx_palette_red)
      _FADE_TO(2000, fx_palette_green)
      _FADE_TO(3000, fx_palette_blue)
-    _TRACK_END(4000)
+     5000, fx_palette_rainbow,
+     5000, fx_palette_type_literal,
+     7000, fx_palette_rainbow,
+    _TRACK_END(9000)
 };
 const unsigned long SongTrackCMY[] PROGMEM =
 {
@@ -64,7 +68,8 @@ const unsigned long SongTrackCMY[] PROGMEM =
      _FADE_TO(1000, fx_palette_cyan)
      _FADE_TO(2000, fx_palette_magenta)
      _FADE_TO(3000, fx_palette_yellow)
-    _TRACK_END(4000)
+    _MULTI_COLOR_TO_WINGS(4000,fx_palette_rainbow)
+    _TRACK_END(6000)
 };
 const unsigned long SongTrackWD[] PROGMEM =
 {

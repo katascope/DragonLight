@@ -119,9 +119,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   I+3600, FXRGB4, \
   I+4200, FXRGB5,
 
-  
+//For dragon
+#define _MULTI_COLOR_TO_WINGS(I, FXRGB) \
+  I, fx_strip + (DRAGON_WING_LEFT|DRAGON_WING_RIGHT), \
+  I, fx_transition_timed_wipe_neg, \
+  I, FXRGB,
 
-  //break up into legs in chest in arms in segments
+//break up into legs in chest in arms in segments
 
 #define _MULTI_COLOR_FROM_FEET(I, FXRGB) \
   I, fx_strip + (LEFT_LEG|RIGHT_LEG), \

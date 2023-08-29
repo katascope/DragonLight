@@ -15,7 +15,7 @@ void FxUpdatePalette(struct FxController &fxc)
   
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    if ((int)fxc.strip[strip]->fxPaletteUpdateType != 0)
+    if ((int)fxc.strip[strip]->paletteUpdateType != 0)
     {
       fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
       if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
@@ -37,7 +37,7 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
   {
     if (fxc.stripMask & (1<<strip)) 
     {
-      fxc.strip[strip]->fxPaletteUpdateType = paletteUpdateType;
+      fxc.strip[strip]->paletteUpdateType = paletteUpdateType;
       fxc.strip[strip]->transitionType = Transition_Instant;
     }    
   }
@@ -78,7 +78,7 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(F(",pd="));
         Serial.print(fxc.strip[strip]->paletteDirection);
         Serial.print(F(",u="));
-        Serial.print(fxc.strip[strip]->fxPaletteUpdateType);
+        Serial.print(fxc.strip[strip]->paletteUpdateType);
         Serial.print(F("] "));
       }
 #endif    
@@ -104,16 +104,34 @@ void FxDisplayStatus(FxController &fxc)
 void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
 {
   int numleds = fxController.strip[strip]->numleds;
-  if (fxController.strip[strip]->transitionType == Transition_Instant)
+  
+  if (fxController.strip[strip]->paletteType == FxPaletteType::Smoothed)
   {
-    LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
-    CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-    CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
-  }
-  else
+    if (fxController.strip[strip]->transitionType == Transition_Instant)
+    {
+      LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
+      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+      CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
+    }
+    else
+    {
+      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+      LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+    }
+  }  
+  else if (fxController.strip[strip]->paletteType == FxPaletteType::Literal)
   {
-    CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
-    LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+    if (fxController.strip[strip]->transitionType == Transition_Instant)
+    {
+      LiteralPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
+      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+      CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
+    }
+    else
+    {
+      CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
+      LiteralPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+    }
   }
 }
 
@@ -258,7 +276,7 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
         || t == Transition_TimedWipeOutIn || t == Transition_TimedWipeInOut
         || t == Transition_TimedFadeSin || t == Transition_TimedFadeCos) 
         {
-          fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None;
+          fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;
           fxc.strip[strip]->paletteIndex = 0;
         }
         if (t == fx_transition_timed_wipe_neg)
@@ -266,7 +284,7 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
     }
     if (t == Transition_TimedWipeRandom)
     {
-      fxc.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::None;
+      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;
       fxc.strip[strip]->paletteIndex = 0;
       //sequence_linear(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
       sequence_random(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
@@ -759,6 +777,15 @@ void FxEventProcess(FxController &fxc,int event)
       WEBRGB::Black,WEBRGB::Black,WEBRGB::Black,WEBRGB::Black,
       WEBRGB::Black,WEBRGB::Black,WEBRGB::Black,WEBRGB::Black);
       break;      
+
+    case fx_palette_type_smoothed:
+      fxc.SetPaletteType(FxPaletteType::Smoothed);      
+      break;
+      
+     case fx_palette_type_literal:
+      fxc.SetPaletteType(FxPaletteType::Literal);
+      break;
+      
  }
 }
 

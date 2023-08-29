@@ -337,6 +337,21 @@ void LerpPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, ui
     }
 }
 
+void LiteralPaletteFromMicroPalette(uint32_t *palette, unsigned int paletteSize, uint32_t* microPalette, unsigned int microPaletteSize)
+{
+    if (microPaletteSize == 0) //Nothing TO do..
+        return;
+
+    unsigned int srcOffset = 0;
+    for (unsigned int dstOffset = 0; dstOffset < paletteSize; dstOffset++)
+    {
+      if (srcOffset >= microPaletteSize)
+        srcOffset = 0;        
+      palette[dstOffset] = microPalette[srcOffset];
+      srcOffset++;
+    }
+}
+
 void CopyPalette(int numleds, uint32_t *dst, uint32_t *src)
 {
   for (int i=0;i<numleds;i++)

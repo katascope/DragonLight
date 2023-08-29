@@ -102,8 +102,8 @@ void loop()
   bool needsUpdate = false;
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    if (fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Once
-    || fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Always
+    if (fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Once
+    || fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Always
     || fxController.IsAnimating())
       needsUpdate = true;
   }  
@@ -118,8 +118,8 @@ void loop()
       
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
-        if (fxController.strip[strip]->fxPaletteUpdateType == FxPaletteUpdateType::Once)
-          fxController.strip[strip]->fxPaletteUpdateType = FxPaletteUpdateType::Done;
+        if (fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Once)
+          fxController.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Done;
       }
     }
   }
