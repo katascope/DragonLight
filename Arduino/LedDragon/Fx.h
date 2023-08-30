@@ -37,8 +37,8 @@ class FxStrip
 public:  
   int numleds = 0;
   unsigned char brightness = BRIGHTNESS;
-  FxTransitionType transitionType = Transition_Instant;  
-  FxPaletteType paletteType = FxPaletteType::Literal;
+  FxTransitionType transitionType = Transition_TimedFade;
+  FxPaletteType paletteType = FxPaletteType::Smoothed;
   FxPaletteUpdateType paletteUpdateType = FxPaletteUpdateType::None;
   uint32_t *palette;
   uint32_t *nextPalette;
