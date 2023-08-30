@@ -130,6 +130,65 @@ void PrintPalette(FxController &fxc)
   Serial.print(F(")"));   
 }
 
+void State_Transition(FxController &fxc)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    int numleds = fxc.strip[strip]->numleds;
+    if (fxc.stripMask & (1<<strip))
+    {    
+      if (fxc.strip[strip]->transitionType == Transition_TimedFade)
+      {
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipePos)
+      {
+        int limit = fxc.transitionMux * (numleds -1);
+        CopyFromNext(fxc, strip, numleds - 1, numleds -1 - limit);      
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeNeg)
+      {
+        int limit = fxc.transitionMux * (numleds -1);
+        CopyFromNext(fxc,strip, 0,limit);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeOutIn)
+      {
+        int limit = fxc.transitionMux * (numleds/2);
+        CopyFromNext(fxc,strip, 0,limit);
+        CopyFromNext(fxc,strip, numleds-1,numleds-limit);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeInOut)
+      {
+        int limit = fxc.transitionMux * (numleds/2);
+        CopyFromNext(fxc,strip, numleds/2,numleds/2-limit);
+        CopyFromNext(fxc,strip, numleds/2,numleds/2+limit);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedWipeRandom)
+      {
+        int limit = fxc.transitionMux * (numleds -1);
+        for (int i=0;i<limit;i++)
+        {
+          int remap = fxc.strip[strip]->sequence[i];
+          fxc.strip[strip]->palette[remap] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+        }
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedFadeSin)
+      {
+        float sinMux = abs(sin(fxc.transitionMux * 3.14159f * 4 * 1.5f));
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+      }
+      if (fxc.strip[strip]->transitionType == Transition_TimedFadeCos)
+      {
+        float sinMux = cos(fxc.transitionMux * 3.14159f * 2 * 1.5f);
+        for (int i = 0; i < numleds; i++)
+          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
+      }
+    }    
+  }
+}
+
 void State_Poll_Play(FxController &fxc, unsigned long timecode)
 {
   
@@ -215,63 +274,8 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   Serial.print(F(" .. "));
   PrintPalette(fxc);
   Serial.println();
-  
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-        int numleds = fxc.strip[strip]->numleds;
-    if (fxc.stripMask & (1<<strip))
-    {    
-      if (fxc.strip[strip]->transitionType == Transition_TimedFade)
-      {
-        for (int i = 0; i < numleds; i++)
-          fxc.strip[strip]->palette[i] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedWipePos)
-      {
-        int limit = fxc.transitionMux * (numleds -1);
-        CopyFromNext(fxc, strip, numleds - 1, numleds -1 - limit);      
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedWipeNeg)
-      {
-        int limit = fxc.transitionMux * (numleds -1);
-        CopyFromNext(fxc,strip, 0,limit);
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedWipeOutIn)
-      {
-        int limit = fxc.transitionMux * (numleds/2);
-        CopyFromNext(fxc,strip, 0,limit);
-        CopyFromNext(fxc,strip, numleds-1,numleds-limit);
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedWipeInOut)
-      {
-        int limit = fxc.transitionMux * (numleds/2);
-        CopyFromNext(fxc,strip, numleds/2,numleds/2-limit);
-        CopyFromNext(fxc,strip, numleds/2,numleds/2+limit);
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedWipeRandom)
-      {
-        int limit = fxc.transitionMux * (numleds -1);
-        for (int i=0;i<limit;i++)
-        {
-          int remap = fxc.strip[strip]->sequence[i];
-          fxc.strip[strip]->palette[remap] = LerpRGB(fxc.transitionMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
-        }
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedFadeSin)
-      {
-        float sinMux = abs(sin(fxc.transitionMux * 3.14159f * 4 * 1.5f));
-        for (int i = 0; i < numleds; i++)
-          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
-      }
-      if (fxc.strip[strip]->transitionType == Transition_TimedFadeCos)
-      {
-        float sinMux = cos(fxc.transitionMux * 3.14159f * 2 * 1.5f);
-        for (int i = 0; i < numleds; i++)
-          fxc.strip[strip]->palette[i] = LerpRGB(sinMux,fxc.strip[strip]->initialPalette[i],fxc.strip[strip]->nextPalette[i]);
-      }
-    }
-    
-  }
+
+  State_Transition(fxc);
 }
 
 void State_Poll(FxController &fxc)

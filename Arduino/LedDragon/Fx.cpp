@@ -38,11 +38,10 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
     if (fxc.stripMask & (1<<strip)) 
     {
       fxc.strip[strip]->paletteUpdateType = paletteUpdateType;
-      fxc.strip[strip]->transitionType = Transition_Instant;
+//      fxc.strip[strip]->transitionType = Transition_Instant;
     }    
   }
 
-  //if (event != fx_nothing) PrintFxEventName(event);
   FxEventProcess(fxc, event);
   FxUpdatePalette(fxc);
 }
@@ -59,6 +58,8 @@ void FxDisplayStatus(FxController &fxc)
       PrintFxStateName(fxc.fxState);
       Serial.print(F(",strip&="));
       Serial.print(fxc.stripMask);
+      Serial.print(F(",mux="));
+      Serial.print(fxc.transitionMux);
 
 #if ENABLE_BLE      
       Serial.print(F(",BLE on"));
@@ -71,7 +72,8 @@ void FxDisplayStatus(FxController &fxc)
       for (int strip=0;strip<NUM_STRIPS;strip++)
       {
         Serial.print(F("["));
-        Serial.print(F("b="));
+        PrintFxTransitionName(fxc.strip[strip]->transitionType);
+        Serial.print(F(",b="));
         Serial.print(fxc.strip[strip]->brightness);
         Serial.print(F(",ps="));
         Serial.print(fxc.strip[strip]->paletteSpeed);
@@ -114,7 +116,11 @@ void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, uns
       LerpPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize);
       CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
     }
-    else LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+    else 
+    {
+      fxController.transitionMux = 0.0f;
+      LerpPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize);
+    }
   }  
   else if (fxController.strip[strip]->paletteType == FxPaletteType::Literal
         || fxController.strip[strip]->paletteType == FxPaletteType::Literal2
@@ -134,7 +140,11 @@ void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, uns
       LiteralPaletteFromMicroPalette(fxController.strip[strip]->palette, numleds, pal16, palSize,steps);
       CopyPalette(numleds, fxController.strip[strip]->nextPalette, fxController.strip[strip]->palette);
     }
-    else LiteralPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize,steps);
+    else 
+    {
+      fxController.transitionMux = 0.0f;
+      LiteralPaletteFromMicroPalette(fxController.strip[strip]->nextPalette, numleds, pal16, palSize,steps);      
+    }
   }  
   CopyPalette(numleds, fxController.strip[strip]->initialPalette, fxController.strip[strip]->palette);
 }

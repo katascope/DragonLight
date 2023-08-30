@@ -107,13 +107,22 @@ void loop()
     || fxController.IsAnimating())
       needsUpdate = true;
   }  
+
+  if (fxController.transitionMux < 1.0f)
+  {
+    fxController.transitionMux += 0.1f;
+    if (fxController.transitionMux > 1.0f)
+      fxController.transitionMux = 1.0f;
+    State_Transition(fxController);
+    needsUpdate = true;
+  } 
+  
   if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
   {
     unsigned long t =  millis();
     if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)
     {
-      FxUpdatePalette(fxController);
-      
+      FxUpdatePalette(fxController);      
       fxController.lastTimeLedUpdate = t;
       
       for (int strip=0;strip<NUM_STRIPS;strip++)

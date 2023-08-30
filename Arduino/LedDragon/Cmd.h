@@ -19,6 +19,14 @@ enum UserCommand
   Cmd_State_Default,
   Cmd_State_Test,
   Cmd_State_MultiTest,
+
+  Cmd_Transition_Fast,
+  Cmd_Transition_TimedFade,
+  Cmd_Transition_TimedWipePos,
+  Cmd_Transition_TimedwipeNeg,
+  Cmd_Transition_TimedWipeOutIn,
+  Cmd_Transition_TimedWipeInOut,
+  Cmd_Transition_TimedWipeRandom,
   
   Cmd_PlayFromStart,
   Cmd_PlayFrom,

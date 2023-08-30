@@ -137,6 +137,14 @@ void UserCommandExecute(FxController &fxc, int cmd)
         neopixelSetBrightness(strip,BRIGHTNESS/2);
       break;
     }
+
+    case Cmd_Transition_Fast:            FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedFade:       FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedWipePos:    FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedwipeNeg:    FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedWipeOutIn:  FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedWipeInOut:  FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once); break;
+    case Cmd_Transition_TimedWipeRandom: FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once); break;
     
 #endif  
     case Cmd_Help:
@@ -145,7 +153,8 @@ void UserCommandExecute(FxController &fxc, int cmd)
       Serial.println(F("( * ) : Track Start/StartFrom/Stop"));
       Serial.println(F("@code : Time code"));
       Serial.println(F("[ % | ^ | &] : Brightness Half/Normal/Full"));
-      Serial.println(F("[_ + - = ~] Neg Pos Dec Inc Rst"));
+      Serial.println(F("[_ + - = ~] PalSpeed Neg Pos Dec Inc Rst"));
+      Serial.println(F("[, . / ?] PalType Smooth Literal/2/4"));
       Serial.println(F("0:dark 1:white 2:red 3:yellow 4:green 5:cyan 6:blue 7:magenta 8:orange 9:half"));
       Serial.println(F("[Q to P] Strips Q:strip0 W:strip1 E:strip2 R:strip3 T:strip4 Y:strip5 U:strip6 I:strip7 O:None P:All"));
       Serial.println(F("Mix1 z:lava x:cloud c:rainbow v:rainbowstripe b:party n:heat"));
@@ -176,6 +185,9 @@ void UserCommandInput(FxController &fxc, int data)
     case '.': UserCommandExecute(fxc, Cmd_PalTypeLiteral);  break;
     case '/': UserCommandExecute(fxc, Cmd_PalTypeLiteral2);  break;
     case '?': UserCommandExecute(fxc, Cmd_PalTypeLiteral4);  break;
+
+    case '[': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
+    case ']': UserCommandExecute(fxc, Cmd_PlayFrom); break;
 
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
@@ -378,4 +390,13 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   if (data == F("pmb")) FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once);
   if (data == F("pmm")) FxInstantEvent(fxc, fx_palette_magenta,FxPaletteUpdateType::Once);
   if (data == F("pmw")) FxInstantEvent(fxc, fx_palette_wm,     FxPaletteUpdateType::Once);
+
+  if (data == F("tf"))   FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once);
+  if (data == F("ttf"))  FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once);
+  if (data == F("ttwp")) FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once);
+  if (data == F("ttwn")) FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once);
+  if (data == F("ttwo")) FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once);
+  if (data == F("ttwi")) FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once);
+  if (data == F("ttwr")) FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once);
+  
 }
