@@ -77,6 +77,8 @@ void FxDisplayStatus(FxController &fxc)
         Serial.print(fxc.strip[strip]->paletteSpeed);
         Serial.print(F(",pd="));
         Serial.print(fxc.strip[strip]->paletteDirection);
+        Serial.print(F(",pi="));
+        Serial.print(fxc.strip[strip]->paletteIndex);
         Serial.print(F(",u="));
         Serial.print(fxc.strip[strip]->paletteUpdateType);
         Serial.print(F("] "));
@@ -182,7 +184,7 @@ void CreateQuadColor(FxController &fxc,
         palette[1] = LEDRGB(r2,g2,b2);
         palette[2] = LEDRGB(r3,g3,b3);
         palette[3] = LEDRGB(r4,g4,b4);
-        FxCreatePalette(fxc,strip, palette,2);
+        FxCreatePalette(fxc,strip, palette,4);
     }
   }
 }
@@ -422,7 +424,8 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_inc:ChangePaletteSpeed(fxc,1);break;
     case fx_speed_dec:ChangePaletteSpeed(fxc,-1);break;
     case fx_speed_rst:
-      ResetPaletteSpeed(fxc);break;
+      ResetPaletteSpeed(fxc);
+      break;
       
     case fx_transition_fast:              SetTransitionType(fxc,Transition_Instant);break;
     case fx_transition_timed_fade:        SetTransitionType(fxc,Transition_TimedFade);break;
@@ -557,7 +560,10 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_palette_dcm: CreateQuadColor(fxc, DARK, CYAN,   DARK, MAGENTA); break;
     case fx_palette_dbm: CreateQuadColor(fxc, DARK, BLUE,   DARK, MAGENTA); break;
 
-    case fx_palette_rbm: CreateQuadColor(fxc, RED, MAGENTA, BLUE,   DARK); break;
+    case fx_palette_rbm: CreateQuadColor(fxc, RED, MAGENTA, BLUE,    DARK); break;
+    case fx_palette_rgb: CreateQuadColor(fxc, RED, GREEN, BLUE,      DARK); break;
+    case fx_palette_cmy: CreateQuadColor(fxc, CYAN, MAGENTA, YELLOW, DARK); break;
+    case fx_palette_cbm: CreateQuadColor(fxc, CYAN, BLUE, MAGENTA,   DARK); break;
 
     case fx_palette_lava:Create16Color(fxc,
         WEBRGB::Black,WEBRGB::Maroon,WEBRGB::Black,WEBRGB::Maroon,    

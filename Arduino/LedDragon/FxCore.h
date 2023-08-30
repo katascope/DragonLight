@@ -250,6 +250,9 @@ enum FxEvent
   fx_palette_dbm,
 
   fx_palette_rbm,
+  fx_palette_rgb,
+  fx_palette_cmy,
+  fx_palette_cbm,
 
   fx_particles_off,
   fx_particles_pos,

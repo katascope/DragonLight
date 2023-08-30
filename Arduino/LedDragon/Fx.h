@@ -49,6 +49,7 @@ public:
   int paletteIndex = 0;
 
   FxParticle particles[NUM_PARTICLES];
+  FxParticle racers[NUM_PARTICLES];
 public:
   FxStrip(int nl)
   { 
@@ -65,6 +66,14 @@ public:
       sequence[i] = i;
     }
   } 
+  bool HasRacers()
+  {
+    for (int i=0;i<NUM_PARTICLES;i++)
+      if (racers[i].on) 
+        return true;
+    return false;
+  }
+  
   bool HasRunning()
   {
     for (int i=0;i<NUM_PARTICLES;i++)

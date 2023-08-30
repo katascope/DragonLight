@@ -52,43 +52,29 @@ const unsigned long SongTrackTest[] PROGMEM =
 #if LEDDRAGON
 const unsigned long SongTrackRGB[] PROGMEM =
 {
-    _TRACK_BEGIN
-     100, fx_palette_type_smoothed,
-     100, fx_speed_3,
-     100, fx_speed_neg,
-     
-     _FADE_TO(1000, fx_palette_red)
-     _FADE_TO(2000, fx_palette_green)
-     _FADE_TO(3000, fx_palette_blue)
-     5000, fx_palette_rainbow,
-     5000, fx_palette_type_literal,
-     7000, fx_palette_rainbow,
-     7000, fx_palette_type_literal2,
-     9000, fx_palette_rainbow,
-     9000, fx_palette_type_literal3,
-     10000, fx_palette_rainbow,
-     10000, fx_palette_type_literal4,
-    _TRACK_END(12000)
+     10, fx_palette_type_literal2,
+     10, fx_transition_timed_fade,
+     10, fx_palette_cm,
+     500, fx_palette_cm,
 };
 const unsigned long SongTrackCMY[] PROGMEM =
-{
-     100, fx_transition_timed_fade,
-     100, fx_speed_2,
-     100, fx_speed_neg,     
-     100, fx_palette_type_literal,
-     100, fx_palette_rainbow,
-     110, fx_palette_type_literal4,
-     1000, fx_palette_rainbow,
-     2000, fx_palette_rainbow
+{ 
+     10, fx_palette_type_literal2,
+     10, fx_transition_timed_fade,
+     10, fx_palette_rainbow,
+     500, fx_palette_rainbow,
 };
 const unsigned long SongTrackWD[] PROGMEM =
 {
     _TRACK_BEGIN
-     _FADE_TO(1000, fx_palette_cyan)
-     _FADE_TO(2000, fx_palette_magenta)
-     _FADE_TO(3000, fx_palette_yellow)
-    _MULTI_COLOR_TO_WINGS(4000,fx_palette_rainbow)
-    _TRACK_END(5000)
+     _FADE_TO(100, fx_palette_red)
+    3000, fx_particles_neg,
+    3000, fx_particles_rnd,
+    //we came together, so purple again?
+    5000, fx_particles_color_magenta,
+    5000, fx_transition_timed_wipe_inout,
+    8000, fx_palette_cyan,
+    _TRACK_END(10000)
 };
 const unsigned long SongTrackRYGCBM[] PROGMEM =
 {

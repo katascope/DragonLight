@@ -50,14 +50,14 @@ static const char *DeviceName = "UnkDevice";
 #define SERIAL_BAUD_RATE    115200
 
 #if LEDDRAGON
-#define NUM_LEDS_0          299
-#define NUM_LEDS_1          299
-#define NUM_LEDS_2          299
-#define NUM_LEDS_3          299
-#define NUM_LEDS_4          299
-#define NUM_LEDS_5          299
-#define NUM_LEDS_6          299
-#define NUM_LEDS_7          299
+#define NUM_LEDS_0          99
+#define NUM_LEDS_1          99
+#define NUM_LEDS_2          99
+#define NUM_LEDS_3          99
+#define NUM_LEDS_4          99
+#define NUM_LEDS_5          99
+#define NUM_LEDS_6          99
+#define NUM_LEDS_7          99
 #define DRAGON_HEAD         LEDS_2|LEDS_3
 #define DRAGON_TORSO_LEFT   LEDS_0
 #define DRAGON_TORSO_RIGHT  LEDS_1
