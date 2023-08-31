@@ -50,6 +50,14 @@ const unsigned long SongTrackTest[] PROGMEM =
 };
 
 #if LEDDRAGON
+const unsigned long TrackFormRGB[] PROGMEM =
+{
+     fx_speed_2,
+     fx_speed_neg,
+     fx_palette_type_smoothed,
+     fx_palette_rgb,
+};
+
 const unsigned long SongTrackRGB[] PROGMEM =
 {
      10, fx_palette_type_literal2,

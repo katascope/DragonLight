@@ -302,6 +302,7 @@ enum FxEvent
   fx_strip_none, //Target no strips, why?
   fx_strip_evens, //Target even strips
   fx_strip_odds, //Target odd strips
+  fx_strip_inv,  //Target 'opposing' strips
   
   fx_stripmask_0, fx_strip = fx_stripmask_0,//make a syntactic sugar for it
   fx_stripmask_1,fx_stripmask_2,fx_stripmask_3,fx_stripmask_4,fx_stripmask_5,fx_stripmask_6,fx_stripmask_7,fx_stripmask_8,  

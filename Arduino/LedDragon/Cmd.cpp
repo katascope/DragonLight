@@ -177,17 +177,17 @@ void UserCommandInput(FxController &fxc, int data)
     case '@': UserCommandExecute(fxc, Cmd_State_Test);break;
     case '#': UserCommandExecute(fxc, Cmd_State_MultiTest);break;
     
-    case '%': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
-    case '^': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
-    case '&': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
+    case '$': UserCommandExecute(fxc, Cmd_Brightness_Half);break;
+    case '%': UserCommandExecute(fxc, Cmd_Brightness_Normal);break;
+    case '^': UserCommandExecute(fxc, Cmd_Brightness_Max);break;
 
     case ',': UserCommandExecute(fxc, Cmd_PalTypeSmoothed); break;
     case '.': UserCommandExecute(fxc, Cmd_PalTypeLiteral);  break;
     case '/': UserCommandExecute(fxc, Cmd_PalTypeLiteral2);  break;
     case '?': UserCommandExecute(fxc, Cmd_PalTypeLiteral4);  break;
 
-    case '[': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
-    case ']': UserCommandExecute(fxc, Cmd_PlayFrom); break;
+    case '[': break;
+    case ']': break;
 
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
@@ -293,132 +293,175 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   //Remove carriage returns; 
   if (data[data.length()-1]=='\n') data.remove(data.length()-1,1);
   if (data[data.length()-1]=='\r') data.remove(data.length()-1,1);
+  int len = data.length();
   Serial.print(F("ComplexCommand="));
   Serial.println(data);  
 
-  if (data[0] == 'p')
+  //If's to avoid excessive string comparisons
+  if (data[0] == 'p') //palette settings
   { 
-    if (data == F("pryd")) FxInstantEvent(fxc, fx_palette_dry,     FxPaletteUpdateType::Once);
-    if (data == F("prgd")) FxInstantEvent(fxc, fx_palette_drg,     FxPaletteUpdateType::Once);
-    if (data == F("prcd")) FxInstantEvent(fxc, fx_palette_drc,     FxPaletteUpdateType::Once);
-    if (data == F("prbd")) FxInstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once);
-    if (data == F("prmd")) FxInstantEvent(fxc, fx_palette_drm,     FxPaletteUpdateType::Once);
-    if (data == F("pryw")) FxInstantEvent(fxc, fx_palette_wry,     FxPaletteUpdateType::Once);
-    if (data == F("prgw")) FxInstantEvent(fxc, fx_palette_wrg,     FxPaletteUpdateType::Once);
-    if (data == F("prcw")) FxInstantEvent(fxc, fx_palette_wrc,     FxPaletteUpdateType::Once);
-    if (data == F("prbw")) FxInstantEvent(fxc, fx_palette_wrb,     FxPaletteUpdateType::Once);
-    if (data == F("prmw")) FxInstantEvent(fxc, fx_palette_wrm,     FxPaletteUpdateType::Once);
+    if (len == 4)
+    {
+      if (data == F("pryd")) FxInstantEvent(fxc, fx_palette_dry,     FxPaletteUpdateType::Once);
+      if (data == F("prgd")) FxInstantEvent(fxc, fx_palette_drg,     FxPaletteUpdateType::Once);
+      if (data == F("prcd")) FxInstantEvent(fxc, fx_palette_drc,     FxPaletteUpdateType::Once);
+      if (data == F("prbd")) FxInstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once);
+      if (data == F("prmd")) FxInstantEvent(fxc, fx_palette_drm,     FxPaletteUpdateType::Once);
+      if (data == F("pryw")) FxInstantEvent(fxc, fx_palette_wry,     FxPaletteUpdateType::Once);
+      if (data == F("prgw")) FxInstantEvent(fxc, fx_palette_wrg,     FxPaletteUpdateType::Once);
+      if (data == F("prcw")) FxInstantEvent(fxc, fx_palette_wrc,     FxPaletteUpdateType::Once);
+      if (data == F("prbw")) FxInstantEvent(fxc, fx_palette_wrb,     FxPaletteUpdateType::Once);
+      if (data == F("prmw")) FxInstantEvent(fxc, fx_palette_wrm,     FxPaletteUpdateType::Once);
+      
+      if (data == F("pygd")) FxInstantEvent(fxc, fx_palette_dyg,     FxPaletteUpdateType::Once);
+      if (data == F("pycd")) FxInstantEvent(fxc, fx_palette_dyc,     FxPaletteUpdateType::Once);
+      if (data == F("pybd")) FxInstantEvent(fxc, fx_palette_dyb,     FxPaletteUpdateType::Once);
+      if (data == F("pymd")) FxInstantEvent(fxc, fx_palette_dym,     FxPaletteUpdateType::Once);
+      if (data == F("pygw")) FxInstantEvent(fxc, fx_palette_wyg,     FxPaletteUpdateType::Once);
+      if (data == F("pycw")) FxInstantEvent(fxc, fx_palette_wyc,     FxPaletteUpdateType::Once);
+      if (data == F("pybw")) FxInstantEvent(fxc, fx_palette_wyb,     FxPaletteUpdateType::Once);
+      if (data == F("pymw")) FxInstantEvent(fxc, fx_palette_wym,     FxPaletteUpdateType::Once);
     
-    if (data == F("pygd")) FxInstantEvent(fxc, fx_palette_dyg,     FxPaletteUpdateType::Once);
-    if (data == F("pycd")) FxInstantEvent(fxc, fx_palette_dyc,     FxPaletteUpdateType::Once);
-    if (data == F("pybd")) FxInstantEvent(fxc, fx_palette_dyb,     FxPaletteUpdateType::Once);
-    if (data == F("pymd")) FxInstantEvent(fxc, fx_palette_dym,     FxPaletteUpdateType::Once);
-    if (data == F("pygw")) FxInstantEvent(fxc, fx_palette_wyg,     FxPaletteUpdateType::Once);
-    if (data == F("pycw")) FxInstantEvent(fxc, fx_palette_wyc,     FxPaletteUpdateType::Once);
-    if (data == F("pybw")) FxInstantEvent(fxc, fx_palette_wyb,     FxPaletteUpdateType::Once);
-    if (data == F("pymw")) FxInstantEvent(fxc, fx_palette_wym,     FxPaletteUpdateType::Once);
-  
-    if (data == F("pgcd")) FxInstantEvent(fxc, fx_palette_dgc,     FxPaletteUpdateType::Once);
-    if (data == F("pgbd")) FxInstantEvent(fxc, fx_palette_dgb,     FxPaletteUpdateType::Once);
-    if (data == F("pgmd")) FxInstantEvent(fxc, fx_palette_dgm,     FxPaletteUpdateType::Once);
-    if (data == F("pgcw")) FxInstantEvent(fxc, fx_palette_wgc,     FxPaletteUpdateType::Once);
-    if (data == F("pgbw")) FxInstantEvent(fxc, fx_palette_wgb,     FxPaletteUpdateType::Once);
-    if (data == F("pgmw")) FxInstantEvent(fxc, fx_palette_wgm,     FxPaletteUpdateType::Once);
-  
-    if (data == F("pcbd")) FxInstantEvent(fxc, fx_palette_dcb,     FxPaletteUpdateType::Once);
-    if (data == F("pcmd")) FxInstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once);
-    if (data == F("pcbw")) FxInstantEvent(fxc, fx_palette_wcb,     FxPaletteUpdateType::Once);
-    if (data == F("pcmw")) FxInstantEvent(fxc, fx_palette_wcm,     FxPaletteUpdateType::Once);
+      if (data == F("pgcd")) FxInstantEvent(fxc, fx_palette_dgc,     FxPaletteUpdateType::Once);
+      if (data == F("pgbd")) FxInstantEvent(fxc, fx_palette_dgb,     FxPaletteUpdateType::Once);
+      if (data == F("pgmd")) FxInstantEvent(fxc, fx_palette_dgm,     FxPaletteUpdateType::Once);
+      if (data == F("pgcw")) FxInstantEvent(fxc, fx_palette_wgc,     FxPaletteUpdateType::Once);
+      if (data == F("pgbw")) FxInstantEvent(fxc, fx_palette_wgb,     FxPaletteUpdateType::Once);
+      if (data == F("pgmw")) FxInstantEvent(fxc, fx_palette_wgm,     FxPaletteUpdateType::Once);
     
-    if (data == F("pbmd")) FxInstantEvent(fxc, fx_palette_dbm,     FxPaletteUpdateType::Once);
-    if (data == F("pbmw")) FxInstantEvent(fxc, fx_palette_wbm,     FxPaletteUpdateType::Once);
-  
-    if (data == F("prgb")) FxInstantEvent(fxc, fx_palette_rgb,     FxPaletteUpdateType::Once);
-    if (data == F("prbm")) FxInstantEvent(fxc, fx_palette_rbm,     FxPaletteUpdateType::Once);
-    if (data == F("pcmy")) FxInstantEvent(fxc, fx_palette_cmy,     FxPaletteUpdateType::Once);
-    if (data == F("pcbm")) FxInstantEvent(fxc, fx_palette_cbm,     FxPaletteUpdateType::Once);
-  
-    if (data == F("prd")) FxInstantEvent(fxc, fx_palette_dr,     FxPaletteUpdateType::Once);
-    if (data == F("prr")) FxInstantEvent(fxc, fx_palette_red,    FxPaletteUpdateType::Once);
-    if (data == F("pry")) FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once);
-    if (data == F("prg")) FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once);
-    if (data == F("prc")) FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once);
-    if (data == F("prb")) FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once);
-    if (data == F("prm")) FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once);
-    if (data == F("prw")) FxInstantEvent(fxc, fx_palette_wr,     FxPaletteUpdateType::Once);
-  
-    if (data == F("pyd")) FxInstantEvent(fxc, fx_palette_dy,     FxPaletteUpdateType::Once);
-    if (data == F("pyr")) FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once);
-    if (data == F("pyy")) FxInstantEvent(fxc, fx_palette_yellow, FxPaletteUpdateType::Once);
-    if (data == F("pyg")) FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once);
-    if (data == F("pyc")) FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once);
-    if (data == F("pyb")) FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once);
-    if (data == F("pym")) FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once);
-    if (data == F("pyw")) FxInstantEvent(fxc, fx_palette_wy,     FxPaletteUpdateType::Once);
+      if (data == F("pcbd")) FxInstantEvent(fxc, fx_palette_dcb,     FxPaletteUpdateType::Once);
+      if (data == F("pcmd")) FxInstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once);
+      if (data == F("pcbw")) FxInstantEvent(fxc, fx_palette_wcb,     FxPaletteUpdateType::Once);
+      if (data == F("pcmw")) FxInstantEvent(fxc, fx_palette_wcm,     FxPaletteUpdateType::Once);
+      
+      if (data == F("pbmd")) FxInstantEvent(fxc, fx_palette_dbm,     FxPaletteUpdateType::Once);
+      if (data == F("pbmw")) FxInstantEvent(fxc, fx_palette_wbm,     FxPaletteUpdateType::Once);
     
-    if (data == F("pgd")) FxInstantEvent(fxc, fx_palette_dg,     FxPaletteUpdateType::Once);
-    if (data == F("pgr")) FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once);
-    if (data == F("pgy")) FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once);
-    if (data == F("pgg")) FxInstantEvent(fxc, fx_palette_green,  FxPaletteUpdateType::Once);
-    if (data == F("pgc")) FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once);
-    if (data == F("pgb")) FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once);
-    if (data == F("pgm")) FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once);
-    if (data == F("pgw")) FxInstantEvent(fxc, fx_palette_wg,     FxPaletteUpdateType::Once);
-  
-    if (data == F("pcd")) FxInstantEvent(fxc, fx_palette_dc,     FxPaletteUpdateType::Once);
-    if (data == F("pcr")) FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once);
-    if (data == F("pcy")) FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once);
-    if (data == F("pcg")) FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once);
-    if (data == F("pcc")) FxInstantEvent(fxc, fx_palette_cyan,   FxPaletteUpdateType::Once);
-    if (data == F("pcb")) FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once);
-    if (data == F("pcm")) FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once);
-    if (data == F("pcw")) FxInstantEvent(fxc, fx_palette_wc,     FxPaletteUpdateType::Once);
+      if (data == F("prgb")) FxInstantEvent(fxc, fx_palette_rgb,     FxPaletteUpdateType::Once);
+      if (data == F("prbm")) FxInstantEvent(fxc, fx_palette_rbm,     FxPaletteUpdateType::Once);
+      if (data == F("pcmy")) FxInstantEvent(fxc, fx_palette_cmy,     FxPaletteUpdateType::Once);
+      if (data == F("pcbm")) FxInstantEvent(fxc, fx_palette_cbm,     FxPaletteUpdateType::Once);
+    }
+    else if (len == 3)
+    {
+      if (data == F("prd")) FxInstantEvent(fxc, fx_palette_dr,     FxPaletteUpdateType::Once);
+      if (data == F("prr")) FxInstantEvent(fxc, fx_palette_red,    FxPaletteUpdateType::Once);
+      if (data == F("pry")) FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once);
+      if (data == F("prg")) FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once);
+      if (data == F("prc")) FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once);
+      if (data == F("prb")) FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once);
+      if (data == F("prm")) FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once);
+      if (data == F("prw")) FxInstantEvent(fxc, fx_palette_wr,     FxPaletteUpdateType::Once);
     
-    if (data == F("pbd")) FxInstantEvent(fxc, fx_palette_db,     FxPaletteUpdateType::Once);
-    if (data == F("pbr")) FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once);
-    if (data == F("pby")) FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once);
-    if (data == F("pbg")) FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once);
-    if (data == F("pbc")) FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once);
-    if (data == F("pbb")) FxInstantEvent(fxc, fx_palette_blue,   FxPaletteUpdateType::Once);
-    if (data == F("pbm")) FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once);
-    if (data == F("pbw")) FxInstantEvent(fxc, fx_palette_wb,     FxPaletteUpdateType::Once);
-  
-    if (data == F("pmd")) FxInstantEvent(fxc, fx_palette_dm,     FxPaletteUpdateType::Once);
-    if (data == F("pmr")) FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once);
-    if (data == F("pmy")) FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once);
-    if (data == F("pmg")) FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once);
-    if (data == F("pmc")) FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once);
-    if (data == F("pmb")) FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once);
-    if (data == F("pmm")) FxInstantEvent(fxc, fx_palette_magenta,FxPaletteUpdateType::Once);
-    if (data == F("pmw")) FxInstantEvent(fxc, fx_palette_wm,     FxPaletteUpdateType::Once);
+      if (data == F("pyd")) FxInstantEvent(fxc, fx_palette_dy,     FxPaletteUpdateType::Once);
+      if (data == F("pyr")) FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once);
+      if (data == F("pyy")) FxInstantEvent(fxc, fx_palette_yellow, FxPaletteUpdateType::Once);
+      if (data == F("pyg")) FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once);
+      if (data == F("pyc")) FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once);
+      if (data == F("pyb")) FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once);
+      if (data == F("pym")) FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once);
+      if (data == F("pyw")) FxInstantEvent(fxc, fx_palette_wy,     FxPaletteUpdateType::Once);
+      
+      if (data == F("pgd")) FxInstantEvent(fxc, fx_palette_dg,     FxPaletteUpdateType::Once);
+      if (data == F("pgr")) FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once);
+      if (data == F("pgy")) FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once);
+      if (data == F("pgg")) FxInstantEvent(fxc, fx_palette_green,  FxPaletteUpdateType::Once);
+      if (data == F("pgc")) FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once);
+      if (data == F("pgb")) FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once);
+      if (data == F("pgm")) FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once);
+      if (data == F("pgw")) FxInstantEvent(fxc, fx_palette_wg,     FxPaletteUpdateType::Once);
+    
+      if (data == F("pcd")) FxInstantEvent(fxc, fx_palette_dc,     FxPaletteUpdateType::Once);
+      if (data == F("pcr")) FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once);
+      if (data == F("pcy")) FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once);
+      if (data == F("pcg")) FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once);
+      if (data == F("pcc")) FxInstantEvent(fxc, fx_palette_cyan,   FxPaletteUpdateType::Once);
+      if (data == F("pcb")) FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once);
+      if (data == F("pcm")) FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once);
+      if (data == F("pcw")) FxInstantEvent(fxc, fx_palette_wc,     FxPaletteUpdateType::Once);
+      
+      if (data == F("pbd")) FxInstantEvent(fxc, fx_palette_db,     FxPaletteUpdateType::Once);
+      if (data == F("pbr")) FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once);
+      if (data == F("pby")) FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once);
+      if (data == F("pbg")) FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once);
+      if (data == F("pbc")) FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once);
+      if (data == F("pbb")) FxInstantEvent(fxc, fx_palette_blue,   FxPaletteUpdateType::Once);
+      if (data == F("pbm")) FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once);
+      if (data == F("pbw")) FxInstantEvent(fxc, fx_palette_wb,     FxPaletteUpdateType::Once);
+    
+      if (data == F("pmd")) FxInstantEvent(fxc, fx_palette_dm,     FxPaletteUpdateType::Once);
+      if (data == F("pmr")) FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once);
+      if (data == F("pmy")) FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once);
+      if (data == F("pmg")) FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once);
+      if (data == F("pmc")) FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once);
+      if (data == F("pmb")) FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once);
+      if (data == F("pmm")) FxInstantEvent(fxc, fx_palette_magenta,FxPaletteUpdateType::Once);
+      if (data == F("pmw")) FxInstantEvent(fxc, fx_palette_wm,     FxPaletteUpdateType::Once);
+    }
+    else if (len == 2)
+    {
+      if (data == F("p0"))  FxInstantEvent(fxc, fx_speed_0,     FxPaletteUpdateType::Once);
+      if (data == F("p1"))  FxInstantEvent(fxc, fx_speed_1,     FxPaletteUpdateType::Once);
+      if (data == F("p2"))  FxInstantEvent(fxc, fx_speed_2,     FxPaletteUpdateType::Once);
+      if (data == F("p3"))  FxInstantEvent(fxc, fx_speed_3,     FxPaletteUpdateType::Once);
+      if (data == F("p4"))  FxInstantEvent(fxc, fx_speed_4,     FxPaletteUpdateType::Once);
+      if (data == F("p5"))  FxInstantEvent(fxc, fx_speed_5,     FxPaletteUpdateType::Once);
+      if (data == F("p6"))  FxInstantEvent(fxc, fx_speed_6,     FxPaletteUpdateType::Once);
+      if (data == F("p7"))  FxInstantEvent(fxc, fx_speed_7,     FxPaletteUpdateType::Once);
+      if (data == F("p8"))  FxInstantEvent(fxc, fx_speed_8,     FxPaletteUpdateType::Once);
+    }
+    return;
+  }
+  else if (data[0] == 'x') //transitions
+  {
+    if (data == F("xf"))   FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once);
+    if (data == F("xtf"))  FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once);
+    if (data == F("xtwp")) FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once);
+    if (data == F("xtwn")) FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once);
+    if (data == F("xtwo")) FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once);
+    if (data == F("xtwi")) FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once);
+    if (data == F("xtwr")) FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once);
+    return;
+  }
+  else if (data[0] == '_')
+  {
+    if (data == F("_red"))      FxInstantEvent(fxc, fx_palette_red,          FxPaletteUpdateType::Once);
+    if (data == F("_yellow"))   FxInstantEvent(fxc, fx_palette_yellow,       FxPaletteUpdateType::Once);
+    if (data == F("_green"))    FxInstantEvent(fxc, fx_palette_green,        FxPaletteUpdateType::Once);
+    if (data == F("_cyan"))     FxInstantEvent(fxc, fx_palette_cyan,         FxPaletteUpdateType::Once);
+    if (data == F("_blue"))     FxInstantEvent(fxc, fx_palette_blue,         FxPaletteUpdateType::Once);
+    if (data == F("_magenta"))  FxInstantEvent(fxc, fx_palette_magenta,      FxPaletteUpdateType::Once);
+    if (data == F("_white"))    FxInstantEvent(fxc, fx_palette_white,        FxPaletteUpdateType::Once);
+    if (data == F("_dark"))     FxInstantEvent(fxc, fx_palette_dark,         FxPaletteUpdateType::Once);
+
+    if (data == F("_red2"))     FxInstantEvent(fxc, fx_palette_dr,            FxPaletteUpdateType::Once);
+    if (data == F("_yellow2"))  FxInstantEvent(fxc, fx_palette_dy,            FxPaletteUpdateType::Once);
+    if (data == F("_green2"))   FxInstantEvent(fxc, fx_palette_dg,            FxPaletteUpdateType::Once);
+    if (data == F("_cyan2"))    FxInstantEvent(fxc, fx_palette_dc,            FxPaletteUpdateType::Once);
+    if (data == F("_blue2"))    FxInstantEvent(fxc, fx_palette_db,            FxPaletteUpdateType::Once);
+    if (data == F("_magenta2")) FxInstantEvent(fxc, fx_palette_dm,            FxPaletteUpdateType::Once);
+    
+    if (data == F("_lava"))     FxInstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once);
+    if (data == F("_cloud"))    FxInstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once);
+    if (data == F("_ocean"))    FxInstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once);
+    if (data == F("_forest"))   FxInstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once);
+    if (data == F("_rainbow"))  FxInstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once);
+    if (data == F("_rainbow2")) FxInstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once);
+    if (data == F("_party"))    FxInstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once);
+    if (data == F("_heat"))     FxInstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once);
     return;
   }
 
-  if (data == F("tf"))   FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once);
-  if (data == F("ttf"))  FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once);
-  if (data == F("ttwp")) FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once);
-  if (data == F("ttwn")) FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once);
-  if (data == F("ttwo")) FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once);
-  if (data == F("ttwi")) FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once);
-  if (data == F("ttwr")) FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once);
   
-  if (data == F("all"))   FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once);
-  if (data == F("torso")) fxc.stripMask = DRAGON_TORSO_LEFT|DRAGON_TORSO_RIGHT;
-  if (data == F("wings")) fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT;
-  if (data == F("head"))  fxc.stripMask = DRAGON_HEAD;
-  if (data == F("tail"))  fxc.stripMask = DRAGON_TAIL;
+  if (data == F("@all"))   FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once);
+  if (data == F("@inv"))   FxInstantEvent(fxc, fx_strip_inv,     FxPaletteUpdateType::Once);
+  if (data == F("@torso")) fxc.stripMask = DRAGON_TORSO_LEFT|DRAGON_TORSO_RIGHT;
+  if (data == F("@wings")) fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT;
+  if (data == F("@head"))  fxc.stripMask = DRAGON_HEAD;
+  if (data == F("@tail"))  fxc.stripMask = DRAGON_TAIL;
 
   if (data == F("test")) fxc.fxState = FxState_TestPattern;
   if (data == F("mtest")) fxc.fxState = FxState_MultiTestPattern;
-
-  if (data == F("lava"))     FxInstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once);
-  if (data == F("cloud"))    FxInstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once);
-  if (data == F("ocean"))    FxInstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once);
-  if (data == F("forest"))   FxInstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once);
-  if (data == F("rainbow"))  FxInstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once);
-  if (data == F("rainbow2")) FxInstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once);
-  if (data == F("party"))    FxInstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once);
-  if (data == F("heat"))     FxInstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once);
 
   if (data == F("kk"))
   {

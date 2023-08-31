@@ -110,6 +110,12 @@ void PrintFxEventName(int event)
     case fx_speed_inc: Serial.print(F("speed inc"));return;
     case fx_speed_dec: Serial.print(F("speed dec"));return;
     case fx_speed_rst: Serial.print(F("speed rst"));return;
+
+    case fx_palette_type_smoothed: Serial.print(F("pal-smoothed"));return;
+    case fx_palette_type_literal: Serial.print(F("pal-literal"));return;
+    case fx_palette_type_literal2: Serial.print(F("pal-literal2"));return;
+    case fx_palette_type_literal3: Serial.print(F("pal-literal3"));return;
+    case fx_palette_type_literal4: Serial.print(F("pal-literal4"));return;
     
     case fx_transition_fast: Serial.print(F("t-fast"));return;
     case fx_transition_timed_fade:Serial.print(F("t-timed-fade"));return;
@@ -253,7 +259,10 @@ void PrintFxEventName(int event)
     case fx_palette_dcm:Serial.print(F("dcm"));return;
     case fx_palette_dbm:Serial.print(F("dbm"));return;
 
+    case fx_palette_rgb:Serial.print(F("rgb"));return;
     case fx_palette_rbm:Serial.print(F("rbm"));return;
+    case fx_palette_cmy:Serial.print(F("cmy"));return;
+    case fx_palette_cbm:Serial.print(F("cbm"));return;
     
     case fx_strip_all:  Serial.print(F("strip-all"));return;
     case fx_strip_none: Serial.print(F("strip-none"));return;
