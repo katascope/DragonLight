@@ -38,7 +38,7 @@ namespace KataTracks
                 // to floating point
                 var sample32 = sample / 32768f;
                 
-                sample32 *= bias*100.0f;//multiple by bias
+                sample32 *= bias*255.0f;//multiple by bias
 
                 // absolute value 
                 if (sample32 < 0) sample32 = -sample32;
