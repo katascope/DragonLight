@@ -157,6 +157,7 @@ BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_CHARACTERISTI
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
+BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND, BLERead | BLEWrite  );
 
 //BLEDevice * central = NULL;
 void blePeripheralConnectHandler(BLEDevice c) {
@@ -194,6 +195,7 @@ bool bleSetup()
   mainService.addCharacteristic( authenticateCharacteristic );
   mainService.addCharacteristic( commandCharacteristic );
   mainService.addCharacteristic( playCharacteristic );
+  mainService.addCharacteristic( soundCharacteristic );
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -253,6 +255,16 @@ void blePoll(FxController &fxc)
           
           //Finally start the track
           trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
+        }
+        if (soundCharacteristic.written() )
+        {
+          fxc.vol = (float)soundCharacteristic.value() / (float)255;
+          int height = (int)(fxc.vol * 32);
+          for (int i=0;i<height;i++)
+          {
+            Serial.print(F("="));
+          }
+          Serial.println();
         }
       }
 

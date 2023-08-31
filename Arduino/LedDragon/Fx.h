@@ -138,6 +138,7 @@ public:
   unsigned char stripMask = 255;
   FxStrip *strip[NUM_STRIPS];
   int select = 0;
+  float vol = 0.5f;
   public:
   bool IsAnimating()
   {

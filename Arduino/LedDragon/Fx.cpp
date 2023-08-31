@@ -48,7 +48,9 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
 
 void FxDisplayStatus(FxController &fxc)
 {
-  Serial.print(F("["));
+      Serial.print(F("v="));
+      Serial.print(fxc.vol);
+      Serial.print(F("["));
       Serial.print(GetTime());
       Serial.print(F(":"));
       Serial.print(getTimecodeSongOffset());
@@ -403,6 +405,7 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_strip_odds:  fxc.stripMask = (unsigned int)(LEDS_1|LEDS_3|LEDS_5|LEDS_7); break;
     case fx_strip_evens: fxc.stripMask = (unsigned int)(LEDS_0|LEDS_2|LEDS_4|LEDS_6); break;
     case fx_strip_none:  fxc.stripMask = (unsigned int)0; break;
+    case fx_strip_inv:   fxc.stripMask = (unsigned int)~(fxc.stripMask); break;
     
     case fx_speed_0:
     case fx_speed_1:
@@ -423,7 +426,9 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_16:
     case fx_speed_17:
     case fx_speed_18:
-      SetPaletteSpeed(fxc,event);
+      Serial.print(F("Set PaletteSpeed"));
+      SetPaletteSpeed(fxc,event-fx_speed_0);
+      Serial.println(event-fx_speed_0);
       break;
     case fx_speed_32:
       SetPaletteSpeed(fxc,32);
