@@ -481,6 +481,21 @@ namespace KataTracks
             StopAndSendToBoth(""+button.Tag);
         }
 
+        private void SendToggle(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+
+            switch (buttonTagChar)
+            {
+                case '1': DeviceManagerBLE.Toggle(1); break;
+                case '2': DeviceManagerBLE.Toggle(2); break;
+                case '3': DeviceManagerBLE.Toggle(3); break;
+                case '4': DeviceManagerBLE.Toggle(4); break;
+            }
+        }
+
         private void SendColor(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
