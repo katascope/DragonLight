@@ -114,6 +114,8 @@ enum FxEvent
   fx_transition_timed_fade_sin,
   fx_transition_timed_fade_cos,
 
+  fx_sidefx_full_reset,
+  
   fx_palette_lead,
   fx_palette_follow,
 

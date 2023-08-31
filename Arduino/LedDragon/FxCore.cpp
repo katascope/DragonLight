@@ -85,6 +85,7 @@ void PrintFxEventName(int event)
     
   switch(event)
   {
+    case fx_sidefx_full_reset: Serial.print(F("Full SideFX Reset"));return;
     case fx_speed_0: Serial.print(F("x0"));return;
     case fx_speed_1: Serial.print(F("x1"));return;
     case fx_speed_2: Serial.print(F("x2"));return;

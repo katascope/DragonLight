@@ -442,6 +442,21 @@ void FxEventProcess(FxController &fxc,int event)
       SetPaletteSpeed(fxc,32);
       break;
 
+    case fx_sidefx_full_reset:
+    {    
+      fxc.fxState = FxState_SideFX;
+      fxc.stripMask = (unsigned int)(LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7); fxc.SetParticlesLoc(0);break;
+      fxc.KillFX();
+      ResetPaletteSpeed(fxc);
+      SetPaletteSpeed(fxc,fx_speed_0);
+      SetTransitionType(fxc,Transition_Instant);
+      fxc.transitionMux = 0.0f;
+      CreateSingleColor(fxc, DARK);
+      FxAnimatePalette(fxc,true);
+      FxAnimatePalette(fxc,false);
+      break;    
+    }
+
     case fx_speed_pos:SetPaletteDirection(fxc,1);break;
     case fx_speed_neg:SetPaletteDirection(fxc,-1);break;
     case fx_speed_inc:ChangePaletteSpeed(fxc,1);break;

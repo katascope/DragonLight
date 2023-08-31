@@ -39,40 +39,54 @@ public:
   int state = 0;
 };
 
+#define NUM_FX_CHANNELS 100
+
 class FxChannelSystem
 {
 public:
-  FxChannel channels[100];
+  FxChannel channels[NUM_FX_CHANNELS];
+  void KillFX()
+  {
+    for (int channel=0;channel<NUM_FX_CHANNELS;channel++)
+    {
+      channels[channel].on = false;
+      channels[channel].state = 0;
+    }
+  }
   void Toggle(int channel)
   {
-    if (channel >= 100)  return;
+    if (channel >= NUM_FX_CHANNELS)  return;
     channels[channel].on = !channels[channel].on;      
   }
   void ToggleOn(int channel)
   {
-    if (channel >= 100)  return;
+    if (channel >= NUM_FX_CHANNELS)  return;
     channels[channel].on = true;
   }
   void ToggleOff(int channel)
   {
-    if (channel >= 100)  return;
+    if (channel >= NUM_FX_CHANNELS)  return;
     channels[channel].on = false;
   }
   void Excite(int channel)
   {
-    if (channel >= 100)  return;
+    if (channel >= NUM_FX_CHANNELS)  return;
     if (channel == 4)    
     {
      channels[channel].state++;
      if (channels[channel].state > 1)
       channels[channel].state = 0;
-      Serial.print(F("Excite:"));
-      Serial.println(channels[channel].state);
+    }
+    if (channel == 5)
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 1)
+      channels[channel].state = 0;
     }
   }
   void Reset(int channel)
   {
-    if (channel >= 100)  return;
+    if (channel >= NUM_FX_CHANNELS)  return;
     channels[channel].state = 0;
   }
 };
@@ -129,6 +143,10 @@ public:
       if (particles[i].on) 
         return true;
     return false;
+  }
+  void SetTransitionType(FxTransitionType tt)
+  {
+    transitionType = tt;
   }
   void SetPaletteType(FxPaletteType pt)
   {
@@ -249,6 +267,20 @@ public:
       if (stripMask & (1<<s))   
         strip[s]->fxSystem.Reset(channel);
   }
+  void KillFX()
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+    {
+      strip[s]->fxSystem.KillFX();
+      for (int i=0;i<strip[s]->numleds;i++)
+      {
+        strip[s]->palette[i] = LEDRGB(0,0,0);
+        strip[s]->nextPalette[i] = LEDRGB(0,0,0);
+        strip[s]->initialPalette[i] = LEDRGB(0,0,0);
+        strip[s]->sideFXPalette[i] = LEDRGB(0,0,0);
+      }
+    }
+  }
   bool HasRunning()
   {
     for (int s=0;s<NUM_STRIPS;s++)
@@ -262,6 +294,12 @@ public:
     for (int s=0;s<NUM_STRIPS;s++)
       if (stripMask & (1<<s))   
         strip[s]->SetPaletteType(paletteType);
+  }
+  void SetTransitionType(FxTransitionType transitionType)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->SetTransitionType(transitionType);
   }
   void SetParticlesLoc(int loc)
   {

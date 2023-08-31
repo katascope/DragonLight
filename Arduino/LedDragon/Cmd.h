@@ -102,6 +102,7 @@ enum UserCommand
   Cmd_StripNone,
   Cmd_StripOdds,
   Cmd_StripEvens,
+  Cmd_StripInv,
   Cmd_Strip0,
   Cmd_Strip1,
   Cmd_Strip2,

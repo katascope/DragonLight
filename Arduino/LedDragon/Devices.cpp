@@ -275,11 +275,10 @@ void blePoll(FxController &fxc)
         if (soundCharacteristic.written() )
         {
           fxc.vol = (float)soundCharacteristic.value() / (float)255;
-          int height = (int)(fxc.vol * 32);
         }
         if (fxToggleOnCharacteristic.written() )
         {
-          int channel = fxToggleCharacteristic.value();
+          int channel = fxToggleOnCharacteristic.value();
           Serial.print(F("ToggleOn "));
           Serial.println(channel);
           fxc.ToggleOn(channel);

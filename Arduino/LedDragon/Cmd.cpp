@@ -93,6 +93,7 @@ void UserCommandExecute(FxController &fxc, int cmd)
     case Cmd_StripNone:           FxInstantEvent(fxc, fx_strip_none,    FxPaletteUpdateType::Once); break;
     case Cmd_StripOdds:           FxInstantEvent(fxc, fx_strip_odds,    FxPaletteUpdateType::Once); break;
     case Cmd_StripEvens:          FxInstantEvent(fxc, fx_strip_evens,   FxPaletteUpdateType::Once); break;
+    case Cmd_StripInv:            FxInstantEvent(fxc, fx_strip_inv,     FxPaletteUpdateType::Once); break;
     case Cmd_Strip0: fxc.stripMask = LEDS_0; break;
     case Cmd_Strip1: fxc.stripMask = LEDS_1; break;
     case Cmd_Strip2: fxc.stripMask = LEDS_2; break;
@@ -186,6 +187,7 @@ void UserCommandInput(FxController &fxc, int data)
     case '/': UserCommandExecute(fxc, Cmd_PalTypeLiteral2);  break;
     case '?': UserCommandExecute(fxc, Cmd_PalTypeLiteral4);  break;
 
+    case '|': fxc.KillFX();break;
     case '[': break;
     case ']': break;
 
@@ -232,10 +234,10 @@ void UserCommandInput(FxController &fxc, int data)
     case 'w': fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT; break;
     case 'e': fxc.stripMask = DRAGON_HEAD; break;
     case 'r': fxc.stripMask = DRAGON_TAIL; break;
-    case 't': fxc.stripMask = LEDS_0; break;
-    case 'y': fxc.stripMask = LEDS_0; break;
-    case 'u': fxc.stripMask = LEDS_0; break;
-    case 'i': fxc.stripMask = LEDS_0; break;
+    case 't': fxc.stripMask = DRAGON_TORSO_LEFT; break;
+    case 'y': fxc.stripMask = DRAGON_TORSO_RIGHT; break;
+    case 'u': fxc.stripMask = DRAGON_WING_LEFT; break;
+    case 'i': fxc.stripMask = DRAGON_WING_RIGHT; break;
     case 'o': fxc.stripMask = LEDS_0; break;
     case 'p': fxc.stripMask = LEDS_0; break;
     
@@ -247,7 +249,7 @@ void UserCommandInput(FxController &fxc, int data)
     case 'Y': UserCommandExecute(fxc, Cmd_Strip5);break;
     case 'U': UserCommandExecute(fxc, Cmd_Strip6);break;
     case 'I': UserCommandExecute(fxc, Cmd_Strip7);break;
-    case 'O': UserCommandExecute(fxc, Cmd_StripNone);break;
+    case 'O': UserCommandExecute(fxc, Cmd_StripInv);break;
     case 'P': UserCommandExecute(fxc, Cmd_StripAll);break;
 
     case 'z': UserCommandExecute(fxc, Cmd_ColorLava);break;

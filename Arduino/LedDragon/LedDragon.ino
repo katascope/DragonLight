@@ -110,6 +110,7 @@ void loop()
 
   if (fxController.transitionMux < 1.0f)
   {
+    fxController.SetTransitionType(Transition_TimedFade);
     fxController.transitionMux += 0.1f;
     if (fxController.transitionMux > 1.0f)
       fxController.transitionMux = 1.0f;

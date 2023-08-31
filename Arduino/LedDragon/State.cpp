@@ -312,6 +312,18 @@ void State_Poll_SideFX(FxController &fxc)
     }
     else 
       fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;  
+
+    if (fxc.strip[strip]->fxSystem.channels[5].on) 
+    {
+      int advance = (fxc.vol * 2) * (fxc.vol *2);
+      if (fxc.strip[strip]->fxSystem.channels[5].state == 0) fxc.strip[strip]->paletteIndex += advance;
+      if (fxc.strip[strip]->fxSystem.channels[5].state == 1) fxc.strip[strip]->paletteIndex -= advance;
+      if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
+        fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
+      if (fxc.strip[strip]->paletteIndex < 0)
+        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
+      
+    }
   }
 
   if (fxc.transitionMux >= 1)
