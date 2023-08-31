@@ -158,6 +158,7 @@ BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STAT
 BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
 BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND, BLERead | BLEWrite  );
+BLECharCharacteristic fxToggleCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE, BLERead | BLEWrite  );
 
 //BLEDevice * central = NULL;
 void blePeripheralConnectHandler(BLEDevice c) {
@@ -196,6 +197,7 @@ bool bleSetup()
   mainService.addCharacteristic( commandCharacteristic );
   mainService.addCharacteristic( playCharacteristic );
   mainService.addCharacteristic( soundCharacteristic );
+  mainService.addCharacteristic( fxToggleCharacteristic );
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -260,11 +262,13 @@ void blePoll(FxController &fxc)
         {
           fxc.vol = (float)soundCharacteristic.value() / (float)255;
           int height = (int)(fxc.vol * 32);
-          for (int i=0;i<height;i++)
-          {
-            Serial.print(F("="));
-          }
-          Serial.println();
+        }
+        if (fxToggleCharacteristic.written() )
+        {
+          int channel = fxToggleCharacteristic.value();
+          Serial.print(F("Toggle "));
+          Serial.println(channel);
+          fxc.Toggle(channel);
         }
       }
 

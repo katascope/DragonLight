@@ -58,6 +58,7 @@ enum FxState
   FxState_TestPattern      = 1,
   FxState_MultiTestPattern = 2,
   FxState_PlayingTrack     = 3,
+  FxState_SideFX           = 4
 };
 
 enum FxStripMask

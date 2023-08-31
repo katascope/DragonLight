@@ -9,10 +9,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Track.h"
 #include "Time.h"
 
-void FxUpdatePalette(struct FxController &fxc)
+void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette)
 {
-  FxProcessSideFX(fxc);
-  
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     if ((int)fxc.strip[strip]->paletteUpdateType != 0)
@@ -24,14 +22,24 @@ void FxUpdatePalette(struct FxController &fxc)
         fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
     }
 #if ENABLE_NEOPIXEL
-    neopixelSetPalette(strip, fxc.strip[strip]->numleds, fxc.strip[strip]->palette, fxc.strip[strip]->paletteIndex);
+    if (useSideFXPalette)
+      neopixelSetPalette(strip, fxc.strip[strip]->numleds, fxc.strip[strip]->sideFXPalette, fxc.strip[strip]->paletteIndex);
+    else
+      neopixelSetPalette(strip, fxc.strip[strip]->numleds, fxc.strip[strip]->palette, fxc.strip[strip]->paletteIndex);
 #endif    
   }
 }
 
+void FxUpdatePalette(struct FxController &fxc)
+{
+  FxProcessParticles(fxc);
+  if (fxc.fxState != FxState::FxState_SideFX)
+    FxAnimatePalette(fxc,false);  
+}
+
 void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType)
 {
-  fxc.fxState = FxState_Default;
+  //fxc.fxState = FxState_Default;
 
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
@@ -814,7 +822,7 @@ void FxEventProcess(FxController &fxc,int event)
 }
 
 
-void FxProcessSideFX(FxController &fxc)
+void FxProcessParticles(FxController &fxc)
 {
   if (fxc.fxState == FxState_Default && fxc.HasRunning())
   {

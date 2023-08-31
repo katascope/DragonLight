@@ -412,15 +412,15 @@ void ComplexUserCommandInput(FxController &fxc, String data)
     }
     return;
   }
-  else if (data[0] == 'x') //transitions
+  else if (data[0] == '!') //transitions
   {
-    if (data == F("xf"))   FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once);
-    if (data == F("xtf"))  FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once);
-    if (data == F("xtwp")) FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once);
-    if (data == F("xtwn")) FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once);
-    if (data == F("xtwo")) FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once);
-    if (data == F("xtwi")) FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once);
-    if (data == F("xtwr")) FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once);
+    if (data == F("!f"))   FxInstantEvent(fxc, fx_transition_fast,  FxPaletteUpdateType::Once);
+    if (data == F("!tf"))  FxInstantEvent(fxc, fx_transition_timed_fade,  FxPaletteUpdateType::Once);
+    if (data == F("!twp")) FxInstantEvent(fxc, fx_transition_timed_wipe_pos,  FxPaletteUpdateType::Once);
+    if (data == F("!twn")) FxInstantEvent(fxc, fx_transition_timed_wipe_neg,  FxPaletteUpdateType::Once);
+    if (data == F("!two")) FxInstantEvent(fxc, fx_transition_timed_wipe_outin,  FxPaletteUpdateType::Once);
+    if (data == F("!twi")) FxInstantEvent(fxc, fx_transition_timed_wipe_inout,  FxPaletteUpdateType::Once);
+    if (data == F("!twr")) FxInstantEvent(fxc, fx_transition_timed_wipe_random,  FxPaletteUpdateType::Once);
     return;
   }
   else if (data[0] == '_')
@@ -452,6 +452,11 @@ void ComplexUserCommandInput(FxController &fxc, String data)
     return;
   }
 
+  if (data == F("t01")) fxc.Toggle(1);
+  if (data == F("t02")) fxc.Toggle(2);
+  if (data == F("t03")) fxc.Toggle(3);
+  if (data == F("t04")) fxc.Toggle(4);
+  if (data == F("x04")) fxc.Excite(4);
   
   if (data == F("@all"))   FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once);
   if (data == F("@inv"))   FxInstantEvent(fxc, fx_strip_inv,     FxPaletteUpdateType::Once);
@@ -463,6 +468,9 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   if (data == F("test")) fxc.fxState = FxState_TestPattern;
   if (data == F("mtest")) fxc.fxState = FxState_MultiTestPattern;
 
+  if (data == F("fx"))
+    fxc.fxState = FxState_SideFX;
+    
   if (data == F("kk"))
   {
     fxc.fxState = FxState_Default;

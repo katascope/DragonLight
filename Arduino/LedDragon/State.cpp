@@ -13,9 +13,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 void State_Poll_TestPattern(FxController &fxc)
 {
 #if ENABLE_NEOPIXEL
-
-  FxEventProcess(fxc, fx_strip_all);
-  FxEventProcess(fxc, fx_transition_fast);
+    FxEventProcess(fxc, fx_strip_all);
+    FxEventProcess(fxc, fx_transition_fast);
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip]->paletteSpeed = 0;
@@ -130,7 +129,7 @@ void PrintPalette(FxController &fxc)
   Serial.print(F(")"));   
 }
 
-void State_Transition(FxController &fxc)
+void Do_Transition(FxController &fxc)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
@@ -275,7 +274,50 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   PrintPalette(fxc);
   Serial.println();
 
-  State_Transition(fxc);
+  Do_Transition(fxc);
+}
+
+void State_Poll_SideFX(FxController &fxc)
+{
+  int b = (int)(fxc.vol * 50.0f);
+  
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.strip[strip]->fxSystem.channels[1].on) 
+    {
+      for (int i=0;i<fxc.strip[strip]->numleds;i++)
+        fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+    }
+    
+    if (fxc.strip[strip]->fxSystem.channels[2].on) 
+    {
+      int len = (int)(fxc.vol * fxc.strip[strip]->numleds);
+      for (int i=0;i<len;i++)        
+      {
+        float f = 255 * ((float)i/(float)1);
+        fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+      }
+      for (int i=len;i<fxc.strip[strip]->numleds;i++)
+        fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+    }    
+    if (fxc.strip[strip]->fxSystem.channels[3].on) 
+        neopixelSetBrightness(strip,b);
+    
+    if (fxc.strip[strip]->fxSystem.channels[4].on) 
+    {
+      if (fxc.strip[strip]->paletteSpeed == 0) fxc.strip[strip]->paletteSpeed = 1;
+      if (fxc.strip[strip]->fxSystem.channels[4].state == 0) fxc.strip[strip]->paletteDirection = 1;
+      if (fxc.strip[strip]->fxSystem.channels[4].state == 1) fxc.strip[strip]->paletteDirection = -1;
+      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Once;
+    }
+    else 
+      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;  
+  }
+
+  if (fxc.transitionMux >= 1)
+  {
+    FxAnimatePalette(fxc,true);
+  }
 }
 
 void State_Poll(FxController &fxc)
@@ -285,11 +327,14 @@ void State_Poll(FxController &fxc)
     FxInstantEvent(fxc, fx_palette_rainbow, FxPaletteUpdateType::Once); 
     FxInstantEvent(fxc, fx_speed_neg,       FxPaletteUpdateType::Once);
     FxInstantEvent(fxc, fx_speed_3,         FxPaletteUpdateType::Once);
-   }
+  }
 
   if (fxc.fxState == FxState_MultiTestPattern)
     State_Poll_TestPattern(fxc);
 
   if (fxc.fxState == FxState_PlayingTrack)
     State_Poll_Play(fxc, GetTime());
+
+  if (fxc.fxState == FxState_SideFX)
+    State_Poll_SideFX(fxc);
 }

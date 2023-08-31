@@ -50,6 +50,8 @@ static const char *DeviceName = "UnkDevice";
 #define SERIAL_BAUD_RATE    115200
 
 #if LEDDRAGON
+#undef STARTUP_STATE 
+#define STARTUP_STATE       FxState_SideFX
 #define NUM_LEDS_0          99
 #define NUM_LEDS_1          99
 #define NUM_LEDS_2          99

@@ -32,6 +32,36 @@ public:
   }
 };
 
+class FxChannel
+{
+public:  
+  bool on = false;
+  int state = 0;
+};
+
+class FxChannelSystem
+{
+public:
+  FxChannel channels[100];
+  void Toggle(int channel)
+  {
+    if (channel >= 100)  return;
+    channels[channel].on = !channels[channel].on;      
+  }
+  void Excite(int channel)
+  {
+    if (channel >= 100)  return;
+    if (channel == 4)    
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 1)
+      channels[channel].state = 0;
+      Serial.print(F("Excite:"));
+      Serial.println(channels[channel].state);
+    }
+  }
+};
+
 class FxStrip
 {
 public:  
@@ -43,6 +73,7 @@ public:
   uint32_t *palette;
   uint32_t *nextPalette;
   uint32_t *initialPalette;
+  uint32_t *sideFXPalette;
   unsigned int *sequence;
   int paletteSpeed = 0;
   int paletteDirection = 1;
@@ -50,6 +81,7 @@ public:
 
   FxParticle particles[NUM_PARTICLES];
   FxParticle racers[NUM_PARTICLES];
+  FxChannelSystem fxSystem;
 public:
   FxStrip(int nl)
   { 
@@ -57,12 +89,14 @@ public:
     palette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
     nextPalette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
     initialPalette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
+    sideFXPalette = (uint32_t *)malloc(sizeof(uint32_t) * numleds);
     sequence = (unsigned int *)malloc(sizeof(sequence) * numleds);
     for (int i=0;i<numleds;i++)
     {
       palette[i] = LEDRGB(0,0,0);
       nextPalette[i] = LEDRGB(0,0,0);
       initialPalette[i] = LEDRGB(0,0,0);
+      sideFXPalette[i] = LEDRGB(0,0,0);
       sequence[i] = i;
     }
   } 
@@ -170,6 +204,18 @@ public:
       }
     }
   }
+  void Toggle(int channel)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->fxSystem.Toggle(channel);
+  }
+  void Excite(int channel)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->fxSystem.Excite(channel);
+  }
   bool HasRunning()
   {
     for (int s=0;s<NUM_STRIPS;s++)
@@ -223,9 +269,10 @@ public:
   
 };
 
+void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette);
 void FxUpdatePalette(struct FxController &fxc);
 void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType);
-void FxProcessSideFX(FxController &fxc);
+void FxProcessParticles(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);
 

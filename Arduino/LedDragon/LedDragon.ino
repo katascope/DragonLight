@@ -113,7 +113,7 @@ void loop()
     fxController.transitionMux += 0.1f;
     if (fxController.transitionMux > 1.0f)
       fxController.transitionMux = 1.0f;
-    State_Transition(fxController);
+    Do_Transition(fxController);
     needsUpdate = true;
   } 
   
@@ -133,9 +133,6 @@ void loop()
     }
   }
 
-  int b = (int)(fxController.vol * 50.0f);
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-    neopixelSetBrightness(strip,b);
 
 #if ENABLE_STATUS
   //Display status once a second

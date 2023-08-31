@@ -10,5 +10,5 @@ struct FxController;
 void State_Poll_TestPattern(FxController &fxc);
 void State_Poll_Play(FxController &fxc, unsigned long timecode);
 void State_Poll(FxController &fxc);
-void State_Transition(FxController &fxc);
+void Do_Transition(FxController &fxc);
 #endif
