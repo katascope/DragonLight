@@ -159,6 +159,10 @@ BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BL
 BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
 BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE, BLERead | BLEWrite  );
+BLECharCharacteristic fxToggleOnCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLEON, BLERead | BLEWrite  );
+BLECharCharacteristic fxToggleOffCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLEOFF, BLERead | BLEWrite  );
+BLECharCharacteristic fxExciteCharacteristic( BLE_UUID_CHARACTERISTIC_FXEXCITE, BLERead | BLEWrite  );
+BLECharCharacteristic fxResetCharacteristic( BLE_UUID_CHARACTERISTIC_FXRESET, BLERead | BLEWrite  );
 
 //BLEDevice * central = NULL;
 void blePeripheralConnectHandler(BLEDevice c) {
@@ -198,6 +202,10 @@ bool bleSetup()
   mainService.addCharacteristic( playCharacteristic );
   mainService.addCharacteristic( soundCharacteristic );
   mainService.addCharacteristic( fxToggleCharacteristic );
+  mainService.addCharacteristic( fxToggleOnCharacteristic );
+  mainService.addCharacteristic( fxToggleOffCharacteristic );
+  mainService.addCharacteristic( fxExciteCharacteristic );
+  mainService.addCharacteristic( fxResetCharacteristic );
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -209,6 +217,12 @@ bool bleSetup()
   commandCharacteristic.writeValue( 0 );
   playCharacteristic.writeValue(0);
   statusCharacteristic.writeValue(0);
+  soundCharacteristic.writeValue(127);
+  fxToggleCharacteristic.writeValue(0);
+  fxToggleOnCharacteristic.writeValue(0);
+  fxToggleOffCharacteristic.writeValue(0);
+  fxExciteCharacteristic.writeValue(0);
+  fxResetCharacteristic.writeValue(0);
   // start advertising
   BLE.advertise();
 
@@ -263,12 +277,33 @@ void blePoll(FxController &fxc)
           fxc.vol = (float)soundCharacteristic.value() / (float)255;
           int height = (int)(fxc.vol * 32);
         }
-        if (fxToggleCharacteristic.written() )
+        if (fxToggleOnCharacteristic.written() )
         {
           int channel = fxToggleCharacteristic.value();
-          Serial.print(F("Toggle "));
+          Serial.print(F("ToggleOn "));
           Serial.println(channel);
-          fxc.Toggle(channel);
+          fxc.ToggleOn(channel);
+        }
+        if (fxToggleOffCharacteristic.written() )
+        {
+          int channel = fxToggleOffCharacteristic.value();
+          Serial.print(F("ToggleOff "));
+          Serial.println(channel);
+          fxc.ToggleOff(channel);
+        }
+        if (fxExciteCharacteristic.written() )
+        {
+          int channel = fxExciteCharacteristic.value();
+          Serial.print(F("Excite "));
+          Serial.println(channel);
+          fxc.Excite(channel);
+        }
+        if (fxResetCharacteristic.written() )
+        {
+          int channel = fxResetCharacteristic.value();
+          Serial.print(F("Reset "));
+          Serial.println(channel);
+          fxc.Reset(channel);
         }
       }
 

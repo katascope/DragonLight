@@ -47,13 +47,17 @@ namespace KataTracks
         public static string MonitorLog = "";
         public static ConcurrentDictionary<string, BleDevice> bleDevices = new ConcurrentDictionary<string, BleDevice>();
 
-        static BluetoothUuid mainServiceUuid = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
-        static BluetoothUuid mainCommandUuid = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
+        static BluetoothUuid mainServiceUuid   = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
+        static BluetoothUuid mainCommandUuid   = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
         static BluetoothUuid mainAuthenticateUuid = BluetoothUuid.FromGuid(new Guid("4C75BB42-5365-458D-A3EA-2B91339646B7"));
-        static BluetoothUuid mainPlayUuid = BluetoothUuid.FromGuid(new Guid("3B140EF5-0A72-4891-AD38-83B5A2595622"));
-        static BluetoothUuid mainStatusUuid = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
-        static BluetoothUuid mainVolumeUuid = BluetoothUuid.FromGuid(new Guid("04E92E16-47AF-11EE-BE56-0242AC120002"));
-        static BluetoothUuid mainToggleUuid = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainPlayUuid      = BluetoothUuid.FromGuid(new Guid("3B140EF5-0A72-4891-AD38-83B5A2595622"));
+        static BluetoothUuid mainStatusUuid    = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
+        static BluetoothUuid mainVolumeUuid    = BluetoothUuid.FromGuid(new Guid("04E92E16-47AF-11EE-BE56-0242AC120002"));
+        static BluetoothUuid mainToggleUuid    = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainToggleOnUuid  = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainToggleOffUuid = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainExciteUuid    = BluetoothUuid.FromGuid(new Guid("5549a237-ede8-4b5e-abb0-b233cebe0e52"));
+        static BluetoothUuid mainResetUuid     = BluetoothUuid.FromGuid(new Guid("a8907f1f-09ea-4caf-8f73-3acfad5ace43"));
 
         public static List<string> connectionList = new List<string>() {
                 //"91CDE3A4B695", //LightSuitAngelA
@@ -408,7 +412,7 @@ namespace KataTracks
             }
         }
 
-        public static async void Toggle(ulong tc)
+        public static async void ToggleOn(ulong tc)
         {
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
             {
@@ -419,7 +423,7 @@ namespace KataTracks
                     {
                         if (bd.serviceCache.Count > 0)
                         {
-                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainToggleUuid].gattCharacteristic;
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainToggleOnUuid].gattCharacteristic;
                             byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
                             await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
                         }
@@ -436,6 +440,94 @@ namespace KataTracks
                 }
             }
         }
+
+        public static async void ToggleOff(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainToggleOffUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+        public static async void Excite(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainExciteUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+
+        public static async void Reset(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainResetUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+
+
     }
 }
 

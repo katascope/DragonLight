@@ -481,7 +481,7 @@ namespace KataTracks
             StopAndSendToBoth(""+button.Tag);
         }
 
-        private void SendToggle(object sender, RoutedEventArgs e)
+        private void SendColor(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             string buttonTag = button.Tag.ToString();
@@ -489,37 +489,18 @@ namespace KataTracks
 
             switch (buttonTagChar)
             {
-                case '1': DeviceManagerBLE.Toggle(1); break;
-                case '2': DeviceManagerBLE.Toggle(2); break;
-                case '3': DeviceManagerBLE.Toggle(3); break;
-                case '4': DeviceManagerBLE.Toggle(4); break;
+                case '0': StopAndSendToBoth("0"); break;
+                case '1': StopAndSendToBoth("1"); break;
+                case '2': StopAndSendToBoth("2"); break;
+                case '3': StopAndSendToBoth("3"); break;
+                case '4': StopAndSendToBoth("4"); break;
+                case '5': StopAndSendToBoth("5"); break;
+                case '6': StopAndSendToBoth("6"); break;
+                case '7': StopAndSendToBoth("7"); break;
+                case '8': StopAndSendToBoth("8"); break;
+                case '9': StopAndSendToBoth("9"); break;
             }
         }
-
-        private void SendColor(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            string buttonTag = button.Tag.ToString();
-            char buttonTagChar = buttonTag[0];
-
-                switch (buttonTagChar)
-                {
-                    case '0': StopAndSendToBoth("0"); break;
-                    case '1': StopAndSendToBoth("1"); break;
-                    case '2': StopAndSendToBoth("2"); break;
-                    case '3': StopAndSendToBoth("3"); break;
-                    case '4': StopAndSendToBoth("4"); break;
-                    case '5': StopAndSendToBoth("5"); break;
-                    case '6': StopAndSendToBoth("6"); break;
-                    case '7': StopAndSendToBoth("7"); break;
-                    case '8': StopAndSendToBoth("8"); break;
-                    case '9': StopAndSendToBoth("9"); break;
-                }
-
-
-
-        }
-
 
         private void InputVolumeTriggerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -539,6 +520,51 @@ namespace KataTracks
         private void TriggerCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             useSoundTrigger = false;
+        }
+
+        private void ToggleOn(object sender, ulong channel)
+        {
+            ((System.Windows.Controls.Button)sender).Background = new SolidColorBrush(Color.FromRgb(0, 0xE0, 0));
+            DeviceManagerBLE.ToggleOn(channel);
+        }
+        private void ToggleOff(object sender, ulong channel)
+        {
+            ((System.Windows.Controls.Button)sender).Background = new SolidColorBrush(Color.FromRgb(0X12, 0X24, 0x61));
+            DeviceManagerBLE.ToggleOff(channel);
+        }
+        private void Toggle(object sender, bool on, ulong channel)
+        {
+            if (on) ToggleOn(sender, channel);
+            else ToggleOff(sender, channel);
+        }
+
+        private void SendToggle(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+            Color color = ((SolidColorBrush)(((System.Windows.Controls.Button)sender).Background)).Color;
+            bool isOff = color.B > 0;
+            ulong channel = (ulong)(int)buttonTagChar - (int)'0';
+            Toggle(sender, isOff, channel);
+        }
+
+        private void SendExcite(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+            ulong channel = (ulong)(int)buttonTagChar - (int)'0';
+            DeviceManagerBLE.Excite(channel);
+        }
+
+        private void SendReset(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+            ulong channel = (ulong)(int)buttonTagChar - (int)'0';
+            DeviceManagerBLE.Reset(channel);
         }
     }
 }

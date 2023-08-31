@@ -48,6 +48,16 @@ public:
     if (channel >= 100)  return;
     channels[channel].on = !channels[channel].on;      
   }
+  void ToggleOn(int channel)
+  {
+    if (channel >= 100)  return;
+    channels[channel].on = true;
+  }
+  void ToggleOff(int channel)
+  {
+    if (channel >= 100)  return;
+    channels[channel].on = false;
+  }
   void Excite(int channel)
   {
     if (channel >= 100)  return;
@@ -59,6 +69,11 @@ public:
       Serial.print(F("Excite:"));
       Serial.println(channels[channel].state);
     }
+  }
+  void Reset(int channel)
+  {
+    if (channel >= 100)  return;
+    channels[channel].state = 0;
   }
 };
 
@@ -210,11 +225,29 @@ public:
       if (stripMask & (1<<s))   
         strip[s]->fxSystem.Toggle(channel);
   }
+  void ToggleOn(int channel)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->fxSystem.ToggleOn(channel);
+  }
+  void ToggleOff(int channel)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->fxSystem.ToggleOff(channel);
+  }
   void Excite(int channel)
   {
     for (int s=0;s<NUM_STRIPS;s++)
       if (stripMask & (1<<s))   
         strip[s]->fxSystem.Excite(channel);
+  }
+  void Reset(int channel)
+  {
+    for (int s=0;s<NUM_STRIPS;s++)
+      if (stripMask & (1<<s))   
+        strip[s]->fxSystem.Reset(channel);
   }
   bool HasRunning()
   {
