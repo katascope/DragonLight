@@ -54,8 +54,8 @@ namespace KataTracks
         static BluetoothUuid mainStatusUuid    = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
         static BluetoothUuid mainVolumeUuid    = BluetoothUuid.FromGuid(new Guid("04E92E16-47AF-11EE-BE56-0242AC120002"));
         static BluetoothUuid mainToggleUuid    = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
-        static BluetoothUuid mainToggleOnUuid  = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
-        static BluetoothUuid mainToggleOffUuid = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainToggleOnUuid  = BluetoothUuid.FromGuid(new Guid("9677B246-7355-4130-A770-769CD4732677"));
+        static BluetoothUuid mainToggleOffUuid = BluetoothUuid.FromGuid(new Guid("CB9B8B39-96A8-498D-8420-4C9FC558894D"));
         static BluetoothUuid mainExciteUuid    = BluetoothUuid.FromGuid(new Guid("5549a237-ede8-4b5e-abb0-b233cebe0e52"));
         static BluetoothUuid mainResetUuid     = BluetoothUuid.FromGuid(new Guid("a8907f1f-09ea-4caf-8f73-3acfad5ace43"));
 
