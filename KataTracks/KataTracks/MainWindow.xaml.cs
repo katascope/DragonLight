@@ -42,7 +42,7 @@ namespace KataTracks
         static Thread discoverBleThread;
         static Dictionary<string, string> foundDevices = null;
         static bool useSoundTrigger = false;
-        static float InputVolumeBias = 50;
+        static float InputVolumeBias = 100;
         static float lastInputVolume = 0.0f;
         static int VolumeThreshold = 50;
         static GameController gameController = new GameController();
@@ -279,7 +279,10 @@ namespace KataTracks
             float inputVolume = DeviceVolume.GetVolume();
             if (inputVolume != lastInputVolume)
             {
-                DeviceManagerBLE.Volume((ulong)inputVolume);
+                float TransVolume = (ulong)(inputVolume * 2.5);//convert 100 to 255
+                if (TransVolume > 255.0f)
+                     TransVolume =255.0f;
+                DeviceManagerBLE.Volume((ulong)(TransVolume));
                 lastInputVolume = inputVolume;
             }
         }
@@ -481,6 +484,18 @@ namespace KataTracks
             StopAndSendToBoth(""+button.Tag);
         }
 
+        private void SendKill(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            StopAndSendToBoth("" + button.Tag);
+
+            for (int i = 1; i < 100; i++)
+            {
+                System.Windows.Controls.Button fx = (System.Windows.Controls.Button)(MainCanvas.FindName("FX" + i));
+                if (fx != null)
+                    fx.Background = new SolidColorBrush(Color.FromRgb(0X12, 0X24, 0x61));
+            }
+        }
         private void SendColor(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
