@@ -49,7 +49,6 @@ const unsigned long SongTrackTest[] PROGMEM =
   _TRACK_END(45000)
 };
 
-#if LEDDRAGON
 const unsigned long TrackFormRGB[] PROGMEM =
 {
      fx_speed_2,
@@ -95,7 +94,7 @@ const unsigned long SongTrackRYGCBM[] PROGMEM =
      _FADE_TO(25000, fx_palette_magenta)
     _TRACK_END(30000)
 };
-#else
+
 //Multistrip
 const unsigned long SongTrack[] PROGMEM =
 {
@@ -426,7 +425,7 @@ const unsigned long SongTrack[] PROGMEM =
     //the end
     _TRACK_END(127000)
 };
-#endif
+
 
 void SetSongTrackContext(int id);
 int GetNumSongTracks();

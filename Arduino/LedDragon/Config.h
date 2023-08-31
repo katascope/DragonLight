@@ -5,14 +5,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEDDRAGON 1 
+#define LEDDRAGON 0
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define FOXBOT    0 //Generally LightSuit*B gold
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      0
+#define LAMP      1
 #define TESTER    0
 
 #if SUIT_JACKET
@@ -48,24 +48,24 @@ static const char *DeviceName = "UnkDevice";
 #define LED_PIN             3
 #define DEBUG_BLE           1
 #define SERIAL_BAUD_RATE    115200
-
-#if LEDDRAGON
-#undef STARTUP_STATE 
-#define STARTUP_STATE       FxState_SideFX
-#define NUM_LEDS_0          99
-#define NUM_LEDS_1          99
-#define NUM_LEDS_2          99
-#define NUM_LEDS_3          99
-#define NUM_LEDS_4          99
-#define NUM_LEDS_5          99
-#define NUM_LEDS_6          99
-#define NUM_LEDS_7          99
 #define DRAGON_HEAD         LEDS_2|LEDS_3
 #define DRAGON_TORSO_LEFT   LEDS_0
 #define DRAGON_TORSO_RIGHT  LEDS_1
 #define DRAGON_WING_LEFT    LEDS_4
 #define DRAGON_WING_RIGHT   LEDS_5
 #define DRAGON_TAIL         LEDS_6|LEDS_7
+
+#if LEDDRAGON
+#undef STARTUP_STATE 
+#define STARTUP_STATE       FxState_SideFX
+#define NUM_LEDS_0          199
+#define NUM_LEDS_1          199
+#define NUM_LEDS_2          199
+#define NUM_LEDS_3          199
+#define NUM_LEDS_4          199
+#define NUM_LEDS_5          199
+#define NUM_LEDS_6          199
+#define NUM_LEDS_7          199
 #endif
 
 #if LEAD
@@ -146,7 +146,7 @@ static const char *DeviceName = "Tester";
 #define NUM_LEDS_6          300
 #define NUM_LEDS_7          300
 #undef STARTUP_STATE
-#define STARTUP_STATE       FxState_TestPattern
+#define STARTUP_STATE       FxState_SideFX
 #undef BRIGHTNESS
 #define BRIGHTNESS          50  //Default brightness
 #undef BRIGHTNESS_LIMIT 
@@ -157,7 +157,6 @@ static const char *DeviceName = "Tester";
 #define NUM_STRIPS          8
 #undef ENABLE_MULTISTRIP
 #define ENABLE_MULTISTRIP   1
-
 #endif
 
 #if ENABLE_MEMORYUSAGE
