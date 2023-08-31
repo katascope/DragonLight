@@ -32,6 +32,7 @@ namespace KataTracks
         static DispatcherTimer animationTimer;
         static DispatcherTimer connectionTimer;
         static DispatcherTimer btTextTimer;
+        static DispatcherTimer btVolumeTimer;
         static bool playing = false;
         static DateTime literalTrackStartTime;
         float volume = 100;
@@ -42,6 +43,7 @@ namespace KataTracks
         static Dictionary<string, string> foundDevices = null;
         static bool useSoundTrigger = false;
         static float InputVolumeBias = 50;
+        static float lastInputVolume = 0.0f;
         static int VolumeThreshold = 50;
         static GameController gameController = new GameController();
 
@@ -59,6 +61,7 @@ namespace KataTracks
             animationTimer = new DispatcherTimer();
             connectionTimer = new DispatcherTimer();
             btTextTimer = new DispatcherTimer();
+            btVolumeTimer = new DispatcherTimer();
             Canvas.SetLeft(TrackIndex, 0);
             Canvas.SetLeft(TrackIndexPlay, 0);
             OutputVolumeSlider.Value = volume;
@@ -82,6 +85,9 @@ namespace KataTracks
             btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btTextTimer.Start();
 
+            btVolumeTimer.Tick += new EventHandler(btVolumeTimer_Tick);
+            btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            btVolumeTimer.Start();
         }
 
         private void LoadImage(string filename)
@@ -92,7 +98,7 @@ namespace KataTracks
             bmImage.BeginInit();
             bmImage.UriSource = new Uri(filename, UriKind.Absolute);
             bmImage.EndInit();
-            tronimage.Source = bmImage;
+            //tronimage.Source = bmImage;
         }
 
         private void LoadConfig(string filename)
@@ -268,6 +274,16 @@ namespace KataTracks
             }
         }
 
+        private void btVolumeTimer_Tick(object sender, EventArgs e)
+        {
+            float inputVolume = DeviceVolume.GetVolume();
+            if (inputVolume != lastInputVolume)
+            {
+                DeviceManagerBLE.Volume((ulong)inputVolume);
+                lastInputVolume = inputVolume;
+            }
+        }
+
         private void btTextTimer_Tick(object sender, EventArgs e)
         {
             GameControllerEvent joyEvent1 = gameController.Poll(0);
@@ -294,7 +310,7 @@ namespace KataTracks
 
             MainLog.Text = "";
             float inputVolume = DeviceVolume.GetVolume();
-            InputVolume.Value = inputVolume;
+            InputVolumeIndicator.Value = inputVolume;
 
             if (useSoundTrigger && inputVolume >= VolumeThreshold && !playing)
             {
@@ -322,8 +338,7 @@ namespace KataTracks
             if (foundDevices != null)
                 MainLog.Text += "Devices " + foundDevices.Count + "\n";
 
-            SongName.Content = "" + songName + "";
-
+            
             /* MainLog.Text += "Actives:\n";
              foreach (KeyValuePair<string, BleDevice> kvp in DeviceManagerBLE.bleDevices)
                  MainLog.Text += " " + kvp.Value.log + "\n";
