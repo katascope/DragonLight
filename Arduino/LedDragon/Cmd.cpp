@@ -206,10 +206,6 @@ void UserCommandInput(FxController &fxc, int data)
     case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
     case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
 
-    case 'a': UserCommandExecute(fxc, Cmd_PlayTrack0); break;
-    case 's': UserCommandExecute(fxc, Cmd_PlayTrack1); break;
-    case 'd': UserCommandExecute(fxc, Cmd_PlayTrack2); break;
-    case 'f': UserCommandExecute(fxc, Cmd_PlayTrack3); break;
     /*case 'a': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
     case 's': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
     case 'd': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;

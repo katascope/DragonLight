@@ -581,5 +581,14 @@ namespace KataTracks
             ulong channel = (ulong)(int)buttonTagChar - (int)'0';
             DeviceManagerBLE.Reset(channel);
         }
+
+        private void SendPal(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string buttonTag = button.Tag.ToString();
+            char buttonTagChar = buttonTag[0];
+            ulong channel = (ulong)(int)buttonTagChar - (int)'0';
+            DeviceManagerBLE.Palette(channel);
+        }
     }
 }
