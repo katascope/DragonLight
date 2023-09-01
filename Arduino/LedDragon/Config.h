@@ -5,7 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEDDRAGON 0
+#define LEDDRAGON 1
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define FOXBOT    0 //Generally LightSuit*B gold
