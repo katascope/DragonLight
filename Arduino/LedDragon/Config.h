@@ -5,7 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEDDRAGON 1
+#define LEDDRAGON 0
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define FOXBOT    0 //Generally LightSuit*B gold
@@ -42,11 +42,11 @@ static const char *DeviceName = "UnkDevice";
 #define ENABLE_SAFETY       0
 #define ENABLE_TRACK_CHECK  1
 #define ENABLE_BLE          1
-#define ENABLE_STATUS       1 //Print status to serial
 #define ENABLE_NEOPIXEL     1
 #define ENABLE_MULTISTRIP   1   //Enable multiple LED strips
 #define LED_PIN             3
-#define DEBUG_BLE           1
+#define DEBUG_STATUS        0
+#define DEBUG_SERIAL        1
 #define SERIAL_BAUD_RATE    115200
 #define DRAGON_HEAD         LEDS_2|LEDS_3
 #define DRAGON_TORSO_LEFT   LEDS_0
@@ -137,22 +137,20 @@ static const char *DeviceName = "Tester";
 
 
 #if LAMP
-#define NUM_LEDS_0          300
-#define NUM_LEDS_1          300
-#define NUM_LEDS_2          300
-#define NUM_LEDS_3          300
-#define NUM_LEDS_4          300
-#define NUM_LEDS_5          300
-#define NUM_LEDS_6          300
-#define NUM_LEDS_7          300
+#define NUM_LEDS_0          100
+#define NUM_LEDS_1          100
+#define NUM_LEDS_2          100
+#define NUM_LEDS_3          100
+#define NUM_LEDS_4          100
+#define NUM_LEDS_5          100
+#define NUM_LEDS_6          100
+#define NUM_LEDS_7          100
 #undef STARTUP_STATE
 #define STARTUP_STATE       FxState_SideFX
 #undef BRIGHTNESS
 #define BRIGHTNESS          50  //Default brightness
 #undef BRIGHTNESS_LIMIT 
 #define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
-#undef NUM_LEDS0
-#define NUM_LEDS_0          300
 #undef NUM_STRIPS
 #define NUM_STRIPS          8
 #undef ENABLE_MULTISTRIP
