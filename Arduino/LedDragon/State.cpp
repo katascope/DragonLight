@@ -277,6 +277,13 @@ void State_Poll_Play(FxController &fxc, unsigned long timecode)
   Do_Transition(fxc);
 }
 
+void DoPaletteMirror(FxController &fxc, int strip)
+{  
+  int height = fxc.strip[strip]->numleds;
+  for (int i=0;i<height/2;i++)
+    fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->sideFXPalette[height-i];
+}
+
 void State_Poll_SideFX(FxController &fxc)
 {
   int b = (int)(fxc.vol * 50.0f);
@@ -321,9 +328,14 @@ void State_Poll_SideFX(FxController &fxc)
       if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
         fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
       if (fxc.strip[strip]->paletteIndex < 0)
-        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
-      
+        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;      
     }
+    
+    if (fxc.strip[strip]->fxSystem.channels[6].on) 
+    {
+      DoPaletteMirror(fxc, strip);
+    }
+    
   }
 
   if (fxc.transitionMux >= 1)
