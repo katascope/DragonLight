@@ -366,6 +366,9 @@ void blePoll(FxController &fxc)
         if (paletteCharacteristic.written() )
         {
           int palChoice = paletteCharacteristic.value();
+          Serial.print(F("PalChoice"));
+          Serial.println(palChoice);
+          blePalette(fxc,palChoice);
         }
         if (fxToggleOnCharacteristic.written() )
         {
