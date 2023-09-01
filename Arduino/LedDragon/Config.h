@@ -12,8 +12,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      1
+#define LAMP      0
 #define TESTER    0
+#define MTESTER   1
 
 #if SUIT_JACKET
 static const char *DeviceName = "LightSuitAngelTest";
@@ -29,6 +30,8 @@ static const char *DeviceName = "LightSuitAngelB";
 static const char *DeviceName = "Mree";
 #elif PREE
 static const char *DeviceName = "Pree";
+#elif MTESTER
+static const char *DeviceName = "MultiTester";
 #else
 static const char *DeviceName = "UnkDevice";
 #endif
@@ -55,6 +58,19 @@ static const char *DeviceName = "UnkDevice";
 #define DRAGON_WING_RIGHT   LEDS_5
 #define DRAGON_TAIL         LEDS_6|LEDS_7
 
+#if MTESTER
+#define NUM_LEDS_0          199
+#define NUM_LEDS_1          199
+#define NUM_LEDS_2          199
+#define NUM_LEDS_3          199
+#define NUM_LEDS_4          199
+#define NUM_LEDS_5          199
+#define NUM_LEDS_6          199
+#define NUM_LEDS_7          199
+#undef LED_PIN
+#define LED_PIN             3
+#endif
+
 #if LEDDRAGON
 #undef STARTUP_STATE 
 #define STARTUP_STATE       FxState_SideFX
@@ -80,7 +96,6 @@ static const char *DeviceName = "UnkDevice";
 #endif
 
 #if TESTER
-static const char *DeviceName = "Tester";
 #define NUM_LEDS_0          60
 #define NUM_LEDS_1          10
 #define NUM_LEDS_2          10
@@ -96,7 +111,7 @@ static const char *DeviceName = "Tester";
 #undef STARTUP_STATE
 #define STARTUP_STATE       FxState_TestPattern
 #undef NUM_STRIPS
-#define NUM_STRIPS          1
+#define NUM_STRIPS          8
 #undef ENABLE_MULTISTRIP
 #define ENABLE_MULTISTRIP   0
 #endif
