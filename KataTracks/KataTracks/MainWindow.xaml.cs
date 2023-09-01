@@ -539,7 +539,7 @@ namespace KataTracks
 
         private void ToggleOn(object sender, ulong channel)
         {
-            ((System.Windows.Controls.Button)sender).Background = new SolidColorBrush(Color.FromRgb(0, 0xE0, 0));
+            ((System.Windows.Controls.Button)sender).Background = new SolidColorBrush(Color.FromRgb(0, 0x48, 0));
             DeviceManagerBLE.ToggleOn(channel);
         }
         private void ToggleOff(object sender, ulong channel)
