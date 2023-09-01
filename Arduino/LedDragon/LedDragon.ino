@@ -83,6 +83,8 @@ void setup() {
   Serial.println(F("Setup complete."));
 }
 
+int altSkip = 0;
+
 void loop()
 {
   while (Serial.available())
@@ -98,7 +100,11 @@ void loop()
   blePoll(fxController);
 #endif
 
-  State_Poll(fxController);
+  altSkip ++;
+  if (altSkip %2 == 0)
+    State_Poll(fxController);
+    
+  
   bool needsUpdate = false;
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
@@ -135,7 +141,7 @@ void loop()
   }
 
 
-#if ENABLE_STATUS
+#if DEBUG_STATUS
   //Display status once a second
     unsigned long t =  millis();
     if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data

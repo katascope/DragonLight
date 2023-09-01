@@ -434,9 +434,7 @@ void FxEventProcess(FxController &fxc,int event)
     case fx_speed_16:
     case fx_speed_17:
     case fx_speed_18:
-      Serial.print(F("Set PaletteSpeed"));
       SetPaletteSpeed(fxc,event-fx_speed_0);
-      Serial.println(event-fx_speed_0);
       break;
     case fx_speed_32:
       SetPaletteSpeed(fxc,32);
