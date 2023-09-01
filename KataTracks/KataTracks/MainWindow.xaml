@@ -32,22 +32,17 @@
         <Rectangle x:Name="TrackIndex" Height="450" Margin="0,0,0,0" Stroke="#FF066693" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Rectangle x:Name="TrackIndexPlay" Height="450" Margin="0,0,0,0" Stroke="#BFBFBFBF" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Button Click="Exit" Content="Exit" Canvas.Left="1227" Canvas.Top="667" Width="22" Height="20" Background="#FF012461" Foreground="#FF00807D" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Button Click="PlayButton_Click" Content="Seek" Margin="0,0,0,0" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Left="124" Canvas.Top="22" FontSize="24"/>
-        <Button Click="StopButton_Click"  Content="Stop" Margin="0,0,0,0" Height="79" Width="80" Background="#FF012461" Foreground="White" Canvas.Left="231" BorderBrush="#FF120351" Canvas.Top="21" FontSize="24"/>
-        <Label x:Name="TrackTime" Content="0:0:0" Margin="0,0                ,0,0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="19" Canvas.Left="329"/>
-        <Slider x:Name="OutputVolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Width="300 " Maximum="100" Canvas.Left="594" Canvas.Top="26" LargeChange="10" Value="100">
+        <Slider x:Name="BoostVolumeSlider" ValueChanged="BoostVolumeSlider_ValueChanged" Width="300 " Maximum="400" Canvas.Left="594" Canvas.Top="26" LargeChange="10" Value="100">
             <Slider.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="2"/>
             </Slider.LayoutTransform>
         </Slider>
-        <Label x:Name="TrackTimeOffset" Content="0:0:0" Foreground="#FFACC0EC" Width="134" FontSize="28" Canvas.Top="69" Canvas.Left="329"/>
         <TextBox x:Name="Log1" 
           Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="200" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
         <TextBox x:Name="MainLog"
          Canvas.Top="663" TextWrapping="Wrap" Width="195" Height="131" Background="Black" Foreground="#FF59ABF0" Text="Initializing..." HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" BorderBrush="#FF1668A7"/>
         <TextBox x:Name="Log2" 
             Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="406" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
-        <Button Click="PlayFromStartButton_Click" Content="Play" Height="79" Background="#FF012461" Foreground="White" BorderBrush="#FF120351" Canvas.Top="12" FontSize="24" Canvas.Left="10"/>
         <Button Click="SendColor" Tag="0" Content="Dark" Canvas.Left="230" Canvas.Top="629" Background="#FF012461" Foreground="#FF404040" BorderBrush="Black" Width="70" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendColor" Tag="1" Content="Brite" Canvas.Left="382" Canvas.Top="629" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="66" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendColor" Tag="2" Content="Red" Canvas.Left="454" Canvas.Top="629" Background="#FF012461" Foreground="Red" BorderBrush="Black" Width="68" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -90,13 +85,8 @@
         </Slider>
         <Label x:Name="InputVolumeSliderLabel_" Content="Input Vol" Canvas.Left="489" Background="Black" Foreground="#FFACC0EC" Height="40" Canvas.Top="75" FontSize="22" Width="100"/>
         <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="931" Background="Black" Foreground="#FFACC0EC" Canvas.Top="36" Height="36" FontSize="22" Width="50"/>
-        <CheckBox x:Name="TriggerCheckBox" Content="Autoplay" Foreground="#FFACC0EC" Canvas.Left="1045" Canvas.Top="2" Checked="TriggerCheckBox_Checked" Unchecked="TriggerCheckBox_Unchecked" Width="72" HorizontalAlignment="Left" Height="17" VerticalAlignment="Top">
-            <CheckBox.LayoutTransform>
-                <ScaleTransform ScaleX="2" ScaleY="2"/>
-            </CheckBox.LayoutTransform>
-        </CheckBox>
         <Label x:Name="TriggerLevelSliderLabel" Content="Trigger" Canvas.Left="907" Background="Black" Foreground="#FFACC0EC" Height="41" Canvas.Top="77" FontSize="22" Width="80"/>
-        <Label x:Name="OutputVolumeSliderLabel" Content="Output Vol" Canvas.Left="470" Background="Black" Foreground="#FFACC0EC" Height="38" Canvas.Top="22" FontSize="22" Width="119"/>
+        <Label x:Name="OutputVolumeSliderLabel" Content="Boost" Canvas.Left="506" Background="Black" Foreground="#FFACC0EC" Height="38" Canvas.Top="22" FontSize="22" Width="83" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Button Click="SendBoth" Tag="x" Content="Test" Canvas.Left="1021" Canvas.Top="667" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="29" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="StatusLabel" Content="LeDragon" Canvas.Top="631" Foreground="#FF066693" FontWeight="Bold" Height="33" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Width="100" Canvas.Left="-5"/>
         <Button Click="SendBoth" Tag="p" Content="All" Canvas.Left="1019" Canvas.Top="759" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -145,7 +135,7 @@
         <Button Click="SendBoth" Tag="y" Content="Torso Right" Canvas.Left="1199" Canvas.Top="205" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="62" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="u" Content="Wing Left" Canvas.Left="1061" Canvas.Top="241" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="62" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="i" Content="Wing Right" Canvas.Left="1200" Canvas.Top="242" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="62" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Click="SendBoth" Tag="O" Content="Inv" Canvas.Left="1179" Canvas.Top="125" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="68" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="o" Content="Inv" Canvas.Left="1179" Canvas.Top="125" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="68" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="," Content="Pal-Smooth" Canvas.Left="9" Canvas.Top="545" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="66" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="." Content="Pal-1" Canvas.Left="81" Canvas.Top="545" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="66" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="/" Content="Pal-2" Canvas.Left="153" Canvas.Top="545" Background="#FF012461" Foreground="White" BorderBrush="Black" Width="66" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>

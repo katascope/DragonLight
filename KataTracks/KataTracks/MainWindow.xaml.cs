@@ -36,6 +36,7 @@ namespace KataTracks
         static bool playing = false;
         static DateTime literalTrackStartTime;
         float volume = 100;
+        float boostVolume = 1.0f;
         static long timePick = 0;
         static bool b1Down = false;
         static ulong textTickCount = 0;
@@ -64,7 +65,7 @@ namespace KataTracks
             btVolumeTimer = new DispatcherTimer();
             Canvas.SetLeft(TrackIndex, 0);
             Canvas.SetLeft(TrackIndexPlay, 0);
-            OutputVolumeSlider.Value = volume;
+            
             InputVolumeSlider.Value = InputVolumeBias;
 
             gameController.Initialize();
@@ -280,6 +281,7 @@ namespace KataTracks
             if (inputVolume != lastInputVolume)
             {
                 float TransVolume = (ulong)(inputVolume * 2.5);//convert 100 to 255
+                TransVolume *= boostVolume;
                 if (TransVolume > 255.0f)
                      TransVolume =255.0f;
                 DeviceManagerBLE.Volume((ulong)(TransVolume));
@@ -313,16 +315,13 @@ namespace KataTracks
 
             MainLog.Text = "";
             float inputVolume = DeviceVolume.GetVolume();
-            InputVolumeIndicator.Value = inputVolume;
+            InputVolumeIndicator.Value = inputVolume*boostVolume;
 
             if (useSoundTrigger && inputVolume >= VolumeThreshold && !playing)
             {
                 Canvas.SetLeft(TrackIndex, 0);
                 timePick = 0;
                 Canvas.SetLeft(TrackIndexPlay, timePick);
-
-                TrackTime.Content = "0:0:0";
-                TrackTimeOffset.Content = "0:0:0";
 
                 PlayTrack(1);
             }
@@ -381,10 +380,6 @@ namespace KataTracks
             //4,416,049
             TimeSpan timeElapsedSincePlay = DateTime.Now - literalTrackStartTime;// + new TimeSpan(0,0,0,0,(int)timePlay*100);
             TimeSpan timeCurrentInSong = timeElapsedSincePlay + new TimeSpan(0, 0, 0, 0, (int)timePick * 100);
-            TrackTime.Content = ""
-                + timeCurrentInSong.Minutes + ":"
-                + timeCurrentInSong.Seconds + ":"
-                + timeCurrentInSong.Milliseconds / 100;
 
             double timeValue = (double)(timeCurrentInSong.TotalMilliseconds) / 100;
             Canvas.SetLeft(TrackIndexPlay, Math.Round(timeValue, 0));
@@ -410,17 +405,6 @@ namespace KataTracks
             discoverBleThread.Start();
         }
 
-        private void PlayFromStartButton_Click(object sender, RoutedEventArgs e)
-        {
-            Canvas.SetLeft(TrackIndex, 0);
-            timePick = 0;
-            Canvas.SetLeft(TrackIndexPlay, timePick);
-
-            TrackTime.Content = "0:0:0";
-            TrackTimeOffset.Content = "0:0:0";
-
-            PlayTrack(0);
-        }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
@@ -448,27 +432,11 @@ namespace KataTracks
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             double Y = e.GetPosition(this).Y;
-            if (b1Down && Y > 150)
-            {
-                double X = e.GetPosition(this).X;
-                timePick = (long)X;
-
-                X = Math.Round(X / 10, 0) * 10;
-                Canvas.SetLeft(TrackIndex, X);
-
-                TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)timePick * 100);// DateTime.Now - trackStartTime;
-                TrackTimeOffset.Content = ""
-                    + ts.Minutes + ":"
-                    + ts.Seconds + ":"
-                    + 0;
-            }
         }
 
-        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void BoostVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            volume = (float)e.NewValue;
-            if (outputDevice != null)
-                outputDevice.Volume = (volume/100.0f);
+            boostVolume = (float)e.NewValue / (float)50;
         }
 
 
