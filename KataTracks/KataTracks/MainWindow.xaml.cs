@@ -86,7 +86,7 @@ namespace KataTracks
             btTextTimer.Start();
 
             btVolumeTimer.Tick += new EventHandler(btVolumeTimer_Tick);
-            btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
+            btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 300);
             btVolumeTimer.Start();
         }
 
@@ -585,10 +585,8 @@ namespace KataTracks
         private void SendPal(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            string buttonTag = button.Tag.ToString();
-            char buttonTagChar = buttonTag[0];
-            ulong channel = (ulong)(int)buttonTagChar - (int)'0';
-            DeviceManagerBLE.Palette(channel);
+            ulong paletteId = Convert.ToUInt64(button.Tag.ToString());
+            DeviceManagerBLE.Palette(paletteId);
         }
     }
 }
