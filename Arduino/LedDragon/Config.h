@@ -12,9 +12,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      0
+#define LAMP      1
 #define TESTER    0
-#define MTESTER   1
+#define MTESTER   0
 
 #if SUIT_JACKET
 static const char *DeviceName = "LightSuitAngelTest";
@@ -152,14 +152,14 @@ static const char *DeviceName = "UnkDevice";
 
 
 #if LAMP
-#define NUM_LEDS_0          100
-#define NUM_LEDS_1          100
-#define NUM_LEDS_2          100
-#define NUM_LEDS_3          100
-#define NUM_LEDS_4          100
-#define NUM_LEDS_5          100
-#define NUM_LEDS_6          100
-#define NUM_LEDS_7          100
+#define NUM_LEDS_0          86
+#define NUM_LEDS_1          86
+#define NUM_LEDS_2          86
+#define NUM_LEDS_3          86
+#define NUM_LEDS_4          86
+#define NUM_LEDS_5          86
+#define NUM_LEDS_6          86
+#define NUM_LEDS_7          86
 #undef STARTUP_STATE
 #define STARTUP_STATE       FxState_SideFX
 #undef BRIGHTNESS

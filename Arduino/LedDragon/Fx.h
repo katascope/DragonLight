@@ -51,7 +51,7 @@ public:
     {
       channels[channel].on = false;
       channels[channel].state = 0;
-    }
+    }    
   }
   void Toggle(int channel)
   {
@@ -71,10 +71,16 @@ public:
   void Excite(int channel)
   {
     if (channel >= NUM_FX_CHANNELS)  return;
+    if (channel == 2)
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 2)
+      channels[channel].state = 0;
+    }
     if (channel == 4)    
     {
      channels[channel].state++;
-     if (channels[channel].state > 1)
+     if (channels[channel].state > 2)
       channels[channel].state = 0;
     }
     if (channel == 5)
