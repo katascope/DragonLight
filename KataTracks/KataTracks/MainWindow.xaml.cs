@@ -82,11 +82,11 @@ namespace KataTracks
             animationTimer.Start();
 
             btTextTimer.Tick += new EventHandler(btTextTimer_Tick);
-            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            btTextTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
             btTextTimer.Start();
 
             btVolumeTimer.Tick += new EventHandler(btVolumeTimer_Tick);
-            btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 300);
+            btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
             btVolumeTimer.Start();
         }
 
