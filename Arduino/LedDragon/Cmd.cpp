@@ -122,18 +122,21 @@ void UserCommandExecute(FxController &fxc, int cmd)
 
     case Cmd_Brightness_Max: 
     {
+      fxc.brightness = BRIGHTNESS_LIMIT;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS_LIMIT);
       break;
     }
     case Cmd_Brightness_Normal:
     {
+      fxc.brightness = BRIGHTNESS;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS);
       break;
     }
     case Cmd_Brightness_Half:
     {
+      fxc.brightness = BRIGHTNESS/2;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS/2);
       break;
@@ -195,7 +198,11 @@ void UserCommandInput(FxController &fxc, int data)
       FxInstantEvent(fxc, fx_strip_all,         FxPaletteUpdateType::Once);
       FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once);
       break;
-    case '[': break;
+    case '[': 
+      for (int strip=0;strip<NUM_STRIPS;strip++)
+        if (fxc.stripMask & (1<<strip)) 
+          fxc.strip[strip]->paletteIndex = 0;
+      break;
     case ']': break;
 
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
@@ -463,6 +470,7 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   if (data == F("t04")) fxc.Toggle(4);
   if (data == F("t05")) fxc.Toggle(5);
   if (data == F("t06")) fxc.Toggle(6);
+  if (data == F("t07")) fxc.Toggle(7);
 
   if (data == F("x01")) fxc.Excite(1);
   if (data == F("x02")) fxc.Excite(2);

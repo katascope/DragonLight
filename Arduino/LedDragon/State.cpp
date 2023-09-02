@@ -284,7 +284,35 @@ void DoPaletteMirror(FxController &fxc, int strip)
   {
     fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->nextPalette[i*2];
     fxc.strip[strip]->sideFXPalette[height-1-i] = fxc.strip[strip]->nextPalette[i*2];
-  }
+  }  
+}
+
+void DoParticles(FxController &fxc, int strip, int state)
+{  
+  float boost = fxc.vol*2;              
+
+  for (int p=0;p<NUM_PARTICLES;p++)
+  {
+    if (state == 0)
+      fxc.strip[strip]->particles[p].vel = abs(fxc.strip[strip]->particles[p].vel);
+    else
+    fxc.strip[strip]->particles[p].vel = -abs(fxc.strip[strip]->particles[p].vel);
+    
+    fxc.strip[strip]->particles[p].loc += fxc.strip[strip]->particles[p].vel*boost;
+    if (fxc.strip[strip]->particles[p].loc >= fxc.strip[strip]->numleds)
+      fxc.strip[strip]->particles[p].loc = 0 + fxc.strip[strip]->particles[p].vel;
+    if (fxc.strip[strip]->particles[p].loc < 0)
+    fxc.strip[strip]->particles[p].loc = fxc.strip[strip]->numleds - fxc.strip[strip]->particles[p].vel;
+
+    int loc = fxc.strip[strip]->particles[p].loc;    
+    fxc.strip[strip]->sideFXPalette[loc] = LEDRGB(255,255,255);
+    for (int i=0;i<boost*2;i++)
+    {
+      if (i+loc < fxc.strip[strip]->numleds)
+        fxc.strip[strip]->sideFXPalette[loc+i] = LEDRGB(255,255,255);      
+    }
+    
+  }  
 }
 
 void State_Poll_SideFX(FxController &fxc)
@@ -337,9 +365,9 @@ void State_Poll_SideFX(FxController &fxc)
       }
     }    
     if (fxc.strip[strip]->fxSystem.channels[3].on) 
-        neopixelSetBrightness(strip,b);
+        neopixelSetBrightness(strip,(int)(fxc.vol * fxc.brightness));
     else
-        neopixelSetBrightness(strip,BRIGHTNESS);
+        neopixelSetBrightness(strip, fxc.brightness);
     
     if (fxc.strip[strip]->fxSystem.channels[4].on) 
     {
@@ -364,7 +392,7 @@ void State_Poll_SideFX(FxController &fxc)
 
     if (fxc.strip[strip]->fxSystem.channels[5].on) 
     {
-      int advance = (fxc.vol * 2) * (fxc.vol *2);
+      int advance = (fxc.vol * fxc.strip[strip]->paletteSpeed) * (fxc.vol * fxc.strip[strip]->paletteSpeed);
       if (fxc.strip[strip]->fxSystem.channels[5].state == 0) fxc.strip[strip]->paletteIndex += advance;
       if (fxc.strip[strip]->fxSystem.channels[5].state == 1) fxc.strip[strip]->paletteIndex -= advance;
       if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
@@ -378,6 +406,10 @@ void State_Poll_SideFX(FxController &fxc)
       DoPaletteMirror(fxc, strip);
     }
     
+    if (fxc.strip[strip]->fxSystem.channels[7].on) 
+    {
+      DoParticles(fxc, strip, fxc.strip[strip]->fxSystem.channels[7].state);
+    }
   }
 
   if (fxc.transitionMux >= 1)
