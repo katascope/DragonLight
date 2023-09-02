@@ -122,18 +122,21 @@ void UserCommandExecute(FxController &fxc, int cmd)
 
     case Cmd_Brightness_Max: 
     {
+      fxc.brightness = BRIGHTNESS_LIMIT;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS_LIMIT);
       break;
     }
     case Cmd_Brightness_Normal:
     {
+      fxc.brightness = BRIGHTNESS;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS);
       break;
     }
     case Cmd_Brightness_Half:
     {
+      fxc.brightness = BRIGHTNESS/2;
       for (int strip=0;strip<NUM_STRIPS;strip++)
         neopixelSetBrightness(strip,BRIGHTNESS/2);
       break;
@@ -195,8 +198,12 @@ void UserCommandInput(FxController &fxc, int data)
       FxInstantEvent(fxc, fx_strip_all,         FxPaletteUpdateType::Once);
       FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once);
       break;
-    case '[': break;
-    case ']': break;
+    case '[': 
+      for (int strip=0;strip<NUM_STRIPS;strip++)
+        if (fxc.stripMask & (1<<strip)) 
+          fxc.strip[strip]->paletteIndex = 0;
+      break;
+    case ']': FxDisplaySideFX(fxc); break;
 
     case ')': UserCommandExecute(fxc, Cmd_PlayFromStart); break;
     case '*': UserCommandExecute(fxc, Cmd_PlayFrom); break;
@@ -213,6 +220,15 @@ void UserCommandInput(FxController &fxc, int data)
     case '8': UserCommandExecute(fxc, Cmd_ColorOrange); break;
     case '9': UserCommandExecute(fxc, Cmd_ColorHalf); break;
 
+    case 'a': FxActivateSideFXTrack(fxc, 0); break;
+    case 's': FxActivateSideFXTrack(fxc, 1); break;
+    case 'd': FxActivateSideFXTrack(fxc, 2); break;
+    case 'f': FxActivateSideFXTrack(fxc, 3); break;
+    case 'g': FxActivateSideFXTrack(fxc, 4); break;
+    case 'h': FxActivateSideFXTrack(fxc, 5); break;
+    case 'j': FxActivateSideFXTrack(fxc, 6); break;
+    case 'k': FxActivateSideFXTrack(fxc, 7); break;
+    case 'l': FxActivateSideFXTrack(fxc, 8); break;
     /*case 'a': UserCommandExecute(fxc, Cmd_ColorPulseWhite); break;
     case 's': UserCommandExecute(fxc, Cmd_ColorPulseRed); break;
     case 'd': UserCommandExecute(fxc, Cmd_ColorPulseYellow); break;
@@ -255,20 +271,20 @@ void UserCommandInput(FxController &fxc, int data)
     case 'O': UserCommandExecute(fxc, Cmd_StripInv);break;
     case 'P': UserCommandExecute(fxc, Cmd_StripAll);break;
 
-    case 'z': UserCommandExecute(fxc, Cmd_ColorLava);break;
-    case 'x': UserCommandExecute(fxc, Cmd_ColorCloud);break;
-    case 'c': UserCommandExecute(fxc, Cmd_ColorRainbow);break;
-    case 'v': UserCommandExecute(fxc, Cmd_ColorRainbowstripe);break;
-    case 'b': UserCommandExecute(fxc, Cmd_ColorParty);break;
-    case 'n': UserCommandExecute(fxc, Cmd_ColorHeat);break;
+    /*case 'z': FxPaletteById(fxc, 201);break;
+    case 'x': FxPaletteById(fxc, 202);break;
+    case 'c': FxPaletteById(fxc, 203);break;
+    case 'v': FxPaletteById(fxc, 204);break;
+    case 'b': FxPaletteById(fxc, 205);break;
+    case 'n': FxPaletteById(fxc, 206);break;*/
 
-    case 'Z': UserCommandExecute(fxc, Cmd_ColorWhiteMagenta);break;
+    /*case 'Z': UserCommandExecute(fxc, Cmd_ColorWhiteMagenta);break;
     case 'X': UserCommandExecute(fxc, Cmd_ColorRedBlue);break;
     case 'C': UserCommandExecute(fxc, Cmd_ColorCyanMagenta);break;
     case 'V': UserCommandExecute(fxc, Cmd_ColorCyanBlue);break;
     case 'B': UserCommandExecute(fxc, Cmd_ColorGreenMagenta);break;
     case 'N': UserCommandExecute(fxc, Cmd_ColorDarkCyanMagenta);break;
-    case 'M': UserCommandExecute(fxc, Cmd_ColorDarkRedBlue);break;
+    case 'M': UserCommandExecute(fxc, Cmd_ColorDarkRedBlue);break;*/
     
     case '_': UserCommandExecute(fxc, Cmd_SpeedNeg);break;
     case '+': UserCommandExecute(fxc, Cmd_SpeedPos);break;
@@ -463,6 +479,7 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   if (data == F("t04")) fxc.Toggle(4);
   if (data == F("t05")) fxc.Toggle(5);
   if (data == F("t06")) fxc.Toggle(6);
+  if (data == F("t07")) fxc.Toggle(7);
 
   if (data == F("x01")) fxc.Excite(1);
   if (data == F("x02")) fxc.Excite(2);

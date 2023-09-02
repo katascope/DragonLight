@@ -8,6 +8,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Fx.h"
 #include "Track.h"
 #include "Time.h"
+#include "SideFXTrack.h"
 
 void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette)
 {
@@ -885,4 +886,253 @@ void FxProcessParticles(FxController &fxc)
               }
             }
   }  
+}
+
+void FxPaletteById(FxController &fxc, int paletteId)
+{
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    if (fxc.stripMask & (1<<strip)) 
+    {
+      fxc.strip[strip]->paletteId = paletteId;    
+    }
+  }
+  
+    switch (paletteId)
+    {
+      case 1: FxInstantEvent(fxc, fx_palette_dry,     FxPaletteUpdateType::Once); break;
+      case 2: FxInstantEvent(fxc, fx_palette_drg,     FxPaletteUpdateType::Once); break;
+      case 3: FxInstantEvent(fxc, fx_palette_drc,     FxPaletteUpdateType::Once); break;
+      case 4: FxInstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once); break;
+      case 5: FxInstantEvent(fxc, fx_palette_drm,     FxPaletteUpdateType::Once); break;
+      case 6: FxInstantEvent(fxc, fx_palette_wry,     FxPaletteUpdateType::Once); break;
+      case 7: FxInstantEvent(fxc, fx_palette_wrg,     FxPaletteUpdateType::Once); break;
+      case 8: FxInstantEvent(fxc, fx_palette_wrc,     FxPaletteUpdateType::Once); break;
+      case 9: FxInstantEvent(fxc, fx_palette_wrb,     FxPaletteUpdateType::Once); break;
+      case 10: FxInstantEvent(fxc, fx_palette_wrm,     FxPaletteUpdateType::Once); break;
+
+      case 11: FxInstantEvent(fxc, fx_palette_dyg,     FxPaletteUpdateType::Once); break;
+      case 12: FxInstantEvent(fxc, fx_palette_dyc,     FxPaletteUpdateType::Once); break;
+      case 13: FxInstantEvent(fxc, fx_palette_dyb,     FxPaletteUpdateType::Once); break;
+      case 14: FxInstantEvent(fxc, fx_palette_dym,     FxPaletteUpdateType::Once); break;
+      case 15: FxInstantEvent(fxc, fx_palette_wyg,     FxPaletteUpdateType::Once); break;
+      case 16: FxInstantEvent(fxc, fx_palette_wyc,     FxPaletteUpdateType::Once); break;
+      case 17: FxInstantEvent(fxc, fx_palette_wyb,     FxPaletteUpdateType::Once); break;
+      case 18: FxInstantEvent(fxc, fx_palette_wym,     FxPaletteUpdateType::Once); break;
+
+      case 19: FxInstantEvent(fxc, fx_palette_dgc,     FxPaletteUpdateType::Once); break;
+      case 20: FxInstantEvent(fxc, fx_palette_dgb,     FxPaletteUpdateType::Once); break;
+      case 21: FxInstantEvent(fxc, fx_palette_dgm,     FxPaletteUpdateType::Once); break;
+      case 22: FxInstantEvent(fxc, fx_palette_wgc,     FxPaletteUpdateType::Once); break;
+      case 23: FxInstantEvent(fxc, fx_palette_wgb,     FxPaletteUpdateType::Once); break;
+      case 24: FxInstantEvent(fxc, fx_palette_wgm,     FxPaletteUpdateType::Once); break;
+
+      case 25: FxInstantEvent(fxc, fx_palette_dcb,     FxPaletteUpdateType::Once); break;
+      case 26: FxInstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once); break;
+      case 27: FxInstantEvent(fxc, fx_palette_wcb,     FxPaletteUpdateType::Once); break;
+      case 28: FxInstantEvent(fxc, fx_palette_wcm,     FxPaletteUpdateType::Once); break;
+
+      case 29: FxInstantEvent(fxc, fx_palette_dbm,     FxPaletteUpdateType::Once); break;
+      case 30: FxInstantEvent(fxc, fx_palette_wbm,     FxPaletteUpdateType::Once); break;
+
+      case 31: FxInstantEvent(fxc, fx_palette_rgb,     FxPaletteUpdateType::Once); break;
+      case 32: FxInstantEvent(fxc, fx_palette_rbm,     FxPaletteUpdateType::Once); break;
+      case 33: FxInstantEvent(fxc, fx_palette_cmy,     FxPaletteUpdateType::Once); break;
+      case 34: FxInstantEvent(fxc, fx_palette_cbm,     FxPaletteUpdateType::Once); break;
+                           
+      case 101: FxInstantEvent(fxc, fx_palette_dr,     FxPaletteUpdateType::Once); break;
+      case 102: FxInstantEvent(fxc, fx_palette_red,    FxPaletteUpdateType::Once); break;
+      case 103: FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once); break;
+      case 104: FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once); break;
+      case 105: FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once); break;
+      case 106: FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once); break;
+      case 107: FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once); break;
+      case 108: FxInstantEvent(fxc, fx_palette_wr,     FxPaletteUpdateType::Once); break;
+
+      case 109: FxInstantEvent(fxc, fx_palette_dy,     FxPaletteUpdateType::Once); break;
+      case 110: FxInstantEvent(fxc, fx_palette_yellow, FxPaletteUpdateType::Once); break;
+      case 111: FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once); break;
+      case 112: FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once); break;
+      case 113: FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once); break;
+      case 114: FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once); break;
+      case 115: FxInstantEvent(fxc, fx_palette_wy,     FxPaletteUpdateType::Once); break;
+
+      case 116: FxInstantEvent(fxc, fx_palette_dg,     FxPaletteUpdateType::Once); break;
+      case 117: FxInstantEvent(fxc, fx_palette_green,  FxPaletteUpdateType::Once); break;
+      case 118: FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once); break;
+      case 119: FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once); break;
+      case 120: FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once); break;
+      case 121: FxInstantEvent(fxc, fx_palette_wg,     FxPaletteUpdateType::Once); break;
+
+      case 122: FxInstantEvent(fxc, fx_palette_dc,     FxPaletteUpdateType::Once); break;
+      case 123: FxInstantEvent(fxc, fx_palette_cyan,   FxPaletteUpdateType::Once); break;
+      case 124: FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once); break;
+      case 125: FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once); break;
+      case 126: FxInstantEvent(fxc, fx_palette_wc,     FxPaletteUpdateType::Once); break;
+
+      case 127: FxInstantEvent(fxc, fx_palette_db,     FxPaletteUpdateType::Once); break;
+      case 128: FxInstantEvent(fxc, fx_palette_blue,   FxPaletteUpdateType::Once); break;
+      case 129: FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once); break;
+      case 130: FxInstantEvent(fxc, fx_palette_wb,     FxPaletteUpdateType::Once); break;
+
+      case 131: FxInstantEvent(fxc, fx_palette_dm,     FxPaletteUpdateType::Once); break;
+      case 132: FxInstantEvent(fxc, fx_palette_magenta,FxPaletteUpdateType::Once); break;
+      case 133: FxInstantEvent(fxc, fx_palette_wm,     FxPaletteUpdateType::Once); break;
+
+      case 150: FxInstantEvent(fxc, fx_palette_rbm,     FxPaletteUpdateType::Once); break;
+      case 151: FxInstantEvent(fxc, fx_palette_rgb,     FxPaletteUpdateType::Once); break;
+      case 152: FxInstantEvent(fxc, fx_palette_cmy,     FxPaletteUpdateType::Once); break;
+      case 153: FxInstantEvent(fxc, fx_palette_cbm,     FxPaletteUpdateType::Once); break;
+
+      case 201: FxInstantEvent(fxc, fx_palette_lava,          FxPaletteUpdateType::Once); break;
+      case 202: FxInstantEvent(fxc, fx_palette_cloud,         FxPaletteUpdateType::Once); break;
+      case 203: FxInstantEvent(fxc, fx_palette_ocean,         FxPaletteUpdateType::Once); break;
+      case 204: FxInstantEvent(fxc, fx_palette_forest,        FxPaletteUpdateType::Once); break;
+      case 205: FxInstantEvent(fxc, fx_palette_rainbow,       FxPaletteUpdateType::Once); break;
+      case 206: FxInstantEvent(fxc, fx_palette_rainbowstripe, FxPaletteUpdateType::Once); break;
+      case 207: FxInstantEvent(fxc, fx_palette_party,         FxPaletteUpdateType::Once); break;
+      case 208: FxInstantEvent(fxc, fx_palette_heat,          FxPaletteUpdateType::Once); break;
+    }
+}
+
+word FxGetSideFXTrackSize(FxController &fxc, int trackId)
+{
+  switch (trackId)
+  {
+    case 0: return sizeof(SideFxTrackCM);
+    case 1: return sizeof(SideFxTrackUSA);
+    case 2: return sizeof(SideFxTrackFirePit);
+    case 3: return sizeof(SideFxTrackPurpleParty);
+    case 4: return sizeof(SideFxTrackRainbow);
+    case 5: return sizeof(SideFxTrackHeat);
+  }
+  return 0;
+}
+
+word FxGetSideFXTrackValue(FxController &fxc, int trackId, int o)
+{
+  switch (trackId)
+  {
+    case 0: return pgm_read_dword(&(SideFxTrackCM[o]));
+    case 1: return pgm_read_dword(&(SideFxTrackUSA[o]));
+    case 2: return pgm_read_dword(&(SideFxTrackFirePit[o]));    
+    case 3: return pgm_read_dword(&(SideFxTrackPurpleParty[o]));
+    case 4: return pgm_read_dword(&(SideFxTrackRainbow[o]));
+    case 5: return pgm_read_dword(&(SideFxTrackHeat[o]));
+  }
+  return 0;
+}
+
+void FxActivateSideFXTrack(FxController &fxc, int trackId)
+{
+  fxc.KillFX();
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+    if (fxc.stripMask & (1<<strip)) 
+      fxc.strip[strip]->paletteIndex = 0;
+  
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {  
+    for (int channel = 0;channel < NUM_FX_CHANNELS;channel++)
+    {
+      fxc.strip[strip]->fxSystem.channels[channel].on = false;
+      fxc.strip[strip]->fxSystem.channels[channel].state = 0;
+    }
+  }
+
+#if ENABLE_MULTISTRIP  
+  int HeaderSize = 8+16;
+  
+  int len = FxGetSideFXTrackSize(fxc, trackId);
+  if (len == 0)
+   return;
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    fxc.strip[strip]->paletteType  = (FxPaletteType)FxGetSideFXTrackValue(fxc, trackId, strip*2+0);
+    fxc.strip[strip]->paletteSpeed = (int)FxGetSideFXTrackValue(fxc, trackId, strip*2+1);
+  }
+   
+  word palId0 = FxGetSideFXTrackValue(fxc, trackId, 16);
+  word palId1 = FxGetSideFXTrackValue(fxc, trackId, 17);
+  word palId2 = FxGetSideFXTrackValue(fxc, trackId, 18);
+  word palId3 = FxGetSideFXTrackValue(fxc, trackId, 19);
+  word palId4 = FxGetSideFXTrackValue(fxc, trackId, 20);
+  word palId5 = FxGetSideFXTrackValue(fxc, trackId, 21);
+  word palId6 = FxGetSideFXTrackValue(fxc, trackId, 22);
+  word palId7 = FxGetSideFXTrackValue(fxc, trackId, 23);
+
+  fxc.stripMask = LEDS_0;FxPaletteById(fxc,palId0);
+  fxc.stripMask = LEDS_1;FxPaletteById(fxc,palId1);
+  fxc.stripMask = LEDS_2;FxPaletteById(fxc,palId2);
+  fxc.stripMask = LEDS_3;FxPaletteById(fxc,palId3);
+  fxc.stripMask = LEDS_4;FxPaletteById(fxc,palId4);
+  fxc.stripMask = LEDS_5;FxPaletteById(fxc,palId5);
+  fxc.stripMask = LEDS_6;FxPaletteById(fxc,palId6);
+  fxc.stripMask = LEDS_7;FxPaletteById(fxc,palId7);
+
+  int parts = (len/2-HeaderSize)/3;
+  //Serial.println(F("Parts:"));
+  //Serial.println(parts);
+  for (int i=0;i<parts;i++)
+  {
+    int stripId   = FxGetSideFXTrackValue(fxc, trackId, HeaderSize+i*3+0);
+    int channelId = FxGetSideFXTrackValue(fxc, trackId, HeaderSize+i*3+1);
+    int stateId   = FxGetSideFXTrackValue(fxc, trackId, HeaderSize+i*3+2);
+    /*Serial.print(stripId);
+    Serial.print(F("/"));
+    Serial.print(channelId);
+    Serial.print(F("/"));
+    Serial.print(stateId);
+    Serial.print(F(" "));*/
+    fxc.strip[stripId]->fxSystem.channels[channelId].on = true;
+    fxc.strip[stripId]->fxSystem.channels[channelId].state = stateId;
+  }
+  //Serial.println();
+  fxc.stripMask = LEDS_0|LEDS_1|LEDS_2|LEDS_3|LEDS_4|LEDS_5|LEDS_6|LEDS_7;
+#endif  
+}  
+
+void FxDisplaySideFX(FxController &fxc)
+{  
+#if ENABLE_MULTISTRIP  
+  Serial.println(F("const word SideFxTrack[] PROGMEM =\n{"));
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    Serial.print(fxc.strip[strip]->paletteType);
+    Serial.print(",");
+    Serial.print(abs(fxc.strip[strip]->paletteSpeed));
+    Serial.print(", ");
+  }
+  Serial.println();
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    Serial.print(fxc.strip[strip]->paletteId);
+    Serial.print(",");
+  }
+  Serial.println();    
+
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {  
+    int count = 0;
+    for (int channel = 0;channel < NUM_FX_CHANNELS;channel++)
+    {
+      if (fxc.strip[strip]->fxSystem.channels[channel].on)
+      {
+        if (count++ > 0)
+          Serial.print(F(", "));
+        Serial.print(strip);
+        Serial.print(F(","));
+        Serial.print(channel);
+        Serial.print(F(","));
+        Serial.print(fxc.strip[strip]->fxSystem.channels[channel].state);
+      }
+    }
+    if (strip < NUM_STRIPS-1)
+      Serial.print(",");
+    Serial.println();    
+  }
+  Serial.println(F("};"));
+#endif  
 }

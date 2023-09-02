@@ -28,7 +28,8 @@ public:
   FxParticle()
   {
       loc = 0;
-      vel = 0.5f + (float)(rand()%40) / 40.0f;
+      vel = 1.5f + (float)(rand()%40) / 40.0f;
+//      vel = 0.5f + (float)(rand()%40) / 40.0f;
   }
 };
 
@@ -89,6 +90,12 @@ public:
      if (channels[channel].state > 1)
       channels[channel].state = 0;
     }
+    if (channel == 7)    
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 1)
+      channels[channel].state = 0;
+    }
   }
   void Reset(int channel)
   {
@@ -109,6 +116,7 @@ public:
   uint32_t *nextPalette;
   uint32_t *initialPalette;
   uint32_t *sideFXPalette;
+  int paletteId = 0;
   unsigned int *sequence;
   int paletteSpeed = 0;
   int paletteDirection = 1;
@@ -180,18 +188,21 @@ public:
   }
   void SetParticlesDirection(int dir)//-1 or 1
   {
+    Serial.println(F("RandomDir"));
     RandomizeParticles();
     for (int i=0;i<NUM_PARTICLES;i++)
       particles[i].loc = dir * particles[i].loc;
   }
   void SetParticleMode(FxParticleMode mode)
   {
+    Serial.println(F("RandomMode"));
     for (int i=0;i<NUM_PARTICLES;i++)
       particles[i].mode = mode;
     RandomizeParticles();
   }
   void RandomizeParticles()
   {
+    Serial.println(F("RandomParticles"));
     for (int i=0;i<NUM_PARTICLES;i++)
     {
       particles[i].loc = rand() % (numleds-1);
@@ -204,6 +215,7 @@ public:
 struct FxController
 {
 public:  
+  unsigned char brightness = BRIGHTNESS;
   float transitionMux = 0;
   FxState fxState = FxState_Default;
   FxTrackEndAction fxTrackEndAction;
@@ -352,5 +364,8 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
 void FxProcessParticles(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);
+void FxDisplaySideFX(FxController &fxc);
+void FxPaletteById(FxController &fxc, int paletteId);
+void FxActivateSideFXTrack(FxController &fxc, int trackId);
 
 #endif

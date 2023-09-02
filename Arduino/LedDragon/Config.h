@@ -49,6 +49,7 @@ static const char *DeviceName = "UnkDevice";
 #define ENABLE_MULTISTRIP   1   //Enable multiple LED strips
 #define LED_PIN             3
 #define DEBUG_STATUS        0
+#define DEBUG_SIDEFX        1
 #define DEBUG_SERIAL        1
 #define SERIAL_BAUD_RATE    115200
 #define DRAGON_HEAD         LEDS_2|LEDS_3
