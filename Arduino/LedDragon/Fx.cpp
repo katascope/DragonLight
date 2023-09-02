@@ -1005,6 +1005,7 @@ word FxGetSideFXTrackSize(FxController &fxc, int trackId)
     case 3: return sizeof(SideFxTrackPurpleParty);
     case 4: return sizeof(SideFxTrackRainbow);
     case 5: return sizeof(SideFxTrackHeat);
+    case 6: return sizeof(SideFxTrackCMY);
   }
   return 0;
 }
@@ -1019,6 +1020,7 @@ word FxGetSideFXTrackValue(FxController &fxc, int trackId, int o)
     case 3: return pgm_read_dword(&(SideFxTrackPurpleParty[o]));
     case 4: return pgm_read_dword(&(SideFxTrackRainbow[o]));
     case 5: return pgm_read_dword(&(SideFxTrackHeat[o]));
+    case 6: return pgm_read_dword(&(SideFxTrackCMY[o]));
   }
   return 0;
 }
