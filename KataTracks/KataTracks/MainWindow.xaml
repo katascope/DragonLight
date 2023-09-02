@@ -30,7 +30,7 @@
         <Rectangle Height="36" Stroke="#FF1668A7" Canvas.Top="758" Width="194" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="-0.016,0.596" Canvas.Left="1"/>
         <Rectangle x:Name="TrackIndex" Height="450" Margin="0,0,0,0" Stroke="#FF066693" Width="1" Canvas.Left="0" Canvas.Top="125"/>
         <Rectangle x:Name="TrackIndexPlay" Height="450" Margin="0,0,0,0" Stroke="#BFBFBFBF" Width="1" Canvas.Left="0" Canvas.Top="125"/>
-        <Button Click="Exit" Content="Exit" Canvas.Left="120" Canvas.Top="758" Width="22" Height="20" Background="#FF012461" Foreground="#FF00807D" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="Exit" Content="Exit" Canvas.Left="148" Canvas.Top="756" Width="22" Height="20" Background="#FF012461" Foreground="#FF00807D" RenderTransformOrigin="0.029,-2.831" BorderBrush="#FF120351" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Slider x:Name="BoostVolumeSlider" ValueChanged="BoostVolumeSlider_ValueChanged" Width="300 " Maximum="400" Canvas.Left="102" Canvas.Top="4" LargeChange="10" Value="100">
             <Slider.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="2"/>
@@ -57,7 +57,7 @@
             Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="612" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
         <TextBox x:Name="Log4" 
             Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="816" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
-        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="Search" Height="20 " Width="42" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="72" BorderBrush="#FF120351" Canvas.Top="758" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="Search" Height="20 " Width="78" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="48" BorderBrush="#FF120351" Canvas.Top="756" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ProgressBar x:Name="InputVolumeIndicator" Height="31" Canvas.Left="496" Canvas.Top="19" Width="288" Foreground="#FF01457E" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF151515"/>
         <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="496" Canvas.Top="49" Width="288" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.104">
             <Slider.LayoutTransform>
@@ -73,7 +73,7 @@
         <Label x:Name="InputVolumeLevelLabel" Content="Live" Canvas.Left="440" Background="Black" Foreground="#FFACC0EC" Canvas.Top="14" Height="36" FontSize="22" Width="50"/>
         <Label x:Name="TriggerLevelSliderLabel" Content="Trigger" Canvas.Left="416" Background="Black" Foreground="#FFACC0EC" Height="41" Canvas.Top="55" FontSize="22" Width="80"/>
         <Label x:Name="OutputVolumeSliderLabel" Content="Boost" Canvas.Left="14" Background="Black" Foreground="#FFACC0EC" Height="38" FontSize="22" Width="84" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Click="SendBoth" Tag="x" Content="Test" Canvas.Left="32" Canvas.Top="758" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="28" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Click="SendBoth" Tag="x" Content="Test" Canvas.Left="-1" Canvas.Top="756" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="28" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Label x:Name="StatusLabel" Content="LeDragon" Canvas.Top="631" Foreground="#FF066693" FontWeight="Bold" Height="33" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="18" Width="100" Canvas.Left="-5"/>
         <Button Click="SendBoth" Tag="$" Content="Dim" Canvas.Left="33" Canvas.Top="568" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="64" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30"/>
         <Button Click="SendBoth" Tag="%" Content="Norm" Canvas.Left="112" Canvas.Top="568" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="64" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.157,0.117" Height="30"/>
