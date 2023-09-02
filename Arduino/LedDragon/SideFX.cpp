@@ -5,6 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "SideFX.h"
 #include "Fx.h"
 #include "FxCore.h"
+#include "FxController.h"
 #include "DevNeo.h"
 #include <avr/pgmspace.h>
 
@@ -175,7 +176,7 @@ word FxGetSideFXTrackValue(FxController &fxc, int trackId, int o)
   return 0;
 }
 
-void SideFX_ActivatePreset(FxController &fxc, int trackId)
+void SideFXActivatePreset(FxController &fxc, int trackId)
 {  
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
@@ -249,7 +250,7 @@ void SideFX_ActivatePreset(FxController &fxc, int trackId)
 #endif  
 }  
 
-void SideFX_PrintState(FxController &fxc)
+void SideFXPrintState(FxController &fxc)
 {  
 #if ENABLE_MULTISTRIP  
   Serial.println(F("const word SideFxTrack[] PROGMEM =\n{"));
@@ -295,7 +296,7 @@ void SideFX_PrintState(FxController &fxc)
 }
 
 
-void SideFX_State_Poll(FxController &fxc)
+void SideFXPollState(FxController &fxc)
 {
   int b = (int)(fxc.vol * 50.0f);
   
@@ -365,10 +366,7 @@ void SideFX_State_Poll(FxController &fxc)
           fxc.strip[strip]->paletteDirection = 1;
         }
       }
-      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Once;
     }
-    else 
-      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;  
 
     if (fxc.strip[strip]->fxSystem.channels[5].on) 
     {

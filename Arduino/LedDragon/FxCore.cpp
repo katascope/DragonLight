@@ -39,18 +39,6 @@ uint32_t ShortnameToCRGB(char shortName)
   return CRGB_DARK;
 }
 
-void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType)
-{
-  switch (paletteUpdateType)
-  {
-    case None:    Serial.print(F("None")); break;
-    case Once:    Serial.print(F("Once")); break;
-    case Done:    Serial.print(F("Done")); break;
-    case Always:  Serial.print(F("Alwa")); break;
-    default: Serial.print(F("Unk"));
-  }
-}
-
 void PrintFxStateName(FxState s)
 {
   switch (s)

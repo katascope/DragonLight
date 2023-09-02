@@ -44,14 +44,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define CRGB_HALF    LEDRGB(HALF)
 #define CRGB_LOWHALF LEDRGB(LOWHALF)
 
-enum FxPaletteUpdateType
-{
-  None,
-  Once,
-  Done,
-  Always
-};
-
 enum FxState
 {
   FxState_Default          = 0,
@@ -436,7 +428,6 @@ void CopyPalette(int numleds, uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);
 
-void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType);
 void PrintFxStateName(FxState s);
 void PrintFxEventName(int event);
 void PrintFxTransitionName(FxTransitionType t);

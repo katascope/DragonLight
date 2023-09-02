@@ -5,6 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Config.h"
 #include "Cmd.h"
 #include "Fx.h"
+#include "FxController.h"
 #include "SideFX.h"
 
 void SimpleUserCommandInput(FxController &fxc, int command)
@@ -44,7 +45,7 @@ void SimpleUserCommandInput(FxController &fxc, int command)
         if (fxc.stripMask & (1<<strip)) 
           fxc.strip[strip]->paletteIndex = 0;
       break;
-    case ']': SideFX_PrintState(fxc); break;
+    case ']': SideFXPrintState(fxc); break;
     
     case '0': FxInstantEvent(fxc, fx_palette_dark);break;
     case '1': FxInstantEvent(fxc, fx_palette_white);break;
@@ -57,15 +58,15 @@ void SimpleUserCommandInput(FxController &fxc, int command)
     case '8': FxInstantEvent(fxc, fx_palette_orange);break;
     case '9': FxInstantEvent(fxc, fx_palette_half);break;
 
-    case 'a': SideFX_ActivatePreset(fxc, 0); break;
-    case 's': SideFX_ActivatePreset(fxc, 1); break;
-    case 'd': SideFX_ActivatePreset(fxc, 2); break;
-    case 'f': SideFX_ActivatePreset(fxc, 3); break;
-    case 'g': SideFX_ActivatePreset(fxc, 4); break;
-    case 'h': SideFX_ActivatePreset(fxc, 5); break;
-    case 'j': SideFX_ActivatePreset(fxc, 6); break;
-    case 'k': SideFX_ActivatePreset(fxc, 7); break;
-    case 'l': SideFX_ActivatePreset(fxc, 8); break;
+    case 'a': SideFXActivatePreset(fxc, 0); break;
+    case 's': SideFXActivatePreset(fxc, 1); break;
+    case 'd': SideFXActivatePreset(fxc, 2); break;
+    case 'f': SideFXActivatePreset(fxc, 3); break;
+    case 'g': SideFXActivatePreset(fxc, 4); break;
+    case 'h': SideFXActivatePreset(fxc, 5); break;
+    case 'j': SideFXActivatePreset(fxc, 6); break;
+    case 'k': SideFXActivatePreset(fxc, 7); break;
+    case 'l': SideFXActivatePreset(fxc, 8); break;
 
     case 'q': fxc.stripMask = DRAGON_TORSO_LEFT|DRAGON_TORSO_RIGHT; break;
     case 'w': fxc.stripMask = DRAGON_WING_LEFT|DRAGON_WING_RIGHT; break;
@@ -313,7 +314,7 @@ void ComplexUserCommandInput(FxController &fxc, String cmd)
   if (cmd == F("@head"))  fxc.stripMask = DRAGON_HEAD;
   if (cmd == F("@tail"))  fxc.stripMask = DRAGON_TAIL;
 
-  if (cmd == F("test"))  fxc.fxState = FxState_Default;
+  if (cmd == F("default"))  fxc.fxState = FxState_Default;
   if (cmd == F("test"))  fxc.fxState = FxState_TestPattern;
   if (cmd == F("mtest")) fxc.fxState = FxState_MultiTestPattern;
   if (cmd == F("fx"))    fxc.fxState = FxState_SideFX;

@@ -7,19 +7,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "DevNeo.h"
 #include "Fx.h"
 #include "SideFX.h"
+#include "FxController.h"
 
 void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
-    if ((int)fxc.strip[strip]->paletteUpdateType != 0)
-    {
-      fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
-      if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
-        fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
-      if (fxc.strip[strip]->paletteIndex < 0)
-        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
-    }
+    fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
+    if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
+      fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
+    if (fxc.strip[strip]->paletteIndex < 0)
+      fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
+        
 #if ENABLE_NEOPIXEL
     if (useSideFXPalette)
       neopixelSetPalette(strip, fxc.strip[strip]->numleds, fxc.strip[strip]->sideFXPalette, fxc.strip[strip]->paletteIndex);
@@ -31,24 +30,12 @@ void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette)
 
 void FxUpdatePalette(struct FxController &fxc)
 {
-  FxProcessParticles(fxc);
   if (fxc.fxState != FxState::FxState_SideFX)
     FxAnimatePalette(fxc,false);  
 }
 
 void FxInstantEvent(FxController &fxc, int event)
 {
-  //fxc.fxState = FxState_Default;
-
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    if (fxc.stripMask & (1<<strip)) 
-    {
-      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Once;
-//      fxc.strip[strip]->transitionType = Transition_Instant;
-    }    
-  }
-
   FxEventProcess(fxc, event);
   FxUpdatePalette(fxc);
 }
@@ -109,8 +96,6 @@ void FxPrintStatus(FxController &fxc)
     Serial.print(fxc.strip[strip]->paletteDirection);
     Serial.print(F(",pi="));
     Serial.print(fxc.strip[strip]->paletteIndex);
-    Serial.print(F(",u="));
-    Serial.print(fxc.strip[strip]->paletteUpdateType);
     Serial.print(F("] "));
   }
 #endif    
@@ -303,7 +288,6 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
         || t == Transition_TimedWipeOutIn || t == Transition_TimedWipeInOut
         || t == Transition_TimedFadeSin || t == Transition_TimedFadeCos) 
         {
-          fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;
           fxc.strip[strip]->paletteIndex = 0;
         }
         if (t == fx_transition_timed_wipe_neg)
@@ -311,7 +295,6 @@ void SetTransitionType(FxController &fxc, FxTransitionType t)
     }
     if (t == Transition_TimedWipeRandom)
     {
-      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::None;
       fxc.strip[strip]->paletteIndex = 0;
       //sequence_linear(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
       sequence_random(fxc.strip[strip]->sequence, fxc.strip[strip]->numleds);
@@ -867,67 +850,13 @@ void FxEventProcess(FxController &fxc,int event)
 }
 
 
-void FxProcessParticles(FxController &fxc)
-{
-  if (fxc.fxState == FxState_Default && fxc.HasRunning())
-  {
-    for (int strip=0;strip<NUM_STRIPS;strip++)
-      for (int led=0;led<fxc.strip[strip]->numleds;led++)
-        fxc.strip[strip]->palette[led] = fxc.strip[strip]->initialPalette[led];
-  }
-
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    
-            for (int particle=0;particle<NUM_PARTICLES;particle++)
-            {
-              if (fxc.strip[strip]->particles[particle].on)
-              {
-               if (fxc.strip[strip]->particles[particle].mode == FX_PARTICLEMODE_RND)
-                {                
-                  fxc.strip[strip]->particles[particle].len += 2;                  
-                  int len = fxc.strip[strip]->particles[particle].len;
-                  
-                  //for (int i=0;i<fxc.strip[strip]->particles[particle].len;i++)
-                  //{
-                    int loc = fxc.strip[strip]->particles[particle].loc;
-                    //fxc.strip[strip]->particles[particle].rgb;
-                    unsigned int r = (fxc.strip[strip]->palette[ loc ]>> 16) & 0xFF;
-                    unsigned int g = (fxc.strip[strip]->palette[ loc ] >> 8) & 0xFF;
-                    unsigned int b = (fxc.strip[strip]->palette[ loc ] >> 0) & 0xFF;
-                    if (len < 2){ r *= 1; g *= 1; b *= 1; }
-                    if (len < 4){ r *= 2; g *= 2; b *= 2; }
-                    if (len < 6){ r *= 3; g *= 3; b *= 3; }
-                    if (len < 8){ r *= 4; g *= 4; b *= 4; }
-                    if (len < 10){ r *= 6; g *= 6; b *= 6; }
-                    if (r > 255) r = 255;
-                    if (g > 255) g = 255;
-                    if (b > 255) b = 255;
-                   
-                    fxc.strip[strip]->palette[ loc ] = LEDRGB(r,g,b);
-                    //if (loc + len < fxc.strip[strip]->numleds) fxc.strip[strip]->palette[ loc + len ] = LEDRGB(r,g,b);
-                    //if (loc - len > 0) fxc.strip[strip]->palette[ loc - len ] = LEDRGB(r,g,b);
-                  
-                  if ((loc + len) >= fxc.strip[strip]->numleds || (loc - len) < 0)
-                  {
-                    fxc.strip[strip]->particles[particle].loc = rand() % (fxc.strip[strip]->numleds-1);
-                    fxc.strip[strip]->particles[particle].len = 1;
-                  }                   
-                }
-              }
-            }
-  }  
-}
 
 void FxPaletteById(FxController &fxc, int paletteId)
 {
+  //Record last set paletteId
   for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
     if (fxc.stripMask & (1<<strip)) 
-    {
       fxc.strip[strip]->paletteId = paletteId;    
-    }
-  }
   
   switch (paletteId)
   {

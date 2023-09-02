@@ -7,6 +7,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "State.h"
 #include "FxCore.h"
 #include "Fx.h"
+#include "FxController.h"
 #include "SideFX.h"
 
 void State_Poll_TestPattern(FxController &fxc)
@@ -17,7 +18,6 @@ void State_Poll_TestPattern(FxController &fxc)
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip]->paletteSpeed = 0;
-      fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Always;
     }
 
     FxEventProcess(fxc, fx_strip_all);//fx_strip + LEDS_0);
@@ -174,5 +174,5 @@ void State_Poll(FxController &fxc)
     State_Poll_TestPattern(fxc);
 
   if (fxc.fxState == FxState_SideFX)
-    SideFX_State_Poll(fxc);
+    SideFXPollState(fxc);
 }
