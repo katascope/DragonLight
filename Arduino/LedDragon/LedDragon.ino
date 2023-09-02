@@ -140,7 +140,6 @@ void loop()
     }
   }
 
-
 #if DEBUG_STATUS
   //Display status once a second
     unsigned long t =  millis();

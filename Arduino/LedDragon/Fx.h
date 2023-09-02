@@ -116,6 +116,7 @@ public:
   uint32_t *nextPalette;
   uint32_t *initialPalette;
   uint32_t *sideFXPalette;
+  int paletteId = 0;
   unsigned int *sequence;
   int paletteSpeed = 0;
   int paletteDirection = 1;
@@ -363,5 +364,8 @@ void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpd
 void FxProcessParticles(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);
+void FxDisplaySideFX(FxController &fxc);
+void FxPaletteById(FxController &fxc, int paletteId);
+void FxActivateSideFXTrack(FxController &fxc, int trackId);
 
 #endif

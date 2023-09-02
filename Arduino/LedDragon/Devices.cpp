@@ -233,90 +233,7 @@ bool bleSetup()
   return true;
 }
 
-void blePalette(FxController &fxc, int paletteId)
-{
-    switch (paletteId)
-    {
-      case 1: FxInstantEvent(fxc, fx_palette_dry,     FxPaletteUpdateType::Once); break;
-      case 2: FxInstantEvent(fxc, fx_palette_drg,     FxPaletteUpdateType::Once); break;
-      case 3: FxInstantEvent(fxc, fx_palette_drc,     FxPaletteUpdateType::Once); break;
-      case 4: FxInstantEvent(fxc, fx_palette_drb,     FxPaletteUpdateType::Once); break;
-      case 5: FxInstantEvent(fxc, fx_palette_drm,     FxPaletteUpdateType::Once); break;
-      case 6: FxInstantEvent(fxc, fx_palette_wry,     FxPaletteUpdateType::Once); break;
-      case 7: FxInstantEvent(fxc, fx_palette_wrg,     FxPaletteUpdateType::Once); break;
-      case 8: FxInstantEvent(fxc, fx_palette_wrc,     FxPaletteUpdateType::Once); break;
-      case 9: FxInstantEvent(fxc, fx_palette_wrb,     FxPaletteUpdateType::Once); break;
-      case 10: FxInstantEvent(fxc, fx_palette_wrm,     FxPaletteUpdateType::Once); break;
 
-      case 11: FxInstantEvent(fxc, fx_palette_dyg,     FxPaletteUpdateType::Once); break;
-      case 12: FxInstantEvent(fxc, fx_palette_dyc,     FxPaletteUpdateType::Once); break;
-      case 13: FxInstantEvent(fxc, fx_palette_dyb,     FxPaletteUpdateType::Once); break;
-      case 14: FxInstantEvent(fxc, fx_palette_dym,     FxPaletteUpdateType::Once); break;
-      case 15: FxInstantEvent(fxc, fx_palette_wyg,     FxPaletteUpdateType::Once); break;
-      case 16: FxInstantEvent(fxc, fx_palette_wyc,     FxPaletteUpdateType::Once); break;
-      case 17: FxInstantEvent(fxc, fx_palette_wyb,     FxPaletteUpdateType::Once); break;
-      case 18: FxInstantEvent(fxc, fx_palette_wym,     FxPaletteUpdateType::Once); break;
-
-      case 19: FxInstantEvent(fxc, fx_palette_dgc,     FxPaletteUpdateType::Once); break;
-      case 20: FxInstantEvent(fxc, fx_palette_dgb,     FxPaletteUpdateType::Once); break;
-      case 21: FxInstantEvent(fxc, fx_palette_dgm,     FxPaletteUpdateType::Once); break;
-      case 22: FxInstantEvent(fxc, fx_palette_wgc,     FxPaletteUpdateType::Once); break;
-      case 23: FxInstantEvent(fxc, fx_palette_wgb,     FxPaletteUpdateType::Once); break;
-      case 24: FxInstantEvent(fxc, fx_palette_wgm,     FxPaletteUpdateType::Once); break;
-
-      case 25: FxInstantEvent(fxc, fx_palette_dcb,     FxPaletteUpdateType::Once); break;
-      case 26: FxInstantEvent(fxc, fx_palette_dcm,     FxPaletteUpdateType::Once); break;
-      case 27: FxInstantEvent(fxc, fx_palette_wcb,     FxPaletteUpdateType::Once); break;
-      case 28: FxInstantEvent(fxc, fx_palette_wcm,     FxPaletteUpdateType::Once); break;
-
-      case 29: FxInstantEvent(fxc, fx_palette_dbm,     FxPaletteUpdateType::Once); break;
-      case 30: FxInstantEvent(fxc, fx_palette_wbm,     FxPaletteUpdateType::Once); break;
-
-      case 31: FxInstantEvent(fxc, fx_palette_rgb,     FxPaletteUpdateType::Once); break;
-      case 32: FxInstantEvent(fxc, fx_palette_rbm,     FxPaletteUpdateType::Once); break;
-      case 33: FxInstantEvent(fxc, fx_palette_cmy,     FxPaletteUpdateType::Once); break;
-      case 34: FxInstantEvent(fxc, fx_palette_cbm,     FxPaletteUpdateType::Once); break;
-                           
-      case 101: FxInstantEvent(fxc, fx_palette_dr,     FxPaletteUpdateType::Once); break;
-      case 102: FxInstantEvent(fxc, fx_palette_red,    FxPaletteUpdateType::Once); break;
-      case 103: FxInstantEvent(fxc, fx_palette_ry,     FxPaletteUpdateType::Once); break;
-      case 104: FxInstantEvent(fxc, fx_palette_rg,     FxPaletteUpdateType::Once); break;
-      case 105: FxInstantEvent(fxc, fx_palette_rc,     FxPaletteUpdateType::Once); break;
-      case 106: FxInstantEvent(fxc, fx_palette_rb,     FxPaletteUpdateType::Once); break;
-      case 107: FxInstantEvent(fxc, fx_palette_rm,     FxPaletteUpdateType::Once); break;
-      case 108: FxInstantEvent(fxc, fx_palette_wr,     FxPaletteUpdateType::Once); break;
-
-      case 109: FxInstantEvent(fxc, fx_palette_dy,     FxPaletteUpdateType::Once); break;
-      case 110: FxInstantEvent(fxc, fx_palette_yellow, FxPaletteUpdateType::Once); break;
-      case 111: FxInstantEvent(fxc, fx_palette_yg,     FxPaletteUpdateType::Once); break;
-      case 112: FxInstantEvent(fxc, fx_palette_yc,     FxPaletteUpdateType::Once); break;
-      case 113: FxInstantEvent(fxc, fx_palette_yb,     FxPaletteUpdateType::Once); break;
-      case 114: FxInstantEvent(fxc, fx_palette_ym,     FxPaletteUpdateType::Once); break;
-      case 115: FxInstantEvent(fxc, fx_palette_wy,     FxPaletteUpdateType::Once); break;
-
-      case 116: FxInstantEvent(fxc, fx_palette_dg,     FxPaletteUpdateType::Once); break;
-      case 117: FxInstantEvent(fxc, fx_palette_green,  FxPaletteUpdateType::Once); break;
-      case 118: FxInstantEvent(fxc, fx_palette_gc,     FxPaletteUpdateType::Once); break;
-      case 119: FxInstantEvent(fxc, fx_palette_gb,     FxPaletteUpdateType::Once); break;
-      case 120: FxInstantEvent(fxc, fx_palette_gm,     FxPaletteUpdateType::Once); break;
-      case 121: FxInstantEvent(fxc, fx_palette_wg,     FxPaletteUpdateType::Once); break;
-
-      case 122: FxInstantEvent(fxc, fx_palette_dc,     FxPaletteUpdateType::Once); break;
-      case 123: FxInstantEvent(fxc, fx_palette_cyan,   FxPaletteUpdateType::Once); break;
-      case 124: FxInstantEvent(fxc, fx_palette_cb,     FxPaletteUpdateType::Once); break;
-      case 125: FxInstantEvent(fxc, fx_palette_cm,     FxPaletteUpdateType::Once); break;
-      case 126: FxInstantEvent(fxc, fx_palette_wc,     FxPaletteUpdateType::Once); break;
-
-      case 127: FxInstantEvent(fxc, fx_palette_db,     FxPaletteUpdateType::Once); break;
-      case 128: FxInstantEvent(fxc, fx_palette_blue,   FxPaletteUpdateType::Once); break;
-      case 129: FxInstantEvent(fxc, fx_palette_bm,     FxPaletteUpdateType::Once); break;
-      case 130: FxInstantEvent(fxc, fx_palette_wb,     FxPaletteUpdateType::Once); break;
-
-      case 131: FxInstantEvent(fxc, fx_palette_dm,     FxPaletteUpdateType::Once); break;
-      case 132: FxInstantEvent(fxc, fx_palette_magenta,FxPaletteUpdateType::Once); break;
-      case 133: FxInstantEvent(fxc, fx_palette_wm,     FxPaletteUpdateType::Once); break;
-    }
-}
 void blePoll(FxController &fxc)
 {
   static unsigned long counter = 0;
@@ -368,7 +285,7 @@ void blePoll(FxController &fxc)
           int palChoice = paletteCharacteristic.value();
           Serial.print(F("PalChoice"));
           Serial.println(palChoice);
-          blePalette(fxc,palChoice);
+          FxPaletteById(fxc,palChoice);
         }
         if (fxToggleOnCharacteristic.written() )
         {
