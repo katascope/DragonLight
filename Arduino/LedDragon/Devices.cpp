@@ -149,14 +149,12 @@ void neopixelSetPalette(int slot, int numleds, uint32_t *palette, int paletteInd
 #include <Arduino_LSM9DS1.h>
 #include "Fx.h"
 #include "Cmd.h"
-#include "Track.h"
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = 25;//LED_PWR;
 BLEService mainService( BLE_UUID_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
-BLEUnsignedLongCharacteristic playCharacteristic(BLE_UUID_CHARACTERISTIC_PLAY, BLERead | BLEWrite  );
 BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND, BLERead | BLEWrite  );
 BLECharCharacteristic paletteCharacteristic( BLE_UUID_CHARACTERISTIC_PALETTE, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE, BLERead | BLEWrite  );
@@ -200,7 +198,6 @@ bool bleSetup()
   // BLE add characteristics
   mainService.addCharacteristic( authenticateCharacteristic );
   mainService.addCharacteristic( commandCharacteristic );
-  mainService.addCharacteristic( playCharacteristic );
   mainService.addCharacteristic( soundCharacteristic );
   mainService.addCharacteristic( paletteCharacteristic );
   mainService.addCharacteristic( fxToggleCharacteristic );
@@ -217,7 +214,6 @@ bool bleSetup()
 
   // set the initial value for the characeristics:
   commandCharacteristic.writeValue( 0 );
-  playCharacteristic.writeValue(0);
   statusCharacteristic.writeValue(0);
   soundCharacteristic.writeValue(127);
   paletteCharacteristic.writeValue(0);
@@ -261,20 +257,8 @@ void blePoll(FxController &fxc)
           Serial.print( F("BLE cmd: " ));
           int v = commandCharacteristic.value();
           Serial.print( (char)v);
-          UserCommandInput(fxc, v);
+          SimpleUserCommandInput(fxc, v);
           Serial.println();
-        }
-        if (playCharacteristic.written() )
-        {
-          //Get all our timing setup.
-          unsigned long tc = playCharacteristic.value();
-          int prevmatch = GetPreviousTimeCodeMatch(tc);    
-          setTimecodeLastMatched(SongTrack_timecode(prevmatch));
-          setTimecodeSongOffset(tc);  
-          setTimecodeTimeOffset(millis());
-          
-          //Finally start the track
-          trackStart(fxc,tc, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), FxTrackEndAction::StopAtEnd);
         }
         if (soundCharacteristic.written() )
         {

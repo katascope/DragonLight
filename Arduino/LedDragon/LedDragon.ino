@@ -4,7 +4,6 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Config.h"
 #include "Fx.h"
-#include "Track.h"
 #include "Cmd.h"
 #include "State.h"
 #include "Devices.h"
@@ -20,15 +19,6 @@ void setup() {
   Serial.print(DeviceName);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
-  
-#if ENABLE_TRACK_CHECK
-  if (trackHasLinearTime())
-    Serial.println(F("Track Linear Check = OK"));
-  else {
-    Serial.println(F("Track Linear Check = FAILED"));
-    return;
-  }
-#endif
 
 #if ENABLE_MEMORYUSAGE
   Serial.println(F("MemoryUsage"));
@@ -57,19 +47,12 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-  UserCommandExecute(fxController, Cmd_Brightness_Half); 
-  UserCommandExecute(fxController, Cmd_ColorDark);   
   fxController.fxState = STARTUP_STATE;
 
-  if (fxController.fxState == FxState_PlayingTrack)
-  {
-    fxController.fxTrackEndAction = FxTrackEndAction::LoopAtEnd;
-    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), fxController.fxTrackEndAction);
-  }
-  else Serial.println(F("Lightstrips OK"));
 #if ENABLE_NEOPIXEL
 //Display brightness levels
   Serial.print(F("Brightness = { "));
+  FxInstantEvent(fxController, fx_palette_dark);
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {
     fxController.strip[strip]->brightness = BRIGHTNESS;
@@ -90,10 +73,8 @@ void loop()
   while (Serial.available())
   {
       String str = Serial.readString();
-      if (str.length()<=3)
-        UserCommandInput(fxController, (int)str[0]);
-      else
-        ComplexUserCommandInput(fxController, str);
+      if (str.length()<=3) SimpleUserCommandInput(fxController, (int)str[0]);
+      else ComplexUserCommandInput(fxController, str);
   }
 
 #if ENABLE_BLE
@@ -124,7 +105,7 @@ void loop()
     needsUpdate = true;
   } 
   
-  if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
+  if (needsUpdate)
   {
     unsigned long t =  millis();
     if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)

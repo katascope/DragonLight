@@ -218,7 +218,6 @@ public:
   unsigned char brightness = BRIGHTNESS;
   float transitionMux = 0;
   FxState fxState = FxState_Default;
-  FxTrackEndAction fxTrackEndAction;
   unsigned long lastTimeLedUpdate = 0;  
   unsigned char stripMask = 255;
   FxStrip *strip[NUM_STRIPS];
@@ -360,7 +359,7 @@ public:
 
 void FxAnimatePalette(struct FxController &fxc, bool useSideFXPalette);
 void FxUpdatePalette(struct FxController &fxc);
-void FxInstantEvent(FxController &fxc, int event, FxPaletteUpdateType paletteUpdateType);
+void FxInstantEvent(FxController &fxc, int event);
 void FxProcessParticles(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
 void FxDisplayStatus(FxController &fxc);

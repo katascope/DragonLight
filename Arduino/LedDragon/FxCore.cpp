@@ -39,17 +39,6 @@ uint32_t ShortnameToCRGB(char shortName)
   return CRGB_DARK;
 }
 
-
-void PrintFxTrackEndAction(FxTrackEndAction fxTrackEndAction)
-{  
-  switch (fxTrackEndAction)
-  {
-    case StopAtEnd: Serial.print(F("StopAtEnd")); break;
-    case LoopAtEnd: Serial.print(F("LoopAtEnd")); break;
-    default: Serial.print(F("Unk"));
-  }
-}
-
 void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType)
 {
   switch (paletteUpdateType)
@@ -69,7 +58,6 @@ void PrintFxStateName(FxState s)
     case FxState_Default:        Serial.print(F("Norm")); break;
     case FxState_TestPattern:    Serial.print(F("Test")); break;
     case FxState_MultiTestPattern:    Serial.print(F("MultiTest")); break;
-    case FxState_PlayingTrack:   Serial.print(F("Play")); break;
     case FxState_SideFX:   Serial.print(F("SideFX")); break;
     default: Serial.print(F("Unk"));
   }
@@ -106,6 +94,15 @@ void PrintFxEventName(int event)
     case fx_speed_17: Serial.print(F("x17"));return;
     case fx_speed_18: Serial.print(F("x18"));return;
     case fx_speed_32: Serial.print(F("x32"));return;
+
+    case fx_state_default:   Serial.print(F("StateDefault"));return;
+    case fx_state_test:      Serial.print(F("StateTest"));return;
+    case fx_state_multitest: Serial.print(F("StateMultiTest"));return;
+    case fx_state_sidefx:    Serial.print(F("StateSideFX"));return;
+
+    case fx_brightness_half:   Serial.print(F("bright half"));return;
+    case fx_brightness_normal: Serial.print(F("bright normal"));return;
+    case fx_brightness_max:    Serial.print(F("bright max"));return;
 
     case fx_speed_pos: Serial.print(F("speed pos"));return;
     case fx_speed_neg: Serial.print(F("speed neg"));return;

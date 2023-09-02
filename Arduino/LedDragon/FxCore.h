@@ -57,8 +57,7 @@ enum FxState
   FxState_Default          = 0,
   FxState_TestPattern      = 1,
   FxState_MultiTestPattern = 2,
-  FxState_PlayingTrack     = 3,
-  FxState_SideFX           = 4
+  FxState_SideFX           = 3
 };
 
 enum FxStripMask
@@ -103,6 +102,15 @@ enum FxEvent
   fx_speed_dec = 23,
   fx_speed_rst = 24,
 
+  fx_state_default,
+  fx_state_test,
+  fx_state_multitest,
+  fx_state_sidefx,
+
+  fx_brightness_half,
+  fx_brightness_normal,
+  fx_brightness_max,
+
   fx_transition_fast,
   fx_transition_timed_fade,
   fx_transition_timed_wipe_pos,
@@ -118,9 +126,6 @@ enum FxEvent
   
   fx_palette_lead,
   fx_palette_follow,
-
-  fx_track_begin,
-  fx_track_stop,
 
   fx_palette_lava,
   fx_palette_cloud,
@@ -380,12 +385,6 @@ enum FxTransitionType
   Transition_TimedFadeCos    = 8,
 };
 
-enum FxTrackEndAction
-{
-  StopAtEnd = 0,
-  LoopAtEnd = 1
-};
-
 enum    WEBRGB {
   AliceBlue = 0xF0F8FF, Amethyst = 0x9966CC, AntiqueWhite = 0xFAEBD7, Aqua = 0x00FFFF,
   Aquamarine = 0x7FFFD4, Azure = 0xF0FFFF, Beige = 0xF5F5DC, Bisque = 0xFFE4C4,
@@ -437,7 +436,6 @@ void CopyPalette(int numleds, uint32_t *dst, uint32_t *src);
 
 uint32_t ShortnameToCRGB(char shortName);
 
-void PrintFxTrackEndAction(FxTrackEndAction fxTrackEndAction);
 void PrintFxPaletteUpdateType(FxPaletteUpdateType paletteUpdateType);
 void PrintFxStateName(FxState s);
 void PrintFxEventName(int event);
