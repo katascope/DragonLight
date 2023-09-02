@@ -7,9 +7,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Fx.h"
 #include "SideFX.h"
 
-void UpdatePalette(FxController &fxc);
-void ComplexUserCommandInput(FxController &fxc, String command);
-
 void SimpleUserCommandInput(FxController &fxc, int command)
 {
   PrintFxEventName(command);

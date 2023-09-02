@@ -102,32 +102,6 @@ void CopyFromPrev(FxController &fxc, int strip, int first, int last)
       fxc.strip[strip]->palette[i] = fxc.strip[strip]->initialPalette[i];
 }
 
-void PrintPalette(FxController &fxc)
-{
-  int limit = 4;
-  Serial.print(F(" ini("));     
-  for (int i=0;i<limit;i++)
-  {
-    Serial.print(fxc.strip[0]->initialPalette[i], HEX);
-    Serial.print(F(" "));
-  }
-  Serial.print(F("), ")); 
-  Serial.print(F(" pal("));
-  for (int i=0;i<limit;i++)
-  {
-    Serial.print(fxc.strip[0]->palette[i], HEX);
-    Serial.print(F(" "));
-  }
-  Serial.print(F(")")); 
-  Serial.print(F(" next("));
-  for (int i=0;i<limit;i++)
-  {
-    Serial.print(fxc.strip[0]->nextPalette[i], HEX);
-    Serial.print(F(" "));
-  }
-  Serial.print(F(")"));   
-}
-
 void Do_Transition(FxController &fxc)
 {
   for (int strip=0;strip<NUM_STRIPS;strip++)

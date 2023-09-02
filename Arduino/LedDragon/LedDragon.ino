@@ -8,10 +8,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "State.h"
 #include "DevBle.h"
 #include "DevNeo.h"
-static FxController fxController;
-void UpdatePalette(FxController &fxc);
 
-static unsigned long lastTimeUlt = 0;
+static FxController fxController;
 static unsigned long lastTimeDisplay = 0;
 
 void setup() {
@@ -27,15 +25,24 @@ void setup() {
   MEMORY_PRINT_HEAPSIZE
 #endif  
 
+  fxController.fxState = STARTUP_STATE;
+
 #if ENABLE_NEOPIXEL
   Serial.println(F("Delaying 3 seconds for LEDs."));  delay( 3000 ); // power-up safety delay
   neopixelSetup();
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-    for (int led=0;led<fxController.strip[strip]->numleds;led++)
-      fxController.strip[strip]->palette[led] = 0;
-  Serial.print(F("NeoPixel init: "));
-  Serial.print(F(" LEDs on pin "));
+  Serial.print(F("NeoPixel LEDS on pin"));
   Serial.println(LED_PIN);
+  
+  Serial.print(F("NeoPixel Brightness = { "));
+  FxInstantEvent(fxController, fx_palette_dark);  
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    fxController.strip[strip]->brightness = BRIGHTNESS;
+    neopixelSetBrightness(strip,fxController.strip[strip]->brightness);
+    Serial.print(fxController.strip[strip]->brightness);
+    Serial.print(F(" "));
+  }
+  Serial.println(F(" }"));
 #else
   Serial.println(F("No NeoPixel init"));
 #endif
@@ -45,22 +52,6 @@ void setup() {
   bleSetup();
 #else
   Serial.println(F("No BLE init"));
-#endif
-
-  fxController.fxState = STARTUP_STATE;
-
-#if ENABLE_NEOPIXEL
-//Display brightness levels
-  Serial.print(F("Brightness = { "));
-  FxInstantEvent(fxController, fx_palette_dark);
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    fxController.strip[strip]->brightness = BRIGHTNESS;
-    neopixelSetBrightness(strip,fxController.strip[strip]->brightness);
-    Serial.print(fxController.strip[strip]->brightness);
-    Serial.print(F(" "));
-  }
-  Serial.println(F(" }"));
 #endif
 
   Serial.println(F("Setup complete."));
@@ -83,8 +74,7 @@ void loop()
 
   altSkip ++;
   if (altSkip %2 == 0)
-    State_Poll(fxController);
-    
+    State_Poll(fxController);    
   
   bool needsUpdate = false;
   for (int strip=0;strip<NUM_STRIPS;strip++)
@@ -122,17 +112,12 @@ void loop()
   }
 
 #if DEBUG_STATUS
-  //Display status once a second
-    unsigned long t =  millis();
-    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-    {      
-      if (fxController.fxState != FxState_PlayingTrack)
-      {        
-        Serial.print(F(" "));
-        FxDisplayStatus(fxController);            
-        Serial.println();  
-      }
-      lastTimeDisplay = t;
-    }
+  //Display status on timed basis
+  unsigned long currentTime = millis();
+  if (currentTime - lastTimeDisplay > DEBUG_STATUS_RATE)//delay to let bluetooth get data
+  {      
+    FxPrintStatus(fxController);            
+    lastTimeDisplay = currentTime;
+  }
 #endif
 }

@@ -97,8 +97,8 @@ bool bleSetup()
 
 void blePoll(FxController &fxc)
 {
-  static unsigned long counter = 0;
-  static long previousMillis = 0;
+  //static unsigned long counter = 0;
+  //static long previousMillis = 0;
 
   // listen for BLE peripherals to connect:
   BLEDevice central = BLE.central();

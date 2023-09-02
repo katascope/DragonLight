@@ -123,7 +123,6 @@ public:
   int paletteIndex = 0;
 
   FxParticle particles[NUM_PARTICLES];
-  FxParticle racers[NUM_PARTICLES];
   FxChannelSystem fxSystem;
 public:
   FxStrip(int nl)
@@ -143,14 +142,6 @@ public:
       sequence[i] = i;
     }
   } 
-  bool HasRacers()
-  {
-    for (int i=0;i<NUM_PARTICLES;i++)
-      if (racers[i].on) 
-        return true;
-    return false;
-  }
-  
   bool HasRunning()
   {
     for (int i=0;i<NUM_PARTICLES;i++)
@@ -362,8 +353,9 @@ void FxUpdatePalette(struct FxController &fxc);
 void FxInstantEvent(FxController &fxc, int event);
 void FxProcessParticles(FxController &fxc);
 void FxEventProcess(FxController &fxc,int event);
-void FxDisplayStatus(FxController &fxc);
 void FxDisplaySideFX(FxController &fxc);
+void FxPrintStatus(FxController &fxc);
+void FxPrintPalette(FxController &fxc);
 void FxPaletteById(FxController &fxc, int paletteId);
 void FxActivateSideFXTrack(FxController &fxc, int trackId);
 

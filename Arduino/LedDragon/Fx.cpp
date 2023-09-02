@@ -53,43 +53,69 @@ void FxInstantEvent(FxController &fxc, int event)
   FxUpdatePalette(fxc);
 }
 
-void FxDisplayStatus(FxController &fxc)
+void FxPrintPalette(FxController &fxc)
 {
-      Serial.print(F("v="));
-      Serial.print(fxc.vol);
-      Serial.print(F("[state="));
-      PrintFxStateName(fxc.fxState);
-      Serial.print(F(",strip&="));
-      Serial.print(fxc.stripMask);
-      Serial.print(F(",mux="));
-      Serial.print(fxc.transitionMux);
+  int limit = 4;
+  Serial.print(F(" ini("));     
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0]->initialPalette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F("), ")); 
+  Serial.print(F(" pal("));
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0]->palette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F(")")); 
+  Serial.print(F(" next("));
+  for (int i=0;i<limit;i++)
+  {
+    Serial.print(fxc.strip[0]->nextPalette[i], HEX);
+    Serial.print(F(" "));
+  }
+  Serial.print(F(")"));   
+}
+
+void FxPrintStatus(FxController &fxc)
+{
+  Serial.print(F("v="));
+  Serial.print(fxc.vol);
+  Serial.print(F("[state="));
+  PrintFxStateName(fxc.fxState);
+  Serial.print(F(",strip&="));
+  Serial.print(fxc.stripMask);
+  Serial.print(F(",mux="));
+  Serial.print(fxc.transitionMux);
 
 #if ENABLE_BLE      
-      Serial.print(F(",BLE on"));
+  Serial.print(F(",BLE on"));
 #else
-      Serial.print(F(",BLE off"));
+  Serial.print(F(",BLE off"));
 #endif
 
-      //Strip debugging
 #if ENABLE_NEOPIXEL  
-      for (int strip=0;strip<NUM_STRIPS;strip++)
-      {
-        Serial.print(F("["));
-        PrintFxTransitionName(fxc.strip[strip]->transitionType);
-        Serial.print(F(",b="));
-        Serial.print(fxc.strip[strip]->brightness);
-        Serial.print(F(",ps="));
-        Serial.print(fxc.strip[strip]->paletteSpeed);
-        Serial.print(F(",pd="));
-        Serial.print(fxc.strip[strip]->paletteDirection);
-        Serial.print(F(",pi="));
-        Serial.print(fxc.strip[strip]->paletteIndex);
-        Serial.print(F(",u="));
-        Serial.print(fxc.strip[strip]->paletteUpdateType);
-        Serial.print(F("] "));
-      }
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    Serial.print(F("["));
+    PrintFxTransitionName(fxc.strip[strip]->transitionType);
+    Serial.print(F(",b="));
+    Serial.print(fxc.strip[strip]->brightness);
+    Serial.print(F(",ps="));
+    Serial.print(fxc.strip[strip]->paletteSpeed);
+    Serial.print(F(",pd="));
+    Serial.print(fxc.strip[strip]->paletteDirection);
+    Serial.print(F(",pi="));
+    Serial.print(fxc.strip[strip]->paletteIndex);
+    Serial.print(F(",u="));
+    Serial.print(fxc.strip[strip]->paletteUpdateType);
+    Serial.print(F("] "));
+  }
 #endif    
-      Serial.print(F(")]"));
+  Serial.print(F(")]"));
+  Serial.println();
 }
 
 void FxCreatePalette(FxController &fxController, int strip, uint32_t *pal16, unsigned int palSize)
@@ -903,99 +929,99 @@ void FxPaletteById(FxController &fxc, int paletteId)
     }
   }
   
-    switch (paletteId)
-    {
-      case 1:  FxInstantEvent(fxc, fx_palette_dry); break;
-      case 2:  FxInstantEvent(fxc, fx_palette_drg); break;
-      case 3:  FxInstantEvent(fxc, fx_palette_drc); break;
-      case 4:  FxInstantEvent(fxc, fx_palette_drb); break;
-      case 5:  FxInstantEvent(fxc, fx_palette_drm); break;
-      case 6:  FxInstantEvent(fxc, fx_palette_wry); break;
-      case 7:  FxInstantEvent(fxc, fx_palette_wrg); break;
-      case 8:  FxInstantEvent(fxc, fx_palette_wrc); break;
-      case 9:  FxInstantEvent(fxc, fx_palette_wrb); break;
-      case 10: FxInstantEvent(fxc, fx_palette_wrm); break;
+  switch (paletteId)
+  {
+    case 1:  FxInstantEvent(fxc, fx_palette_dry); break;
+    case 2:  FxInstantEvent(fxc, fx_palette_drg); break;
+    case 3:  FxInstantEvent(fxc, fx_palette_drc); break;
+    case 4:  FxInstantEvent(fxc, fx_palette_drb); break;
+    case 5:  FxInstantEvent(fxc, fx_palette_drm); break;
+    case 6:  FxInstantEvent(fxc, fx_palette_wry); break;
+    case 7:  FxInstantEvent(fxc, fx_palette_wrg); break;
+    case 8:  FxInstantEvent(fxc, fx_palette_wrc); break;
+    case 9:  FxInstantEvent(fxc, fx_palette_wrb); break;
+    case 10: FxInstantEvent(fxc, fx_palette_wrm); break;
 
-      case 11: FxInstantEvent(fxc, fx_palette_dyg); break;
-      case 12: FxInstantEvent(fxc, fx_palette_dyc); break;
-      case 13: FxInstantEvent(fxc, fx_palette_dyb); break;
-      case 14: FxInstantEvent(fxc, fx_palette_dym); break;
-      case 15: FxInstantEvent(fxc, fx_palette_wyg); break;
-      case 16: FxInstantEvent(fxc, fx_palette_wyc); break;
-      case 17: FxInstantEvent(fxc, fx_palette_wyb); break;
-      case 18: FxInstantEvent(fxc, fx_palette_wym); break;
+    case 11: FxInstantEvent(fxc, fx_palette_dyg); break;
+    case 12: FxInstantEvent(fxc, fx_palette_dyc); break;
+    case 13: FxInstantEvent(fxc, fx_palette_dyb); break;
+    case 14: FxInstantEvent(fxc, fx_palette_dym); break;
+    case 15: FxInstantEvent(fxc, fx_palette_wyg); break;
+    case 16: FxInstantEvent(fxc, fx_palette_wyc); break;
+    case 17: FxInstantEvent(fxc, fx_palette_wyb); break;
+    case 18: FxInstantEvent(fxc, fx_palette_wym); break;
 
-      case 19: FxInstantEvent(fxc, fx_palette_dgc); break;
-      case 20: FxInstantEvent(fxc, fx_palette_dgb); break;
-      case 21: FxInstantEvent(fxc, fx_palette_dgm); break;
-      case 22: FxInstantEvent(fxc, fx_palette_wgc); break;
-      case 23: FxInstantEvent(fxc, fx_palette_wgb); break;
-      case 24: FxInstantEvent(fxc, fx_palette_wgm); break;
+    case 19: FxInstantEvent(fxc, fx_palette_dgc); break;
+    case 20: FxInstantEvent(fxc, fx_palette_dgb); break;
+    case 21: FxInstantEvent(fxc, fx_palette_dgm); break;
+    case 22: FxInstantEvent(fxc, fx_palette_wgc); break;
+    case 23: FxInstantEvent(fxc, fx_palette_wgb); break;
+    case 24: FxInstantEvent(fxc, fx_palette_wgm); break;
 
-      case 25: FxInstantEvent(fxc, fx_palette_dcb); break;
-      case 26: FxInstantEvent(fxc, fx_palette_dcm); break;
-      case 27: FxInstantEvent(fxc, fx_palette_wcb); break;
-      case 28: FxInstantEvent(fxc, fx_palette_wcm); break;
+    case 25: FxInstantEvent(fxc, fx_palette_dcb); break;
+    case 26: FxInstantEvent(fxc, fx_palette_dcm); break;
+    case 27: FxInstantEvent(fxc, fx_palette_wcb); break;
+    case 28: FxInstantEvent(fxc, fx_palette_wcm); break;
 
-      case 29: FxInstantEvent(fxc, fx_palette_dbm); break;
-      case 30: FxInstantEvent(fxc, fx_palette_wbm); break;
+    case 29: FxInstantEvent(fxc, fx_palette_dbm); break;
+    case 30: FxInstantEvent(fxc, fx_palette_wbm); break;
 
-      case 31: FxInstantEvent(fxc, fx_palette_rgb); break;
-      case 32: FxInstantEvent(fxc, fx_palette_rbm); break;
-      case 33: FxInstantEvent(fxc, fx_palette_cmy); break;
-      case 34: FxInstantEvent(fxc, fx_palette_cbm); break;
+    case 31: FxInstantEvent(fxc, fx_palette_rgb); break;
+    case 32: FxInstantEvent(fxc, fx_palette_rbm); break;
+    case 33: FxInstantEvent(fxc, fx_palette_cmy); break;
+    case 34: FxInstantEvent(fxc, fx_palette_cbm); break;
 
-      case 101: FxInstantEvent(fxc, fx_palette_dr); break;
-      case 102: FxInstantEvent(fxc, fx_palette_red); break;
-      case 103: FxInstantEvent(fxc, fx_palette_ry); break;
-      case 104: FxInstantEvent(fxc, fx_palette_rg); break;
-      case 105: FxInstantEvent(fxc, fx_palette_rc); break;
-      case 106: FxInstantEvent(fxc, fx_palette_rb); break;
-      case 107: FxInstantEvent(fxc, fx_palette_rm); break;
-      case 108: FxInstantEvent(fxc, fx_palette_wr); break;
+    case 101: FxInstantEvent(fxc, fx_palette_dr); break;
+    case 102: FxInstantEvent(fxc, fx_palette_red); break;
+    case 103: FxInstantEvent(fxc, fx_palette_ry); break;
+    case 104: FxInstantEvent(fxc, fx_palette_rg); break;
+    case 105: FxInstantEvent(fxc, fx_palette_rc); break;
+    case 106: FxInstantEvent(fxc, fx_palette_rb); break;
+    case 107: FxInstantEvent(fxc, fx_palette_rm); break;
+    case 108: FxInstantEvent(fxc, fx_palette_wr); break;
 
-      case 109: FxInstantEvent(fxc, fx_palette_dy); break;
-      case 110: FxInstantEvent(fxc, fx_palette_yellow); break;
-      case 111: FxInstantEvent(fxc, fx_palette_yg); break;
-      case 112: FxInstantEvent(fxc, fx_palette_yc); break;
-      case 113: FxInstantEvent(fxc, fx_palette_yb); break;
-      case 114: FxInstantEvent(fxc, fx_palette_ym); break;
-      case 115: FxInstantEvent(fxc, fx_palette_wy); break;
+    case 109: FxInstantEvent(fxc, fx_palette_dy); break;
+    case 110: FxInstantEvent(fxc, fx_palette_yellow); break;
+    case 111: FxInstantEvent(fxc, fx_palette_yg); break;
+    case 112: FxInstantEvent(fxc, fx_palette_yc); break;
+    case 113: FxInstantEvent(fxc, fx_palette_yb); break;
+    case 114: FxInstantEvent(fxc, fx_palette_ym); break;
+    case 115: FxInstantEvent(fxc, fx_palette_wy); break;
 
-      case 116: FxInstantEvent(fxc, fx_palette_dg); break;
-      case 117: FxInstantEvent(fxc, fx_palette_green); break;
-      case 118: FxInstantEvent(fxc, fx_palette_gc); break;
-      case 119: FxInstantEvent(fxc, fx_palette_gb); break;
-      case 120: FxInstantEvent(fxc, fx_palette_gm); break;
-      case 121: FxInstantEvent(fxc, fx_palette_wg); break;
+    case 116: FxInstantEvent(fxc, fx_palette_dg); break;
+    case 117: FxInstantEvent(fxc, fx_palette_green); break;
+    case 118: FxInstantEvent(fxc, fx_palette_gc); break;
+    case 119: FxInstantEvent(fxc, fx_palette_gb); break;
+    case 120: FxInstantEvent(fxc, fx_palette_gm); break;
+    case 121: FxInstantEvent(fxc, fx_palette_wg); break;
 
-      case 122: FxInstantEvent(fxc, fx_palette_dc); break;
-      case 123: FxInstantEvent(fxc, fx_palette_cyan); break;
-      case 124: FxInstantEvent(fxc, fx_palette_cb); break;
-      case 125: FxInstantEvent(fxc, fx_palette_cm); break;
-      case 126: FxInstantEvent(fxc, fx_palette_wc); break;
+    case 122: FxInstantEvent(fxc, fx_palette_dc); break;
+    case 123: FxInstantEvent(fxc, fx_palette_cyan); break;
+    case 124: FxInstantEvent(fxc, fx_palette_cb); break;
+    case 125: FxInstantEvent(fxc, fx_palette_cm); break;
+    case 126: FxInstantEvent(fxc, fx_palette_wc); break;
 
-      case 127: FxInstantEvent(fxc, fx_palette_db); break;
-      case 128: FxInstantEvent(fxc, fx_palette_blue); break;
-      case 129: FxInstantEvent(fxc, fx_palette_bm); break;
-      case 130: FxInstantEvent(fxc, fx_palette_wb); break;
+    case 127: FxInstantEvent(fxc, fx_palette_db); break;
+    case 128: FxInstantEvent(fxc, fx_palette_blue); break;
+    case 129: FxInstantEvent(fxc, fx_palette_bm); break;
+    case 130: FxInstantEvent(fxc, fx_palette_wb); break;
 
-      case 131: FxInstantEvent(fxc, fx_palette_dm); break;
-      case 132: FxInstantEvent(fxc, fx_palette_magenta); break;
-      case 133: FxInstantEvent(fxc, fx_palette_wm); break;
+    case 131: FxInstantEvent(fxc, fx_palette_dm); break;
+    case 132: FxInstantEvent(fxc, fx_palette_magenta); break;
+    case 133: FxInstantEvent(fxc, fx_palette_wm); break;
 
-      case 150: FxInstantEvent(fxc, fx_palette_rbm); break;
-      case 151: FxInstantEvent(fxc, fx_palette_rgb); break;
-      case 152: FxInstantEvent(fxc, fx_palette_cmy); break;
-      case 153: FxInstantEvent(fxc, fx_palette_cbm); break;
+    case 150: FxInstantEvent(fxc, fx_palette_rbm); break;
+    case 151: FxInstantEvent(fxc, fx_palette_rgb); break;
+    case 152: FxInstantEvent(fxc, fx_palette_cmy); break;
+    case 153: FxInstantEvent(fxc, fx_palette_cbm); break;
 
-      case 201: FxInstantEvent(fxc, fx_palette_lava); break;
-      case 202: FxInstantEvent(fxc, fx_palette_cloud); break;
-      case 203: FxInstantEvent(fxc, fx_palette_ocean); break;
-      case 204: FxInstantEvent(fxc, fx_palette_forest); break;
-      case 205: FxInstantEvent(fxc, fx_palette_rainbow); break;
-      case 206: FxInstantEvent(fxc, fx_palette_rainbowstripe); break;
-      case 207: FxInstantEvent(fxc, fx_palette_party); break;
-      case 208: FxInstantEvent(fxc, fx_palette_heat); break;
-    }
+    case 201: FxInstantEvent(fxc, fx_palette_lava); break;
+    case 202: FxInstantEvent(fxc, fx_palette_cloud); break;
+    case 203: FxInstantEvent(fxc, fx_palette_ocean); break;
+    case 204: FxInstantEvent(fxc, fx_palette_forest); break;
+    case 205: FxInstantEvent(fxc, fx_palette_rainbow); break;
+    case 206: FxInstantEvent(fxc, fx_palette_rainbowstripe); break;
+    case 207: FxInstantEvent(fxc, fx_palette_party); break;
+    case 208: FxInstantEvent(fxc, fx_palette_heat); break;
+  }
 }
