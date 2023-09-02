@@ -1026,11 +1026,16 @@ word FxGetSideFXTrackValue(FxController &fxc, int trackId, int o)
 }
 
 void FxActivateSideFXTrack(FxController &fxc, int trackId)
-{
-  fxc.KillFX();
+{  
   for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
     if (fxc.stripMask & (1<<strip)) 
+    {
       fxc.strip[strip]->paletteIndex = 0;
+      fxc.strip[strip]->paletteSpeed = 0;
+      fxc.strip[strip]->paletteDirection = 1;
+    }
+  }
   
   for (int strip=0;strip<NUM_STRIPS;strip++)
   {  
