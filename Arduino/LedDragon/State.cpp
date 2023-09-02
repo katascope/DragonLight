@@ -281,7 +281,10 @@ void DoPaletteMirror(FxController &fxc, int strip)
 {  
   int height = fxc.strip[strip]->numleds;
   for (int i=0;i<height/2;i++)
-    fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->sideFXPalette[height-i];
+  {
+    fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->nextPalette[i*2];
+    fxc.strip[strip]->sideFXPalette[height-1-i] = fxc.strip[strip]->nextPalette[i*2];
+  }
 }
 
 void State_Poll_SideFX(FxController &fxc)
@@ -296,25 +299,64 @@ void State_Poll_SideFX(FxController &fxc)
         fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
     }
     
-    if (fxc.strip[strip]->fxSystem.channels[2].on) 
+    if (fxc.strip[strip]->fxSystem.channels[2].on) //sound bar
     {
       int len = (int)(fxc.vol * fxc.strip[strip]->numleds);
-      for (int i=0;i<len;i++)        
+      int height = fxc.strip[strip]->numleds;
+      if (fxc.strip[strip]->fxSystem.channels[2].state == 0)
       {
-        float f = 255 * ((float)i/(float)1);
-        fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+        for (int i=0;i<len;i++)        
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+        }
+        for (int i=len;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
       }
-      for (int i=len;i<fxc.strip[strip]->numleds;i++)
-        fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+      else if (fxc.strip[strip]->fxSystem.channels[2].state == 1)
+      {
+        for (int i=0;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+        for (int i=0;i<len;i++)
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sideFXPalette[height/2+i/2] = fxc.strip[strip]->palette[i];
+          fxc.strip[strip]->sideFXPalette[height/2-i/2] = fxc.strip[strip]->palette[i];
+        }
+      }
+      else if (fxc.strip[strip]->fxSystem.channels[2].state == 2)
+      {
+        for (int i=0;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+        for (int i=0;i<len;i++)
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sideFXPalette[i/2] = fxc.strip[strip]->palette[i];
+          fxc.strip[strip]->sideFXPalette[height-1-i/2] = fxc.strip[strip]->palette[i];
+        }
+      }
     }    
     if (fxc.strip[strip]->fxSystem.channels[3].on) 
         neopixelSetBrightness(strip,b);
+    else
+        neopixelSetBrightness(strip,BRIGHTNESS);
     
     if (fxc.strip[strip]->fxSystem.channels[4].on) 
     {
       if (fxc.strip[strip]->paletteSpeed == 0) fxc.strip[strip]->paletteSpeed = 1;
       if (fxc.strip[strip]->fxSystem.channels[4].state == 0) fxc.strip[strip]->paletteDirection = 1;
       if (fxc.strip[strip]->fxSystem.channels[4].state == 1) fxc.strip[strip]->paletteDirection = -1;
+      if (fxc.strip[strip]->fxSystem.channels[4].state == 2) 
+      {
+        if (fxc.strip[strip]->paletteDirection > 0 && fxc.strip[strip]->paletteIndex+fxc.strip[strip]->paletteSpeed >= fxc.strip[strip]->numleds)
+        {
+          fxc.strip[strip]->paletteDirection = -1;
+        }
+        else if (fxc.strip[strip]->paletteDirection < 0 && fxc.strip[strip]->paletteIndex-fxc.strip[strip]->paletteSpeed <= 0)
+        {
+          fxc.strip[strip]->paletteDirection = 1;
+        }
+      }
       fxc.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Once;
     }
     else 

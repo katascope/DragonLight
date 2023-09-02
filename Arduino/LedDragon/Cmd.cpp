@@ -187,7 +187,14 @@ void UserCommandInput(FxController &fxc, int data)
     case '/': UserCommandExecute(fxc, Cmd_PalTypeLiteral2);  break;
     case '?': UserCommandExecute(fxc, Cmd_PalTypeLiteral4);  break;
 
-    case '|': fxc.KillFX();break;
+    case '|': 
+      fxc.KillFX();
+      FxInstantEvent(fxc, fx_palette_dark,      FxPaletteUpdateType::Once);
+      FxInstantEvent(fxc, fx_speed_rst,         FxPaletteUpdateType::Once);
+      FxInstantEvent(fxc, fx_speed_0,           FxPaletteUpdateType::Once);
+      FxInstantEvent(fxc, fx_strip_all,         FxPaletteUpdateType::Once);
+      FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once);
+      break;
     case '[': break;
     case ']': break;
 
@@ -234,8 +241,8 @@ void UserCommandInput(FxController &fxc, int data)
     case 'y': fxc.stripMask = DRAGON_TORSO_RIGHT; break;
     case 'u': fxc.stripMask = DRAGON_WING_LEFT; break;
     case 'i': fxc.stripMask = DRAGON_WING_RIGHT; break;
-    case 'o': fxc.stripMask = LEDS_0; break;
-    case 'p': fxc.stripMask = LEDS_0; break;
+    case 'o': FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once);break;
+    case 'p': FxInstantEvent(fxc, fx_strip_inv,     FxPaletteUpdateType::Once);break;
     
     case 'Q': UserCommandExecute(fxc, Cmd_Strip0);break;
     case 'W': UserCommandExecute(fxc, Cmd_Strip1);break;
@@ -454,7 +461,15 @@ void ComplexUserCommandInput(FxController &fxc, String data)
   if (data == F("t02")) fxc.Toggle(2);
   if (data == F("t03")) fxc.Toggle(3);
   if (data == F("t04")) fxc.Toggle(4);
+  if (data == F("t05")) fxc.Toggle(5);
+  if (data == F("t06")) fxc.Toggle(6);
+
+  if (data == F("x01")) fxc.Excite(1);
+  if (data == F("x02")) fxc.Excite(2);
+  if (data == F("x03")) fxc.Excite(3);
   if (data == F("x04")) fxc.Excite(4);
+  if (data == F("x05")) fxc.Excite(5);
+  if (data == F("x06")) fxc.Excite(6);
   
   if (data == F("@all"))   FxInstantEvent(fxc, fx_strip_all,     FxPaletteUpdateType::Once);
   if (data == F("@inv"))   FxInstantEvent(fxc, fx_strip_inv,     FxPaletteUpdateType::Once);
@@ -471,10 +486,12 @@ void ComplexUserCommandInput(FxController &fxc, String data)
     
   if (data == F("kk"))
   {
-    fxc.fxState = FxState_Default;
+    fxc.fxState = FxState_SideFX;
+    FxInstantEvent(fxc, fx_palette_dark,      FxPaletteUpdateType::Once);
+    FxInstantEvent(fxc, fx_speed_rst,         FxPaletteUpdateType::Once);
     FxInstantEvent(fxc, fx_speed_0,           FxPaletteUpdateType::Once);
     FxInstantEvent(fxc, fx_strip_all,         FxPaletteUpdateType::Once);
     FxInstantEvent(fxc, fx_transition_fast,   FxPaletteUpdateType::Once);
-  }
+  }  
   
 }
