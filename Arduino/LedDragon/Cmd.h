@@ -7,7 +7,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <Arduino.h>
 struct FxController;
 
-void SimpleUserCommandInput(FxController &fxc, int data);
-void ComplexUserCommandInput(FxController &fxc, String data);
+void SimpleUserCommandInput(FxController &fxc, int command);
+void ComplexUserCommandInput(FxController &fxc, String command);
 
 #endif

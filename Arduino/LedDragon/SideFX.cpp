@@ -5,7 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "SideFX.h"
 #include "Fx.h"
 #include "FxCore.h"
-#include "Devices.h"
+#include "DevNeo.h"
 #include <avr/pgmspace.h>
 
 const word SideFx_Preset_CM[] PROGMEM =

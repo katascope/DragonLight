@@ -6,7 +6,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Fx.h"
 #include "Cmd.h"
 #include "State.h"
-#include "Devices.h"
+#include "DevBle.h"
+#include "DevNeo.h"
 static FxController fxController;
 void UpdatePalette(FxController &fxc);
 
@@ -27,8 +28,7 @@ void setup() {
 #endif  
 
 #if ENABLE_NEOPIXEL
-  Serial.println(F("Delaying 3 seconds for LEDs."));
-  delay( 3000 ); // power-up safety delay
+  Serial.println(F("Delaying 3 seconds for LEDs."));  delay( 3000 ); // power-up safety delay
   neopixelSetup();
   for (int strip=0;strip<NUM_STRIPS;strip++)
     for (int led=0;led<fxController.strip[strip]->numleds;led++)
