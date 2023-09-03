@@ -332,7 +332,7 @@ namespace KataTracks
             }
         }
 
-        public static async void Volume(ulong tc)
+        public static async void Volume(byte tc)
         {
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
             {
@@ -345,7 +345,8 @@ namespace KataTracks
                         {
                             GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainVolumeUuid].gattCharacteristic;
                             byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
-                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                            //await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                            await gattCharacteristicCommand.WriteValueWithoutResponseAsync(bytesPlayTimecode);
                         }
                         else
                         {
