@@ -14,7 +14,8 @@ static FxController fxController;
 
 static unsigned long lastTimeDisplay = 0;
 static unsigned long lastTimePoll = 0;
-static unsigned long lockedFPS = 60;
+static unsigned long lockedFPS = 30;
+static unsigned long millisecondInterval = 1000/lockedFPS;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -76,23 +77,25 @@ void loop()
 
   bool needsUpdate = false;
 
-  if (millis()-lastTimePoll > (1000/lockedFPS))
+  if (millis()-lastTimePoll > millisecondInterval)//locked fps
   {
+    lastTimePoll = millis(); 
     needsUpdate = true;
     State_Poll(fxController);   
-    lastTimePoll = millis(); 
+
+    if (fxController.transitionMux < 1.0f)
+    {
+      fxController.SetTransitionType(Transition_TimedFade);
+      fxController.transitionMux += 0.1f;
+      if (fxController.transitionMux > 1.0f)
+        fxController.transitionMux = 1.0f;
+      Do_Transition(fxController);
+      needsUpdate = true;
+    } 
   }
   
-  if (fxController.transitionMux < 1.0f)
-  {
-    fxController.SetTransitionType(Transition_TimedFade);
-    fxController.transitionMux += 0.1f;
-    if (fxController.transitionMux > 1.0f)
-      fxController.transitionMux = 1.0f;
-    Do_Transition(fxController);
-  } 
 
-  if (needsUpdate)
+  if (fxController.fxState != FxState::FxState_SideFX || needsUpdate)
   {
     unsigned long t =  millis();
     if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)

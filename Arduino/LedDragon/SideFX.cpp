@@ -410,5 +410,5 @@ void SideFXPollState(FxController &fxc)
       DoChaos(fxc, strip, fxc.strip[strip]->fxSystem.channels[8].state);
     }
   }
-  FxUpdatePalette(fxc);
+  //FxUpdatePalette(fxc);
 }

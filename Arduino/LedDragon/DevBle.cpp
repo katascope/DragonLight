@@ -21,7 +21,7 @@ BLEService mainService( BLE_UUID_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
-BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND, BLERead | BLEWrite  );
+BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND,  BLERead | BLEWrite | BLEWriteWithoutResponse );
 BLECharCharacteristic paletteCharacteristic( BLE_UUID_CHARACTERISTIC_PALETTE, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleOnCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLEON, BLERead | BLEWrite  );
