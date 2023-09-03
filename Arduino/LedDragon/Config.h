@@ -58,6 +58,15 @@ static const char *DeviceName = "UnkDevice";
 #define DRAGON_WING_RIGHT   LEDS_5
 #define DRAGON_TAIL         LEDS_6|LEDS_7
 
+#define LED_0_RGBTYPE       NEO_GRB
+#define LED_1_RGBTYPE       NEO_GRB
+#define LED_2_RGBTYPE       NEO_GRB
+#define LED_3_RGBTYPE       NEO_GRB
+#define LED_4_RGBTYPE       NEO_GRB//
+#define LED_5_RGBTYPE       NEO_GRB
+#define LED_6_RGBTYPE       NEO_GRB
+#define LED_7_RGBTYPE       NEO_GRB
+
 #if MTESTER
 #define NUM_LEDS_0          199
 #define NUM_LEDS_1          199
@@ -74,14 +83,14 @@ static const char *DeviceName = "UnkDevice";
 #if LEDDRAGON
 #undef STARTUP_STATE 
 #define STARTUP_STATE       FxState_SideFX
-#define NUM_LEDS_0          299
-#define NUM_LEDS_1          299
-#define NUM_LEDS_2          299
-#define NUM_LEDS_3          299
-#define NUM_LEDS_4          299
-#define NUM_LEDS_5          299
-#define NUM_LEDS_6          299
-#define NUM_LEDS_7          299
+#define NUM_LEDS_0          300
+#define NUM_LEDS_1          300
+#define NUM_LEDS_2          300
+#define NUM_LEDS_3          300
+#define NUM_LEDS_4          300
+#define NUM_LEDS_5          300
+#define NUM_LEDS_6          300
+#define NUM_LEDS_7          300
 #endif
 
 #if LEAD

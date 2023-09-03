@@ -10,15 +10,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #if ENABLE_NEOPIXEL
 #include <Adafruit_NeoPixel.h>
-static Adafruit_NeoPixel strip0 = Adafruit_NeoPixel(NUM_LEDS_0, LED_PIN+0, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip0 = Adafruit_NeoPixel(NUM_LEDS_0, LED_PIN+0, LED_0_RGBTYPE + NEO_KHZ800);
 #if ENABLE_MULTISTRIP
-static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS_1, LED_PIN+1, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS_2, LED_PIN+2, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS_3, LED_PIN+3, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS_4, LED_PIN+4, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS_5, LED_PIN+5, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS_6, LED_PIN+6, NEO_GRB + NEO_KHZ800);
-static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS_7, LED_PIN+7, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUM_LEDS_1, LED_PIN+1, LED_1_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUM_LEDS_2, LED_PIN+2, LED_2_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUM_LEDS_3, LED_PIN+3, LED_3_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip4 = Adafruit_NeoPixel(NUM_LEDS_4, LED_PIN+4, LED_4_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip5 = Adafruit_NeoPixel(NUM_LEDS_5, LED_PIN+5, LED_5_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip6 = Adafruit_NeoPixel(NUM_LEDS_6, LED_PIN+6, LED_6_RGBTYPE + NEO_KHZ800);
+static Adafruit_NeoPixel strip7 = Adafruit_NeoPixel(NUM_LEDS_7, LED_PIN+7, LED_7_RGBTYPE + NEO_KHZ800);
 #endif
 void neopixelSetup()
 {
