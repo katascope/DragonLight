@@ -8,7 +8,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define LEDDRAGON 0
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
-#define FOXBOT    0 //Generally LightSuit*B gold
+#define FOXBOT    0
 #define MREE      0
 #define PREE      0
 #define JACKET    0
@@ -49,8 +49,7 @@ static const char *DeviceName = "UnkDevice";
 #define ENABLE_MULTISTRIP   1   //Enable multiple LED strips
 #define LED_PIN             3
 #define DEBUG_STATUS        0
-#define DEBUG_SIDEFX        1
-#define DEBUG_SERIAL        1
+#define DEBUG_STATUS_RATE   1000 //Once a second
 #define SERIAL_BAUD_RATE    115200
 #define DRAGON_HEAD         LEDS_2|LEDS_3
 #define DRAGON_TORSO_LEFT   LEDS_0
@@ -75,14 +74,14 @@ static const char *DeviceName = "UnkDevice";
 #if LEDDRAGON
 #undef STARTUP_STATE 
 #define STARTUP_STATE       FxState_SideFX
-#define NUM_LEDS_0          199
-#define NUM_LEDS_1          199
-#define NUM_LEDS_2          199
-#define NUM_LEDS_3          199
-#define NUM_LEDS_4          199
-#define NUM_LEDS_5          199
-#define NUM_LEDS_6          199
-#define NUM_LEDS_7          199
+#define NUM_LEDS_0          299
+#define NUM_LEDS_1          299
+#define NUM_LEDS_2          299
+#define NUM_LEDS_3          299
+#define NUM_LEDS_4          299
+#define NUM_LEDS_5          299
+#define NUM_LEDS_6          299
+#define NUM_LEDS_7          299
 #endif
 
 #if LEAD
@@ -149,8 +148,6 @@ static const char *DeviceName = "UnkDevice";
 #define NUM_LEDS_6          35 //legs
 #define NUM_LEDS_7          35
 #endif
-
-
 
 #if LAMP
 #define NUM_LEDS_0          86

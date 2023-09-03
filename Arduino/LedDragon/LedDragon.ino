@@ -3,16 +3,19 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Config.h"
-#include "Fx.h"
-#include "Track.h"
+#include "FxPalette.h"
+#include "FxController.h"
 #include "Cmd.h"
 #include "State.h"
-#include "Devices.h"
-static FxController fxController;
-void UpdatePalette(FxController &fxc);
+#include "DevBle.h"
+#include "DevNeo.h"
 
-static unsigned long lastTimeUlt = 0;
+static FxController fxController;
+
 static unsigned long lastTimeDisplay = 0;
+static unsigned long lastTimePoll = 0;
+static unsigned long lockedFPS = 30;
+static unsigned long millisecondInterval = 1000/lockedFPS;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -20,15 +23,6 @@ void setup() {
   Serial.print(DeviceName);
   Serial.print(F("Serial init: "));
   Serial.println(SERIAL_BAUD_RATE);
-  
-#if ENABLE_TRACK_CHECK
-  if (trackHasLinearTime())
-    Serial.println(F("Track Linear Check = OK"));
-  else {
-    Serial.println(F("Track Linear Check = FAILED"));
-    return;
-  }
-#endif
 
 #if ENABLE_MEMORYUSAGE
   Serial.println(F("MemoryUsage"));
@@ -36,16 +30,24 @@ void setup() {
   MEMORY_PRINT_HEAPSIZE
 #endif  
 
+  fxController.fxState = STARTUP_STATE;
+
 #if ENABLE_NEOPIXEL
-  Serial.println(F("Delaying 3 seconds for LEDs."));
-  delay( 3000 ); // power-up safety delay
+  Serial.println(F("Delaying 3 seconds for LEDs."));  delay( 3000 ); // power-up safety delay
   neopixelSetup();
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-    for (int led=0;led<fxController.strip[strip]->numleds;led++)
-      fxController.strip[strip]->palette[led] = 0;
-  Serial.print(F("NeoPixel init: "));
-  Serial.print(F(" LEDs on pin "));
+  Serial.print(F("NeoPixel LEDS on pin"));
   Serial.println(LED_PIN);
+  
+  Serial.print(F("NeoPixel Brightness = { "));
+  FxEvent(fxController, fx_palette_dark);  
+  for (int strip=0;strip<NUM_STRIPS;strip++)
+  {
+    fxController.strip[strip]->brightness = BRIGHTNESS;
+    neopixelSetBrightness(strip,fxController.strip[strip]->brightness);
+    Serial.print(fxController.strip[strip]->brightness);
+    Serial.print(F(" "));
+  }
+  Serial.println(F(" }"));
 #else
   Serial.println(F("No NeoPixel init"));
 #endif
@@ -57,101 +59,59 @@ void setup() {
   Serial.println(F("No BLE init"));
 #endif
 
-  UserCommandExecute(fxController, Cmd_Brightness_Half); 
-  UserCommandExecute(fxController, Cmd_ColorDark);   
-  fxController.fxState = STARTUP_STATE;
-
-  if (fxController.fxState == FxState_PlayingTrack)
-  {
-    fxController.fxTrackEndAction = FxTrackEndAction::LoopAtEnd;
-    trackStart(fxController, 0, (unsigned long)(millis() - (signed long)TRACK_START_DELAY), fxController.fxTrackEndAction);
-  }
-  else Serial.println(F("Lightstrips OK"));
-#if ENABLE_NEOPIXEL
-//Display brightness levels
-  Serial.print(F("Brightness = { "));
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    fxController.strip[strip]->brightness = BRIGHTNESS;
-    neopixelSetBrightness(strip,fxController.strip[strip]->brightness);
-    Serial.print(fxController.strip[strip]->brightness);
-    Serial.print(F(" "));
-  }
-  Serial.println(F(" }"));
-#endif
-
   Serial.println(F("Setup complete."));
 }
-
-int altSkip = 0;
 
 void loop()
 {
   while (Serial.available())
   {
       String str = Serial.readString();
-      if (str.length()<=3)
-        UserCommandInput(fxController, (int)str[0]);
-      else
-        ComplexUserCommandInput(fxController, str);
+      if (str.length()<=3) SimpleUserCommandInput(fxController, (int)str[0]);
+      else ComplexUserCommandInput(fxController, str);
   }
 
 #if ENABLE_BLE
   blePoll(fxController);
 #endif
 
-  altSkip ++;
-  if (altSkip %2 == 0)
-    State_Poll(fxController);
-    
-  
   bool needsUpdate = false;
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    if (fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Once
-    || fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Always
-    || fxController.IsAnimating())
-      needsUpdate = true;
-  }  
 
-  if (fxController.transitionMux < 1.0f)
+  if (millis()-lastTimePoll > millisecondInterval)//locked fps
   {
-    fxController.SetTransitionType(Transition_TimedFade);
-    fxController.transitionMux += 0.25f;
-    if (fxController.transitionMux > 1.0f)
-      fxController.transitionMux = 1.0f;
-    Do_Transition(fxController);
+    lastTimePoll = millis(); 
     needsUpdate = true;
-  } 
+    State_Poll(fxController);   
+
+    if (fxController.transitionMux < 1.0f)
+    {
+      fxController.SetTransitionType(Transition_TimedFade);
+      fxController.transitionMux += 0.1f;
+      if (fxController.transitionMux > 1.0f)
+        fxController.transitionMux = 1.0f;
+      Do_Transition(fxController);
+      needsUpdate = true;
+    } 
+  }
   
-  if (fxController.fxState == FxState_PlayingTrack || needsUpdate)
+
+  if (fxController.fxState != FxState::FxState_SideFX || needsUpdate)
   {
     unsigned long t =  millis();
     if (t - fxController.lastTimeLedUpdate > UPDATE_DELAY)//delay to let bluetooth get data(fastled issue)
     {
       FxUpdatePalette(fxController);      
       fxController.lastTimeLedUpdate = t;
-      
-      for (int strip=0;strip<NUM_STRIPS;strip++)
-      {
-        if (fxController.strip[strip]->paletteUpdateType == FxPaletteUpdateType::Once)
-          fxController.strip[strip]->paletteUpdateType = FxPaletteUpdateType::Done;
-      }
     }
   }
 
 #if DEBUG_STATUS
-  //Display status once a second
-    unsigned long t =  millis();
-    if (t - lastTimeDisplay > 1000)//delay to let bluetooth get data
-    {      
-      if (fxController.fxState != FxState_PlayingTrack)
-      {        
-        Serial.print(F(" "));
-        FxDisplayStatus(fxController);            
-        Serial.println();  
-      }
-      lastTimeDisplay = t;
-    }
+  //Display status on timed basis
+  unsigned long currentTime = millis();
+  if (currentTime - lastTimeDisplay > DEBUG_STATUS_RATE)//delay to let bluetooth get data
+  {      
+    fxController.PrintStatus();
+    lastTimeDisplay = currentTime;
+  }
 #endif
 }
