@@ -291,10 +291,24 @@ void DoParticles(FxController &fxc, int strip, int state)
     {
       if (i+loc < fxc.strip[strip]->numleds)
         fxc.strip[strip]->sequence[loc+i] = -2;
-    }
-    
+    }    
   }  
 }
+
+void DoChaos(FxController &fxc, int strip, int state)
+{  
+  float boost = fxc.vol*2;              
+  int height = fxc.strip[strip]->numleds;
+  
+  for (int i=0;i<height;i++)
+  {
+    switch (state)
+    {
+      case 0: fxc.strip[strip]->sequence[i] = (i*i)/10;break;
+    }    
+  }
+}
+
 
 void SideFXPollState(FxController &fxc)
 {
@@ -366,6 +380,7 @@ void SideFXPollState(FxController &fxc)
           fxc.strip[strip]->paletteDirection = 1;
         }
       }
+      FxAnimateStrip(fxc,strip);
     }
 
     if (fxc.strip[strip]->fxSystem.channels[5].on) 
@@ -388,6 +403,11 @@ void SideFXPollState(FxController &fxc)
     if (fxc.strip[strip]->fxSystem.channels[7].on) 
     {
       DoParticles(fxc, strip, fxc.strip[strip]->fxSystem.channels[7].state);
+    }
+
+    if (fxc.strip[strip]->fxSystem.channels[8].on) 
+    {
+      DoChaos(fxc, strip, fxc.strip[strip]->fxSystem.channels[8].state);
     }
   }
   FxUpdatePalette(fxc);

@@ -342,16 +342,13 @@ void FxUpdatePalette(struct FxController &fxc)
   }
 }
 
-void FxAnimatePalette(struct FxController &fxc)
+void FxAnimateStrip(struct FxController &fxc, int strip)
 {
-  for (int strip=0;strip<NUM_STRIPS;strip++)
-  {
-    fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
-    if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
-      fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
-    if (fxc.strip[strip]->paletteIndex < 0)
-      fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
-  }
+  fxc.strip[strip]->paletteIndex = fxc.strip[strip]->paletteIndex + (fxc.strip[strip]->paletteSpeed * fxc.strip[strip]->paletteDirection);
+  if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
+    fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
+  if (fxc.strip[strip]->paletteIndex < 0)
+    fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;
 }
 
 void PalettePrint(FxController &fxc)

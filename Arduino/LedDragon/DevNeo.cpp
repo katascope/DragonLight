@@ -153,9 +153,6 @@ void neopixelSetSequencePalette(int slot, int numleds, uint32_t *palette, int pa
       default:
       {
         rgb = palette[seq];
-        r = (rgb >> 16) & 0xFF;
-        g = (rgb >> 8) & 0xFF;
-        b = (rgb >> 0) & 0xFF;
         break;
       }
     }

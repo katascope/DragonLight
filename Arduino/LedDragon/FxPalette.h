@@ -110,7 +110,7 @@ void PaletteCreateQuadPulseBand(FxController &fxc, uint8_t r, uint8_t g, uint8_t
 void PaletteCreateById(FxController &fxc, int paletteId);
 
 void FxUpdatePalette(struct FxController &fxc);
-void FxAnimatePalette(struct FxController &fxc);
+void FxAnimateStrip(struct FxController &fxc, int strip);
 
 void PalettePrint(FxController &fxc);
 

@@ -11,7 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "DevNeo.h"
 
 static FxController fxController;
+
 static unsigned long lastTimeDisplay = 0;
+static unsigned long lastTimePoll = 0;
+static unsigned long lockedFPS = 60;
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -58,8 +61,6 @@ void setup() {
   Serial.println(F("Setup complete."));
 }
 
-int altSkip = 0;
-
 void loop()
 {
   while (Serial.available())
@@ -73,13 +74,15 @@ void loop()
   blePoll(fxController);
 #endif
 
-  altSkip ++;
-  if (altSkip %2 == 0)
-    State_Poll(fxController);    
-  
   bool needsUpdate = false;
-  needsUpdate = true;
 
+  if (millis()-lastTimePoll > (1000/lockedFPS))
+  {
+    needsUpdate = true;
+    State_Poll(fxController);   
+    lastTimePoll = millis(); 
+  }
+  
   if (fxController.transitionMux < 1.0f)
   {
     fxController.SetTransitionType(Transition_TimedFade);
@@ -87,9 +90,8 @@ void loop()
     if (fxController.transitionMux > 1.0f)
       fxController.transitionMux = 1.0f;
     Do_Transition(fxController);
-    needsUpdate = true;
   } 
-  
+
   if (needsUpdate)
   {
     unsigned long t =  millis();
