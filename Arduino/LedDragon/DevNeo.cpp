@@ -3,7 +3,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Config.h"
-#include "Fx.h"
+#include "FxPalette.h"
 
 /////////////////////////////////////////////////////////////////////////
 //WS2811 - led strip lights
@@ -133,4 +133,50 @@ void neopixelSetPalette(int slot, int numleds, uint32_t *palette, int paletteInd
 #endif  
     }
 }
+
+void neopixelSetSequencePalette(int slot, int numleds, uint32_t *palette, int paletteIndex, int *sequence)
+{  
+  uint32_t offset = paletteIndex;
+  unsigned char r,g,b;
+  unsigned char h,s,v;
+  uint32_t rgb;
+  
+  for(uint16_t i=0; i<numleds; i++)
+  {
+    if (offset >= numleds)
+     offset=0;
+    int seq = sequence[i];
+    switch (seq)
+    {
+      case -1: rgb=0; break;
+      case -2: rgb=0xFFFFFFFF; break;
+      default:
+      {
+        rgb = palette[seq];
+        r = (rgb >> 16) & 0xFF;
+        g = (rgb >> 8) & 0xFF;
+        b = (rgb >> 0) & 0xFF;
+        break;
+      }
+    }
+     
+    neopixelSetPixel(slot,offset,rgb);
+    offset++;    
+  }
+  
+  switch (slot)
+  {
+    case 0: strip0.show();break;
+#if ENABLE_MULTISTRIP  
+    case 1: strip1.show();break;
+    case 2: strip2.show();break;
+    case 3: strip3.show();break;
+    case 4: strip4.show();break;
+    case 5: strip5.show();break;
+    case 6: strip6.show();break;
+    case 7: strip7.show();break;
+#endif  
+  }
+}
+
 #endif

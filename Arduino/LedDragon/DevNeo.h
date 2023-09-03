@@ -10,8 +10,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <Adafruit_NeoPixel.h>
 void neopixelSetup();
 void neopixelSetBrightness(int strip, unsigned char brightness);
-void neopixelSetPalette(int slot, int numleds , uint32_t *palette, int paletteIndex);
 void neopixelSetPixel(int slot, int offset, uint32_t rgb);
+void neopixelSetPalette(int slot, int numleds , uint32_t *palette, int paletteIndex);
+void neopixelSetSequencePalette(int slot, int numleds , uint32_t *palette, int paletteIndex, int *sequence);
 #endif
 //////////////// NeoPixel Section ////////////////
 

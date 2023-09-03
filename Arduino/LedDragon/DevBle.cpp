@@ -3,7 +3,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Config.h"
-#include "Fx.h"
+#include "FxPalette.h"
 #include "FxController.h"
 #include "DevBle.h"
 
@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #if ENABLE_BLE
 #include <ArduinoBLE.h>
 #include <Arduino_LSM9DS1.h>
-#include "Fx.h"
+#include "FxPalette.h"
 #include "Cmd.h"
 const int BLE_LED_PIN = LED_BUILTIN;
 const int RSSI_LED_PIN = 25;//LED_PWR;
@@ -135,7 +135,7 @@ void blePoll(FxController &fxc)
           int palChoice = paletteCharacteristic.value();
           Serial.print(F("PalChoice"));
           Serial.println(palChoice);
-          FxPaletteById(fxc,palChoice);
+          PaletteCreateById(fxc,palChoice);
         }
         if (fxToggleOnCharacteristic.written() )
         {

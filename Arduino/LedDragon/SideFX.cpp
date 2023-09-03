@@ -3,8 +3,8 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "SideFX.h"
-#include "Fx.h"
-#include "FxCore.h"
+#include "FxPalette.h"
+#include "FxEvent.h"
 #include "FxController.h"
 #include "DevNeo.h"
 #include <avr/pgmspace.h>
@@ -108,43 +108,6 @@ const word SideFx_Preset_CMY[] PROGMEM =
 };
 
 
-void DoPaletteMirror(FxController &fxc, int strip)
-{  
-  int height = fxc.strip[strip]->numleds;
-  for (int i=0;i<height/2;i++)
-  {
-    fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->nextPalette[i*2];
-    fxc.strip[strip]->sideFXPalette[height-1-i] = fxc.strip[strip]->nextPalette[i*2];
-  }  
-}
-
-void DoParticles(FxController &fxc, int strip, int state)
-{  
-  float boost = fxc.vol*2;              
-
-  for (int p=0;p<NUM_PARTICLES;p++)
-  {
-    if (state == 0)
-      fxc.strip[strip]->particles[p].vel = abs(fxc.strip[strip]->particles[p].vel);
-    else
-    fxc.strip[strip]->particles[p].vel = -abs(fxc.strip[strip]->particles[p].vel);
-    
-    fxc.strip[strip]->particles[p].loc += fxc.strip[strip]->particles[p].vel*boost;
-    if (fxc.strip[strip]->particles[p].loc >= fxc.strip[strip]->numleds)
-      fxc.strip[strip]->particles[p].loc = 0 + fxc.strip[strip]->particles[p].vel;
-    if (fxc.strip[strip]->particles[p].loc < 0)
-    fxc.strip[strip]->particles[p].loc = fxc.strip[strip]->numleds - fxc.strip[strip]->particles[p].vel;
-
-    int loc = fxc.strip[strip]->particles[p].loc;    
-    fxc.strip[strip]->sideFXPalette[loc] = LEDRGB(255,255,255);
-    for (int i=0;i<boost*2;i++)
-    {
-      if (i+loc < fxc.strip[strip]->numleds)
-        fxc.strip[strip]->sideFXPalette[loc+i] = LEDRGB(255,255,255);      
-    }
-    
-  }  
-}
 
 word FxGetSideFXTrackSize(FxController &fxc, int trackId)
 {
@@ -219,14 +182,14 @@ void SideFXActivatePreset(FxController &fxc, int trackId)
   word palId6 = FxGetSideFXTrackValue(fxc, trackId, 22);
   word palId7 = FxGetSideFXTrackValue(fxc, trackId, 23);
 
-  fxc.stripMask = LEDS_0;FxPaletteById(fxc,palId0);
-  fxc.stripMask = LEDS_1;FxPaletteById(fxc,palId1);
-  fxc.stripMask = LEDS_2;FxPaletteById(fxc,palId2);
-  fxc.stripMask = LEDS_3;FxPaletteById(fxc,palId3);
-  fxc.stripMask = LEDS_4;FxPaletteById(fxc,palId4);
-  fxc.stripMask = LEDS_5;FxPaletteById(fxc,palId5);
-  fxc.stripMask = LEDS_6;FxPaletteById(fxc,palId6);
-  fxc.stripMask = LEDS_7;FxPaletteById(fxc,palId7);
+  fxc.stripMask = LEDS_0;PaletteCreateById(fxc,palId0);
+  fxc.stripMask = LEDS_1;PaletteCreateById(fxc,palId1);
+  fxc.stripMask = LEDS_2;PaletteCreateById(fxc,palId2);
+  fxc.stripMask = LEDS_3;PaletteCreateById(fxc,palId3);
+  fxc.stripMask = LEDS_4;PaletteCreateById(fxc,palId4);
+  fxc.stripMask = LEDS_5;PaletteCreateById(fxc,palId5);
+  fxc.stripMask = LEDS_6;PaletteCreateById(fxc,palId6);
+  fxc.stripMask = LEDS_7;PaletteCreateById(fxc,palId7);
 
   int parts = (len/2-HeaderSize)/3;
   //Serial.println(F("Parts:"));
@@ -295,6 +258,43 @@ void SideFXPrintState(FxController &fxc)
 #endif  
 }
 
+void DoPaletteMirror(FxController &fxc, int strip)
+{  
+  int height = fxc.strip[strip]->numleds;
+  for (int i=0;i<height/2;i++)
+  {
+    fxc.strip[strip]->sequence[i] = i;
+    fxc.strip[strip]->sequence[height-1-i] = i;
+  }
+}
+
+void DoParticles(FxController &fxc, int strip, int state)
+{  
+  float boost = fxc.vol*2;              
+
+  for (int p=0;p<NUM_PARTICLES;p++)
+  {
+    if (state == 0)
+      fxc.strip[strip]->particles[p].vel = abs(fxc.strip[strip]->particles[p].vel);
+    else
+    fxc.strip[strip]->particles[p].vel = -abs(fxc.strip[strip]->particles[p].vel);
+    
+    fxc.strip[strip]->particles[p].loc += fxc.strip[strip]->particles[p].vel*boost;
+    if (fxc.strip[strip]->particles[p].loc >= fxc.strip[strip]->numleds)
+      fxc.strip[strip]->particles[p].loc = 0 + fxc.strip[strip]->particles[p].vel;
+    if (fxc.strip[strip]->particles[p].loc < 0)
+    fxc.strip[strip]->particles[p].loc = fxc.strip[strip]->numleds - fxc.strip[strip]->particles[p].vel;
+
+    int loc = fxc.strip[strip]->particles[p].loc;    
+    fxc.strip[strip]->sequence[loc] = -2;
+    for (int i=0;i<boost*2;i++)
+    {
+      if (i+loc < fxc.strip[strip]->numleds)
+        fxc.strip[strip]->sequence[loc+i] = -2;
+    }
+    
+  }  
+}
 
 void SideFXPollState(FxController &fxc)
 {
@@ -305,7 +305,7 @@ void SideFXPollState(FxController &fxc)
     if (fxc.strip[strip]->fxSystem.channels[1].on) 
     {
       for (int i=0;i<fxc.strip[strip]->numleds;i++)
-        fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+        fxc.strip[strip]->sequence[i] = i;
     }
     
     if (fxc.strip[strip]->fxSystem.channels[2].on) //sound bar
@@ -317,31 +317,31 @@ void SideFXPollState(FxController &fxc)
         for (int i=0;i<len;i++)        
         {
           float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sideFXPalette[i] = fxc.strip[strip]->palette[i];
+          fxc.strip[strip]->sequence[i] = i;
         }
         for (int i=len;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+          fxc.strip[strip]->sequence[i] = -1;
       }
       else if (fxc.strip[strip]->fxSystem.channels[2].state == 1)
       {
         for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+          fxc.strip[strip]->sequence[i] = -1;
         for (int i=0;i<len;i++)
         {
           float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sideFXPalette[height/2+i/2] = fxc.strip[strip]->palette[i];
-          fxc.strip[strip]->sideFXPalette[height/2-i/2] = fxc.strip[strip]->palette[i];
+          fxc.strip[strip]->sequence[height/2+i/2] = i;
+          fxc.strip[strip]->sequence[height/2-i/2] = i;
         }
       }
       else if (fxc.strip[strip]->fxSystem.channels[2].state == 2)
       {
         for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sideFXPalette[i] = LEDRGB(0,0,0);
+          fxc.strip[strip]->sequence[i] = -1;
         for (int i=0;i<len;i++)
         {
           float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sideFXPalette[i/2] = fxc.strip[strip]->palette[i];
-          fxc.strip[strip]->sideFXPalette[height-1-i/2] = fxc.strip[strip]->palette[i];
+          fxc.strip[strip]->sequence[i/2] = i;
+          fxc.strip[strip]->sequence[height-1-i/2] = i;
         }
       }
     }    
@@ -370,7 +370,8 @@ void SideFXPollState(FxController &fxc)
 
     if (fxc.strip[strip]->fxSystem.channels[5].on) 
     {
-      int advance = (fxc.vol * fxc.strip[strip]->paletteSpeed) * (fxc.vol * fxc.strip[strip]->paletteSpeed);
+      if (fxc.strip[strip]->paletteSpeed == 0) fxc.strip[strip]->paletteSpeed = 1;
+      int advance =  (3*fxc.vol * fxc.strip[strip]->paletteSpeed) * (3*fxc.vol * fxc.strip[strip]->paletteSpeed);
       if (fxc.strip[strip]->fxSystem.channels[5].state == 0) fxc.strip[strip]->paletteIndex += advance;
       if (fxc.strip[strip]->fxSystem.channels[5].state == 1) fxc.strip[strip]->paletteIndex -= advance;
       if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
@@ -389,9 +390,5 @@ void SideFXPollState(FxController &fxc)
       DoParticles(fxc, strip, fxc.strip[strip]->fxSystem.channels[7].state);
     }
   }
-
-  if (fxc.transitionMux >= 1)
-  {
-    FxAnimatePalette(fxc,true);
-  }
+  FxUpdatePalette(fxc);
 }

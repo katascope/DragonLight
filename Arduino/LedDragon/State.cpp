@@ -5,59 +5,59 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "Config.h"
 #include "DevNeo.h"
 #include "State.h"
-#include "FxCore.h"
-#include "Fx.h"
+#include "FxEvent.h"
+#include "FxPalette.h"
 #include "FxController.h"
 #include "SideFX.h"
 
 void State_Poll_TestPattern(FxController &fxc)
 {
 #if ENABLE_NEOPIXEL
-    FxEventProcess(fxc, fx_strip_all);
-    FxEventProcess(fxc, fx_transition_fast);
+    FxEvent(fxc, fx_strip_all);
+    FxEvent(fxc, fx_transition_fast);
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
       fxc.strip[strip]->paletteSpeed = 0;
     }
 
-    FxEventProcess(fxc, fx_strip_all);//fx_strip + LEDS_0);
-    FxEventProcess(fxc, fx_palette_rainbow);
+    FxEvent(fxc, fx_strip_all);//fx_strip + LEDS_0);
+    FxEvent(fxc, fx_palette_rainbow);
 #if !ENABLE_MULTISTRIP
-    FxEventProcess(fxc, fx_palette_half);
+    FxEvent(fxc, fx_palette_half);
 #endif    
     neopixelSetPalette(0, fxc.strip[0]->numleds, fxc.strip[0]->palette, fxc.strip[0]->paletteIndex);
     neopixelSetPixel(0, 0, CRGB_WHITE);
     
 #if ENABLE_MULTISTRIP    
-    FxEventProcess(fxc, fx_strip + LEDS_1);
-    FxEventProcess(fxc, fx_palette_red);
+    FxEvent(fxc, fx_strip + LEDS_1);
+    FxEvent(fxc, fx_palette_red);
     neopixelSetPalette(1, fxc.strip[1]->numleds, fxc.strip[1]->palette, fxc.strip[1]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_2);
-    FxEventProcess(fxc, fx_palette_yellow);
+    FxEvent(fxc, fx_strip + LEDS_2);
+    FxEvent(fxc, fx_palette_yellow);
     neopixelSetPalette(2, fxc.strip[2]->numleds, fxc.strip[2]->palette, fxc.strip[2]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_3);
-    FxEventProcess(fxc, fx_palette_green);
+    FxEvent(fxc, fx_strip + LEDS_3);
+    FxEvent(fxc, fx_palette_green);
     neopixelSetPalette(3, fxc.strip[3]->numleds, fxc.strip[3]->palette, fxc.strip[3]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_4);
-    FxEventProcess(fxc, fx_palette_cyan);
+    FxEvent(fxc, fx_strip + LEDS_4);
+    FxEvent(fxc, fx_palette_cyan);
     neopixelSetPalette(4, fxc.strip[4]->numleds, fxc.strip[4]->palette, fxc.strip[4]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_5);
-    FxEventProcess(fxc, fx_palette_blue);
+    FxEvent(fxc, fx_strip + LEDS_5);
+    FxEvent(fxc, fx_palette_blue);
     neopixelSetPalette(5, fxc.strip[5]->numleds, fxc.strip[5]->palette, fxc.strip[5]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_6);
-    FxEventProcess(fxc, fx_palette_magenta);
+    FxEvent(fxc, fx_strip + LEDS_6);
+    FxEvent(fxc, fx_palette_magenta);
     neopixelSetPalette(6, fxc.strip[6]->numleds, fxc.strip[6]->palette, fxc.strip[6]->paletteIndex);
     
-    FxEventProcess(fxc, fx_strip + LEDS_7);
-    FxEventProcess(fxc, fx_palette_orange);
+    FxEvent(fxc, fx_strip + LEDS_7);
+    FxEvent(fxc, fx_palette_orange);
     neopixelSetPalette(7, fxc.strip[7]->numleds, fxc.strip[7]->palette, fxc.strip[7]->paletteIndex);
 #endif    
-    FxEventProcess(fxc, fx_strip_all);
+    FxEvent(fxc, fx_strip_all);
 
     for (int strip=0;strip<NUM_STRIPS;strip++)
     {
@@ -165,9 +165,9 @@ void State_Poll(FxController &fxc)
 {
   if (fxc.fxState == FxState_TestPattern)
   {
-    FxInstantEvent(fxc, fx_palette_rainbow); 
-    FxInstantEvent(fxc, fx_speed_neg);
-    FxInstantEvent(fxc, fx_speed_3);
+    FxEvent(fxc, fx_palette_rainbow); 
+    FxEvent(fxc, fx_palanim_speed_neg);
+    FxEvent(fxc, fx_palanim_speed_3);
   }
 
   if (fxc.fxState == FxState_MultiTestPattern)

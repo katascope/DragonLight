@@ -4,8 +4,29 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #ifndef FX_CONTROLLER_DEF
 #define FX_CONTROLLER_DEF
-#include "FxCore.h"
+#include "Config.h"
+#include "FxEvent.h"
 #include "FxStrip.h"
+
+enum FxState
+{
+  FxState_Default          = 0,
+  FxState_TestPattern      = 1,
+  FxState_MultiTestPattern = 2,
+  FxState_SideFX           = 3
+};
+
+enum FxStripMask
+{
+  LEDS_0 = 1,   RIGHT_CHEST_A = LEDS_0,
+  LEDS_1 = 2,   LEFT_CHEST_A = LEDS_1,
+  LEDS_2 = 4,   RIGHT_CHEST_B = LEDS_2,
+  LEDS_3 = 8,   LEFT_CHEST_B = LEDS_3,
+  LEDS_4 = 16,  RIGHT_ARM = LEDS_4,
+  LEDS_5 = 32,  LEFT_ARM = LEDS_5,
+  LEDS_6 = 64,  RIGHT_LEG = LEDS_6,
+  LEDS_7 = 128, LEFT_LEG = LEDS_7
+};
 
 struct FxController
 {
@@ -19,137 +40,28 @@ public:
   int select = 0;
   float vol = 0.5f;
   public:
-  bool IsAnimating()
-  {
-    for (int i=0;i<NUM_STRIPS;i++)
-        if (strip[i]->paletteSpeed > 0)
-          return true;
-    if (HasRunning())
-      return true;
-    
-    return false;
-  }
-  FxController()
-  {
-    for (int i=0;i<NUM_STRIPS;i++)
-    {
-      strip[i] = NULL;
-      switch (i)
-      {
-        case 0: strip[i] = new FxStrip(NUM_LEDS_0); break;
-#if ENABLE_MULTISTRIP        
-        case 1: strip[i] = new FxStrip(NUM_LEDS_1); break;
-        case 2: strip[i] = new FxStrip(NUM_LEDS_2); break;
-        case 3: strip[i] = new FxStrip(NUM_LEDS_3); break;
-        case 4: strip[i] = new FxStrip(NUM_LEDS_4); break;
-        case 5: strip[i] = new FxStrip(NUM_LEDS_5); break;
-        case 6: strip[i] = new FxStrip(NUM_LEDS_6); break;
-        case 7: strip[i] = new FxStrip(NUM_LEDS_7); break;
-#endif        
-      }
-    }
-  }
-  void Toggle(int channel)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->fxSystem.Toggle(channel);
-  }
-  void ToggleOn(int channel)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->fxSystem.ToggleOn(channel);
-  }
-  void ToggleOff(int channel)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->fxSystem.ToggleOff(channel);
-  }
-  void Excite(int channel)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->fxSystem.Excite(channel);
-  }
-  void Reset(int channel)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->fxSystem.Reset(channel);
-  }
-  void KillFX()
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-    {
-      strip[s]->fxSystem.KillFX();
-      for (int i=0;i<strip[s]->numleds;i++)
-      {
-        strip[s]->palette[i] = LEDRGB(0,0,0);
-        strip[s]->nextPalette[i] = LEDRGB(0,0,0);
-        strip[s]->initialPalette[i] = LEDRGB(0,0,0);
-        strip[s]->sideFXPalette[i] = LEDRGB(0,0,0);
-      }
-    }
-  }
-  bool HasRunning()
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        if (strip[s]->HasRunning())
-          return true;
-    return false;
-  }
-  void SetPaletteType(FxPaletteType paletteType)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetPaletteType(paletteType);
-  }
-  void SetTransitionType(FxTransitionType transitionType)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetTransitionType(transitionType);
-  }
-  void SetParticlesLoc(int loc)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))
-        strip[s]->SetParticlesLoc(loc);
-  }
-  void SetParticlesRunning(bool isRunning)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetParticlesRunning(isRunning);
-  }  
-  void SetParticlesColor(uint32_t rgb)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetParticlesColor(rgb);
-  }  
-  void SetParticlesDirection(int dir)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetParticlesDirection(dir);
-  }  
-  void SetParticlesLength(int len)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetParticlesLength(len);
-  }
-  void SetParticleMode(FxParticleMode mode)
-  {
-    for (int s=0;s<NUM_STRIPS;s++)
-      if (stripMask & (1<<s))   
-        strip[s]->SetParticleMode(mode);
-  }
-  
+    FxController();
+    void Toggle(int channel);
+    void ToggleOn(int channel);
+    void ToggleOff(int channel);
+    void Excite(int channel);
+    void Reset(int channel);
+    void KillFX();
+    void SetPaletteType(FxPaletteType paletteType);
+    void SetTransitionType(FxTransitionType transitionType);
+    void SetParticlesLoc(int loc);
+    void SetParticlesRunning(bool isRunning);
+    void SetParticlesColor(uint32_t rgb);
+    void SetParticlesDirection(int dir);
+    void SetParticlesLength(int len);
+    void SetParticleMode(FxParticleMode mode);  
+    void PrintStateName();
+    void PrintStatus();
+    void SetPaletteSpeed(int v);
+    void ResetPaletteSpeed();
+    void ResetPaletteLocation();
+    void ChangePaletteSpeed(int ps);
+    void SetPaletteDirection(int c);
 };
 
 #endif
