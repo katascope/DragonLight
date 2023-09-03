@@ -278,6 +278,8 @@ namespace KataTracks
         private void btVolumeTimer_Tick(object sender, EventArgs e)
         {
             float inputVolume = DeviceVolume.GetVolume();
+            //float inputVolume = DeviceVolume.GetDirectVolume();
+
             if (inputVolume != lastInputVolume)
             {
                 float TransVolume = (ulong)(inputVolume * 2.5);//convert 100 to 255

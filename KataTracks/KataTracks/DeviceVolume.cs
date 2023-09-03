@@ -27,6 +27,12 @@ namespace KataTracks
         //Between 0 and 1
         public static float GetVolume() { return trackMax; }
 
+        public static float GetDirectVolume(){
+            var enumerator = new MMDeviceEnumerator();
+            var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
+            return device.AudioMeterInformation.MasterPeakValue;
+        }
+
         private static void OnDataAvailable(object sender, WaveInEventArgs args)
         {
             float max = 0;
@@ -79,12 +85,12 @@ namespace KataTracks
         {
             try
             {
-                int deviceNumber = GetInputDeviceNumber(deviceName);
+                int deviceNumber = GetInputDeviceNumber(deviceName);    
 
                 Console.WriteLine("Device number for " + deviceName + " is " + deviceNumber);
                 var newWaveIn = new WaveInEvent() { DeviceNumber = deviceNumber };
 
-                newWaveIn.WaveFormat = new WaveFormat(11050, 2);
+                newWaveIn.WaveFormat = new WaveFormat(11025, 1);
                 newWaveIn.DataAvailable += OnDataAvailable;
 
                 newWaveIn.StartRecording();
