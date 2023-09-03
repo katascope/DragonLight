@@ -14,7 +14,7 @@ static FxController fxController;
 
 static unsigned long lastTimeDisplay = 0;
 static unsigned long lastTimePoll = 0;
-static unsigned long lockedFPS = 30;
+static unsigned long lockedFPS = 60;
 static unsigned long millisecondInterval = 1000/lockedFPS;
 
 void setup() {
