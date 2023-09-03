@@ -59,6 +59,8 @@ namespace KataTracks
         static BluetoothUuid mainToggleOffUuid = BluetoothUuid.FromGuid(new Guid("CB9B8B39-96A8-498D-8420-4C9FC558894D"));
         static BluetoothUuid mainExciteUuid    = BluetoothUuid.FromGuid(new Guid("5549a237-ede8-4b5e-abb0-b233cebe0e52"));
         static BluetoothUuid mainResetUuid     = BluetoothUuid.FromGuid(new Guid("a8907f1f-09ea-4caf-8f73-3acfad5ace43"));
+        static BluetoothUuid mainFxPresetUuid  = BluetoothUuid.FromGuid(new Guid("b47cb504-39df-489f-9bfa-2434082f6285"));
+        
 
         public static List<string> connectionList = new List<string>() {
                 //"91CDE3A4B695", //LightSuitAngelA
@@ -541,6 +543,35 @@ namespace KataTracks
                         if (bd.serviceCache.Count > 0)
                         {
                             GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainPaletteUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+
+        public static async void SideFXPreset(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainFxPresetUuid].gattCharacteristic;
                             byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
                             await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
                         }

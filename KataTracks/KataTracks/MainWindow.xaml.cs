@@ -89,6 +89,9 @@ namespace KataTracks
             btVolumeTimer.Tick += new EventHandler(btVolumeTimer_Tick);
             btVolumeTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             btVolumeTimer.Start();
+
+            EventManager.RegisterClassHandler(typeof(Window),
+                 Keyboard.KeyUpEvent, new KeyEventHandler(OnButtonKeyUp), true);
         }
 
         private void LoadImage(string filename)
@@ -558,5 +561,29 @@ namespace KataTracks
             ulong paletteId = Convert.ToUInt64(button.Tag.ToString());
             DeviceManagerBLE.Palette(paletteId);
         }
+
+        private void SendSideFXPreset(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            ulong paletteId = Convert.ToUInt64(button.Tag.ToString());
+            DeviceManagerBLE.Palette(paletteId);
+        }
+
+        private void OnButtonKeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.D1: DeviceManagerBLE.SideFXPreset(1); break;
+                case Key.D2: DeviceManagerBLE.SideFXPreset(2); break;
+                case Key.D3: DeviceManagerBLE.SideFXPreset(3); break;
+                case Key.D4: DeviceManagerBLE.SideFXPreset(4); break;
+                case Key.D5: DeviceManagerBLE.SideFXPreset(5); break;
+                case Key.D6: DeviceManagerBLE.SideFXPreset(6); break;
+                case Key.D7: DeviceManagerBLE.SideFXPreset(7); break;
+                case Key.D8: DeviceManagerBLE.SideFXPreset(8); break;
+                case Key.D9: DeviceManagerBLE.SideFXPreset(9); break;
+            }
+        }
+
     }
 }

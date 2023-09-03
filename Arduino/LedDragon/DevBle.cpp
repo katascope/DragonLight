@@ -6,6 +6,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "FxPalette.h"
 #include "FxController.h"
 #include "DevBle.h"
+#include "SideFX.h"
 
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -28,6 +29,7 @@ BLECharCharacteristic fxToggleOnCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE
 BLECharCharacteristic fxToggleOffCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLEOFF, BLERead | BLEWrite  );
 BLECharCharacteristic fxExciteCharacteristic( BLE_UUID_CHARACTERISTIC_FXEXCITE, BLERead | BLEWrite  );
 BLECharCharacteristic fxResetCharacteristic( BLE_UUID_CHARACTERISTIC_FXRESET, BLERead | BLEWrite  );
+BLECharCharacteristic fxSideFXPresetCharacteristic( BLE_UUID_CHARACTERISTIC_FXPRESET, BLERead | BLEWrite  );
 
 //BLEDevice * central = NULL;
 void blePeripheralConnectHandler(BLEDevice c) {
@@ -71,6 +73,7 @@ bool bleSetup()
   mainService.addCharacteristic( fxToggleOffCharacteristic );
   mainService.addCharacteristic( fxExciteCharacteristic );
   mainService.addCharacteristic( fxResetCharacteristic );
+  mainService.addCharacteristic( fxSideFXPresetCharacteristic );
  
   BLE.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   BLE.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -88,6 +91,7 @@ bool bleSetup()
   fxToggleOffCharacteristic.writeValue(0);
   fxExciteCharacteristic.writeValue(0);
   fxResetCharacteristic.writeValue(0);
+  fxSideFXPresetCharacteristic.writeValue(0);
   // start advertising
   BLE.advertise();
 
@@ -164,6 +168,13 @@ void blePoll(FxController &fxc)
           Serial.print(F("Reset "));
           Serial.println(channel);
           fxc.Reset(channel);
+        }
+        if (fxResetCharacteristic.written() )
+        {
+          int preset = fxSideFXPresetCharacteristic.value();
+          Serial.print(F("Preset "));
+          Serial.println(preset);
+          SideFXActivatePreset(fxc, preset);
         }
       }
 
