@@ -573,15 +573,15 @@ namespace KataTracks
         {
             switch (e.Key)
             {
-                case Key.D1: DeviceManagerBLE.SideFXPreset(1); break;
-                case Key.D2: DeviceManagerBLE.SideFXPreset(2); break;
-                case Key.D3: DeviceManagerBLE.SideFXPreset(3); break;
-                case Key.D4: DeviceManagerBLE.SideFXPreset(4); break;
-                case Key.D5: DeviceManagerBLE.SideFXPreset(5); break;
-                case Key.D6: DeviceManagerBLE.SideFXPreset(6); break;
-                case Key.D7: DeviceManagerBLE.SideFXPreset(7); break;
-                case Key.D8: DeviceManagerBLE.SideFXPreset(8); break;
-                case Key.D9: DeviceManagerBLE.SideFXPreset(9); break;
+                case Key.D1: DeviceManagerBLE.SideFXPreset(0); break;
+                case Key.D2: DeviceManagerBLE.SideFXPreset(1); break;
+                case Key.D3: DeviceManagerBLE.SideFXPreset(2); break;
+                case Key.D4: DeviceManagerBLE.SideFXPreset(3); break;
+                case Key.D5: DeviceManagerBLE.SideFXPreset(4); break;
+                case Key.D6: DeviceManagerBLE.SideFXPreset(5); break;
+                case Key.D7: DeviceManagerBLE.SideFXPreset(6); break;
+                case Key.D8: DeviceManagerBLE.SideFXPreset(7); break;
+                case Key.D9: DeviceManagerBLE.SideFXPreset(8); break;
             }
         }
 
