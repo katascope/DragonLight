@@ -277,6 +277,9 @@ void PaletteCreateById(FxController &fxc, int paletteId)
     case 33: FxEvent(fxc, fx_palette_cmy); break;
     case 34: FxEvent(fxc, fx_palette_cbm); break;
 
+    case 50:  FxEvent(fxc, fx_palette_dark); break;
+    case 51:  FxEvent(fxc, fx_palette_white); break;
+
     case 101: FxEvent(fxc, fx_palette_dr); break;
     case 102: FxEvent(fxc, fx_palette_red); break;
     case 103: FxEvent(fxc, fx_palette_ry); break;

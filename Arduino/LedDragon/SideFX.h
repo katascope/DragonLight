@@ -11,6 +11,8 @@ class FxChannel
 public:  
   bool on = false;
   int state = 0;
+  int loc = 0;
+  int dir = 0;
 };
 
 #define NUM_FX_CHANNELS 100
@@ -19,12 +21,16 @@ class FxChannelSystem
 {
 public:
   FxChannel channels[NUM_FX_CHANNELS];
+  int tick = 0;
   void KillFX()
   {
+    tick =0;
     for (int channel=0;channel<NUM_FX_CHANNELS;channel++)
     {
       channels[channel].on = false;
       channels[channel].state = 0;
+      channels[channel].loc = 0;
+      channels[channel].dir = 1;
     }    
   }
   void Toggle(int channel)
@@ -48,7 +54,7 @@ public:
     if (channel == 2)
     {
      channels[channel].state++;
-     if (channels[channel].state > 2)
+     if (channels[channel].state > 3)
       channels[channel].state = 0;
     }
     if (channel == 4)    
@@ -74,6 +80,8 @@ public:
   {
     if (channel >= NUM_FX_CHANNELS)  return;
     channels[channel].state = 0;
+    channels[channel].dir = 0;
+    channels[channel].loc = 0;
   }
 };
 
