@@ -62,6 +62,7 @@ void FxController::KillFX()
       strip[s]->palette[i] = LEDRGB(0,0,0);
       strip[s]->nextPalette[i] = LEDRGB(0,0,0);
       strip[s]->initialPalette[i] = LEDRGB(0,0,0);
+      strip[s]->sequence[i] = -1;
     }
   }
 }

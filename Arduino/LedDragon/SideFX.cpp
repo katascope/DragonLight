@@ -9,6 +9,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "DevNeo.h"
 #include <avr/pgmspace.h>
 
+const word SideFx_Preset_Off[] PROGMEM =
+{
+0,1, 0,1, 0,1, 0,1, 0,1, 0,1, 0,1, 0,1, 
+50,50,50,50,50,50,50,50
+};
+
 const word SideFx_Preset_CM[] PROGMEM =
 {
 0,7, 0,7, 0,7, 0,7, 0,7, 0,7, 0,7, 0,7,
@@ -107,19 +113,38 @@ const word SideFx_Preset_CMY[] PROGMEM =
 7,1,0, 7,2,0, 7,3,0, 7,4,0, 7,5,0, 7,6,0, 7,7,0
 };
 
+const word SideFxTrack_MultiPrideUSA[] PROGMEM =
+{
+0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 
+206,206,9,9,206,206,9,9,
+0,2,2,
+1,2,2,
+2,2,1,
+3,2,1,
+4,2,2,
+5,2,2,
+6,2,1,
+7,2,1
+};
+
+
+
+
 
 
 word FxGetSideFXTrackSize(FxController &fxc, int trackId)
 {
   switch (trackId)
   {
-    case 0: return sizeof(SideFx_Preset_CM);
-    case 1: return sizeof(SideFx_Preset_USA);
-    case 2: return sizeof(SideFx_Preset_FirePit);
-    case 3: return sizeof(SideFx_Preset_PurpleParty);
-    case 4: return sizeof(SideFx_Preset_Rainbow);
-    case 5: return sizeof(SideFx_Preset_Heat);
-    case 6: return sizeof(SideFx_Preset_CMY);
+    case 0: return sizeof(SideFx_Preset_Off);
+    case 1: return sizeof(SideFx_Preset_CM);
+    case 2: return sizeof(SideFx_Preset_USA);
+    case 3: return sizeof(SideFx_Preset_FirePit);
+    case 4: return sizeof(SideFx_Preset_PurpleParty);
+    case 5: return sizeof(SideFx_Preset_Rainbow);
+    case 6: return sizeof(SideFx_Preset_Heat);
+    case 7: return sizeof(SideFx_Preset_CMY);
+    case 8: return sizeof(SideFxTrack_MultiPrideUSA);
   }
   return 0;
 }
@@ -128,13 +153,15 @@ word FxGetSideFXTrackValue(FxController &fxc, int trackId, int o)
 {
   switch (trackId)
   {
-    case 0: return pgm_read_dword(&(SideFx_Preset_CM[o]));
-    case 1: return pgm_read_dword(&(SideFx_Preset_USA[o]));
-    case 2: return pgm_read_dword(&(SideFx_Preset_FirePit[o]));    
-    case 3: return pgm_read_dword(&(SideFx_Preset_PurpleParty[o]));
-    case 4: return pgm_read_dword(&(SideFx_Preset_Rainbow[o]));
-    case 5: return pgm_read_dword(&(SideFx_Preset_Heat[o]));
-    case 6: return pgm_read_dword(&(SideFx_Preset_CMY[o]));
+    case 0: return pgm_read_dword(&(SideFx_Preset_Off[o]));
+    case 1: return pgm_read_dword(&(SideFx_Preset_CM[o]));
+    case 2: return pgm_read_dword(&(SideFx_Preset_USA[o]));
+    case 3: return pgm_read_dword(&(SideFx_Preset_FirePit[o]));    
+    case 4: return pgm_read_dword(&(SideFx_Preset_PurpleParty[o]));
+    case 5: return pgm_read_dword(&(SideFx_Preset_Rainbow[o]));
+    case 6: return pgm_read_dword(&(SideFx_Preset_Heat[o]));
+    case 7: return pgm_read_dword(&(SideFx_Preset_CMY[o]));
+    case 8: return pgm_read_dword(&(SideFxTrack_MultiPrideUSA[o]));
   }
   return 0;
 }
@@ -258,6 +285,73 @@ void SideFXPrintState(FxController &fxc)
 #endif  
 }
 
+void DoFireworks(FxController &fxc, int strip, int state)
+{  
+  int height = fxc.strip[strip]->numleds;
+
+  int subHeight = 8;
+  int scalar = fxc.strip[strip]->numleds/subHeight;
+  float fireworkBlast = subHeight *fxc.vol;
+  for (int i=subHeight;i<height;i+=(subHeight*2))
+  {
+    for (int sub=0;sub<=subHeight;sub++) //Set to black  behind it
+    { 
+      fxc.strip[strip]->sequence[i-sub] = -1;
+      fxc.strip[strip]->sequence[i+sub] = -1;      
+    }
+    if (fireworkBlast > 1)
+    {
+      for (int sub=0;sub<fireworkBlast;sub++) //Then set color
+      {
+        fxc.strip[strip]->sequence[i-sub] = sub*scalar;
+        fxc.strip[strip]->sequence[i+sub] = sub*scalar;
+      }    
+    }
+  }
+}
+
+void DoSoundBar(FxController &fxc, int strip, int state)
+{
+      int len = (int)(fxc.vol * fxc.strip[strip]->numleds);
+      int height = fxc.strip[strip]->numleds;
+      if (fxc.strip[strip]->fxSystem.channels[2].state == 0)
+      {
+        for (int i=0;i<len;i++)        
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sequence[i] = i;
+        }
+        for (int i=len;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sequence[i] = -1;
+      }
+      else if (fxc.strip[strip]->fxSystem.channels[2].state == 1)
+      {
+        for (int i=0;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sequence[i] = -1;
+        for (int i=0;i<len;i++)
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sequence[height/2+i/2] = i;
+          fxc.strip[strip]->sequence[height/2-i/2] = i;
+        }
+      }
+      else if (fxc.strip[strip]->fxSystem.channels[2].state == 2)
+      {
+        for (int i=0;i<fxc.strip[strip]->numleds;i++)
+          fxc.strip[strip]->sequence[i] = -1;
+        for (int i=0;i<len;i++)
+        {
+          float f = 255 * ((float)i/(float)1);
+          fxc.strip[strip]->sequence[i/2] = i;
+          fxc.strip[strip]->sequence[height-1-i/2] = i;
+        }
+      }
+      else if (fxc.strip[strip]->fxSystem.channels[2].state == 3)
+      {
+        DoFireworks(fxc, strip, fxc.strip[strip]->fxSystem.channels[8].state);
+      }
+}
+
 void DoPaletteMirror(FxController &fxc, int strip)
 {  
   int height = fxc.strip[strip]->numleds;
@@ -309,6 +403,27 @@ void DoChaos(FxController &fxc, int strip, int state)
   }
 }
 
+int counter = 0;
+int counterStep = 1;
+void DoWarver(FxController &fxc, int strip, int state)
+{  
+  float boost = fxc.vol*2;              
+  int height = fxc.strip[strip]->numleds;
+
+    counter+=counterStep;
+    if (counter > 16)
+      counterStep = -1;
+    if (counter < 0)
+      counterStep = 1;
+   
+  for (int i=0;i<height;i++)
+  {
+    int val = fxc.strip[strip]->sequence[i]+counter+i;
+    if (val > height)
+     val = val -height;
+    fxc.strip[strip]->sequence[i] = val;
+  }
+}
 
 void SideFXPollState(FxController &fxc)
 {
@@ -324,40 +439,7 @@ void SideFXPollState(FxController &fxc)
     
     if (fxc.strip[strip]->fxSystem.channels[2].on) //sound bar
     {
-      int len = (int)(fxc.vol * fxc.strip[strip]->numleds);
-      int height = fxc.strip[strip]->numleds;
-      if (fxc.strip[strip]->fxSystem.channels[2].state == 0)
-      {
-        for (int i=0;i<len;i++)        
-        {
-          float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sequence[i] = i;
-        }
-        for (int i=len;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
-      }
-      else if (fxc.strip[strip]->fxSystem.channels[2].state == 1)
-      {
-        for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
-        for (int i=0;i<len;i++)
-        {
-          float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sequence[height/2+i/2] = i;
-          fxc.strip[strip]->sequence[height/2-i/2] = i;
-        }
-      }
-      else if (fxc.strip[strip]->fxSystem.channels[2].state == 2)
-      {
-        for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
-        for (int i=0;i<len;i++)
-        {
-          float f = 255 * ((float)i/(float)1);
-          fxc.strip[strip]->sequence[i/2] = i;
-          fxc.strip[strip]->sequence[height-1-i/2] = i;
-        }
-      }
+      DoSoundBar(fxc, strip, fxc.strip[strip]->fxSystem.channels[2].state);
     }    
     if (fxc.strip[strip]->fxSystem.channels[3].on) 
         neopixelSetBrightness(strip,(int)(fxc.vol * fxc.brightness));
@@ -407,8 +489,41 @@ void SideFXPollState(FxController &fxc)
 
     if (fxc.strip[strip]->fxSystem.channels[8].on) 
     {
-      DoChaos(fxc, strip, fxc.strip[strip]->fxSystem.channels[8].state);
+      int span = fxc.vol*8;
+      for (int i=0;i<span;i++)
+      {
+        fxc.strip[strip]->fxSystem.channels[8].loc += fxc.strip[strip]->fxSystem.channels[8].dir;
+        if (fxc.strip[strip]->fxSystem.channels[8].loc >= fxc.strip[strip]->numleds)
+          fxc.strip[strip]->fxSystem.channels[8].loc = 0;
+        int val = fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.channels[8].loc] + fxc.strip[strip]->fxSystem.tick;
+        if (val >= fxc.strip[strip]->numleds)
+          val = val-fxc.strip[strip]->numleds;
+        fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.channels[8].loc] = val;
+      }
     }
+
+    if (fxc.strip[strip]->fxSystem.channels[9].on) 
+    {
+      int span = 3;
+      for (int i=0;i<span;i++)
+      {
+        fxc.strip[strip]->fxSystem.channels[9].loc += fxc.strip[strip]->fxSystem.channels[9].dir;        
+        if (fxc.strip[strip]->fxSystem.channels[9].loc > 16)
+          fxc.strip[strip]->fxSystem.channels[9].dir = -1;
+        if (fxc.strip[strip]->fxSystem.channels[9].loc < 0)
+          fxc.strip[strip]->fxSystem.channels[9].dir = 0;
+        
+        int val = fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.tick] + fxc.strip[strip]->fxSystem.channels[9].loc;
+        if (val >= fxc.strip[strip]->numleds)
+          val = val-fxc.strip[strip]->numleds;
+        fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.tick] = val;
+      }
+    }
+    
+
+    fxc.strip[strip]->fxSystem.tick++;
+    if (fxc.strip[strip]->fxSystem.tick >= fxc.strip[strip]->numleds)
+      fxc.strip[strip]->fxSystem.tick = 0;
   }
   //FxUpdatePalette(fxc);
 }

@@ -20,7 +20,7 @@ FxStrip::FxStrip(int nl)
     nextPalette[i] = LEDRGB(0, 0, 0);
     initialPalette[i] = LEDRGB(0, 0, 0);
     //sideFXPalette[i] = LEDRGB(0, 0, 0);
-    sequence[i] = i;
+    sequence[i] = -1;
   }
 }
 
