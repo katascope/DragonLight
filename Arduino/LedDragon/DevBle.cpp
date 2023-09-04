@@ -169,7 +169,7 @@ void blePoll(FxController &fxc)
           Serial.println(channel);
           fxc.Reset(channel);
         }
-        if (fxResetCharacteristic.written() )
+        if (fxSideFXPresetCharacteristic.written() )
         {
           int preset = fxSideFXPresetCharacteristic.value();
           Serial.print(F("Preset "));

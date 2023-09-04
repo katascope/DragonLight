@@ -256,6 +256,7 @@ void FxEvent(FxController &fxc, int event)
     fxc.stripMask = (unsigned int)event-(unsigned int)fx_stripmask_0;
     return;
   }
+  FxEventPrint(event);
 
   switch (event)
   {
