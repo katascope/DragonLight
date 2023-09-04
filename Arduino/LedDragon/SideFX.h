@@ -75,6 +75,24 @@ public:
      if (channels[channel].state > 1)
       channels[channel].state = 0;
     }
+    if (channel == 8)
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 10)
+      channels[channel].state = 0;
+    }    
+    if (channel == 9)
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 10)
+      channels[channel].state = 0;
+    }    
+    if (channel == 10)
+    {
+     channels[channel].state++;
+     if (channels[channel].state > 1)
+      channels[channel].state = 0;
+    }
   }
   void Reset(int channel)
   {

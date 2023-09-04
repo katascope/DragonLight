@@ -543,6 +543,11 @@ void FxEvent(FxController &fxc, int event)
       0xCC0000, 0xFF0000, 0xFF3300, 0xFF6600, 
       0xFF9900, 0xFFCC00, 0xFFFF00, 0xFFFF33, 
       0xFFFF66, 0xFFFF99, 0xFFFFCC, 0xFFFFFF);break;
+    case fx_palette_seahawks:PaletteCreateQuadColor(fxc, 
+      0x00,0x7F,0x00,
+      0x00,0x00,0xFF,
+      0x1f,0x1f,0x1F,
+      0x00,0x00,0x7F);break;
 
     case fx_particles_off: fxc.SetParticlesRunning(false); break;
     case fx_particles_pos: fxc.SetParticlesRunning(true); fxc.SetParticleMode(FX_PARTICLEMODE_STAR); fxc.SetParticlesDirection(1); break;

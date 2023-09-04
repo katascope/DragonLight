@@ -72,6 +72,7 @@ enum FxEvent
   fx_palette_rainbowstripe,
   fx_palette_party,
   fx_palette_heat,
+  fx_palette_seahawks,
 
   fx_palette_dark,
   fx_palette_white,

@@ -403,6 +403,12 @@ void DoChaos(FxController &fxc, int strip, int state)
   }
 }
 
+float sinpulse(float f, float scale, float repeat)
+{
+    float val = (1+sin((f/scale) * (3.14*repeat*2) ))/2;
+    return val;
+}
+
 int counter = 0;
 int counterStep = 1;
 void DoWarver(FxController &fxc, int strip, int state)
@@ -474,7 +480,7 @@ void SideFXPollState(FxController &fxc)
       if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
         fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
       if (fxc.strip[strip]->paletteIndex < 0)
-        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;      
+        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;              
     }
     
     if (fxc.strip[strip]->fxSystem.channels[6].on) 
@@ -489,37 +495,30 @@ void SideFXPollState(FxController &fxc)
 
     if (fxc.strip[strip]->fxSystem.channels[8].on) 
     {
-      int span = fxc.vol*8;
-      for (int i=0;i<span;i++)
+      float repeats = fxc.vol*(fxc.strip[strip]->fxSystem.channels[8].state+2);
+      for (int i=0;i<fxc.strip[strip]->numleds;i++)
       {
-        fxc.strip[strip]->fxSystem.channels[8].loc += fxc.strip[strip]->fxSystem.channels[8].dir;
-        if (fxc.strip[strip]->fxSystem.channels[8].loc >= fxc.strip[strip]->numleds)
-          fxc.strip[strip]->fxSystem.channels[8].loc = 0;
-        int val = fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.channels[8].loc] + fxc.strip[strip]->fxSystem.tick;
-        if (val >= fxc.strip[strip]->numleds)
-          val = val-fxc.strip[strip]->numleds;
-        fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.channels[8].loc] = val;
+        fxc.strip[strip]->sequence[i] = sinpulse(i,fxc.strip[strip]->numleds,repeats) * fxc.strip[strip]->numleds;
       }
     }
 
     if (fxc.strip[strip]->fxSystem.channels[9].on) 
     {
-      int span = 3;
-      for (int i=0;i<span;i++)
-      {
-        fxc.strip[strip]->fxSystem.channels[9].loc += fxc.strip[strip]->fxSystem.channels[9].dir;        
-        if (fxc.strip[strip]->fxSystem.channels[9].loc > 16)
-          fxc.strip[strip]->fxSystem.channels[9].dir = -1;
-        if (fxc.strip[strip]->fxSystem.channels[9].loc < 0)
-          fxc.strip[strip]->fxSystem.channels[9].dir = 0;
-        
-        int val = fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.tick] + fxc.strip[strip]->fxSystem.channels[9].loc;
-        if (val >= fxc.strip[strip]->numleds)
-          val = val-fxc.strip[strip]->numleds;
-        fxc.strip[strip]->sequence[fxc.strip[strip]->fxSystem.tick] = val;
-      }
+      if (fxc.strip[strip]->paletteSpeed == 0) fxc.strip[strip]->paletteSpeed = 1;
+      float repeats = fxc.vol*(fxc.strip[strip]->fxSystem.channels[9].state+2);
+      int advance =  (repeats * fxc.strip[strip]->paletteSpeed) * (repeats * fxc.strip[strip]->paletteSpeed);
+      if (fxc.strip[strip]->fxSystem.channels[9].state == 0) fxc.strip[strip]->paletteIndex += advance;
+      if (fxc.strip[strip]->fxSystem.channels[9].state == 1) fxc.strip[strip]->paletteIndex -= advance;
+      if (fxc.strip[strip]->paletteIndex >= fxc.strip[strip]->numleds)
+        fxc.strip[strip]->paletteIndex -= fxc.strip[strip]->numleds;
+      if (fxc.strip[strip]->paletteIndex < 0)
+        fxc.strip[strip]->paletteIndex = fxc.strip[strip]->numleds - 1;              
     }
     
+    if (fxc.strip[strip]->fxSystem.channels[10].on) 
+    {
+      //make this particles
+    }
 
     fxc.strip[strip]->fxSystem.tick++;
     if (fxc.strip[strip]->fxSystem.tick >= fxc.strip[strip]->numleds)

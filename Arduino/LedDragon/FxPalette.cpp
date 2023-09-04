@@ -332,6 +332,8 @@ void PaletteCreateById(FxController &fxc, int paletteId)
     case 206: FxEvent(fxc, fx_palette_rainbowstripe); break;
     case 207: FxEvent(fxc, fx_palette_party); break;
     case 208: FxEvent(fxc, fx_palette_heat); break;
+    
+    case 209: FxEvent(fxc, fx_palette_seahawks); break;
   }
 }
 
