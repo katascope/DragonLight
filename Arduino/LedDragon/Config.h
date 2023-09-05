@@ -41,7 +41,7 @@ static const char *DeviceName = "UnkDevice";
 #define UPDATE_DELAY        30 //100 //Milliseconds to delay between palette updates, set to 100 for iot, 30 for ble
 #define NUM_STRIPS          8
 #define BRIGHTNESS          50  //Default brightness
-#define BRIGHTNESS_LIMIT    100 //Maximum allowed brightness, //90 possible but runs too hot
+#define BRIGHTNESS_LIMIT    250 //Maximum allowed brightness, //90 possible but runs too hot
 #define ENABLE_SAFETY       0
 #define ENABLE_TRACK_CHECK  1
 #define ENABLE_BLE          1

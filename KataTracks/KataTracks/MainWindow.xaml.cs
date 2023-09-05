@@ -573,15 +573,48 @@ namespace KataTracks
         {
             switch (e.Key)
             {
-                case Key.D1: DeviceManagerBLE.SideFXPreset(0); break;
-                case Key.D2: DeviceManagerBLE.SideFXPreset(1); break;
-                case Key.D3: DeviceManagerBLE.SideFXPreset(2); break;
-                case Key.D4: DeviceManagerBLE.SideFXPreset(3); break;
-                case Key.D5: DeviceManagerBLE.SideFXPreset(4); break;
-                case Key.D6: DeviceManagerBLE.SideFXPreset(5); break;
-                case Key.D7: DeviceManagerBLE.SideFXPreset(6); break;
-                case Key.D8: DeviceManagerBLE.SideFXPreset(7); break;
-                case Key.D9: DeviceManagerBLE.SideFXPreset(8); break;
+                case Key.D1: DeviceManagerBLE.Toggle(1); break;
+                case Key.D2: DeviceManagerBLE.Toggle(2); break;
+                case Key.D3: DeviceManagerBLE.Toggle(3); break;
+                case Key.D4: DeviceManagerBLE.Toggle(4); break;
+                case Key.D5: DeviceManagerBLE.Toggle(5); break;
+                case Key.D6: DeviceManagerBLE.Toggle(6); break;
+                case Key.D7: DeviceManagerBLE.Toggle(7); break;
+                case Key.D8: DeviceManagerBLE.Toggle(8); break;
+                case Key.D9: DeviceManagerBLE.Toggle(9); break;
+                case Key.D0: StopAndSendToBoth("|");break;
+
+                case Key.Q: DeviceManagerBLE.SideFXPreset(0); break;
+                case Key.W: DeviceManagerBLE.SideFXPreset(1); break;
+                case Key.E: DeviceManagerBLE.SideFXPreset(2); break;
+                case Key.R: DeviceManagerBLE.SideFXPreset(3); break;
+                case Key.T: DeviceManagerBLE.SideFXPreset(4); break;
+                case Key.Y: DeviceManagerBLE.SideFXPreset(5); break;
+                case Key.U: DeviceManagerBLE.SideFXPreset(6); break;
+                case Key.I: DeviceManagerBLE.SideFXPreset(7); break;
+                case Key.O: DeviceManagerBLE.SideFXPreset(8); break;
+                case Key.P: DeviceManagerBLE.SideFXPreset(9); break;
+
+                case Key.A: DeviceManagerBLE.Palette(150); break; //fx_palette_rbm
+                case Key.S: DeviceManagerBLE.Palette(151); break; //fx_palette_rgb
+                case Key.D: DeviceManagerBLE.Palette(152); break; //fx_palette_cmy
+                case Key.F: DeviceManagerBLE.Palette(153); break; //fx_palette_cbm
+                case Key.G: DeviceManagerBLE.Palette(205); break; //fx_palette_rainbow
+                case Key.H: DeviceManagerBLE.Palette(206); break; //fx_palette_rainbowstripe
+                case Key.J: DeviceManagerBLE.Palette(207); break; //fx_palette_party
+                case Key.K: DeviceManagerBLE.Palette(208); break; //fx_palette_heat
+                case Key.L: DeviceManagerBLE.Palette(209); break; //fx_palette_seahawks
+
+                case Key.Z: StopAndSendToBoth("e"); break; //head
+                case Key.X: StopAndSendToBoth("w"); break; //wings
+                case Key.C: StopAndSendToBoth("q"); break; //torso
+                case Key.V: StopAndSendToBoth("r"); break; //tail
+                case Key.B: StopAndSendToBoth("o"); break; //all
+
+                case Key.OemComma:      StopAndSendToBoth("="); break;
+                case Key.OemSemicolon:  StopAndSendToBoth("-"); break;
+                case Key.Oem2:          StopAndSendToBoth("["); break;
+
             }
         }
 

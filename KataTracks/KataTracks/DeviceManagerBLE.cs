@@ -416,6 +416,36 @@ namespace KataTracks
             }
         }
 
+        public static async void Toggle(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainToggleUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+        
+
         public static async void ToggleOn(ulong tc)
         {
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
