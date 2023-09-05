@@ -141,6 +141,13 @@ void blePoll(FxController &fxc)
           Serial.println(palChoice);
           PaletteCreateById(fxc,palChoice);
         }
+        if (fxToggleCharacteristic.written() )
+        {
+          int channel = fxToggleCharacteristic.value();
+          Serial.print(F("Toggle "));
+          Serial.println(channel);
+          fxc.Toggle(channel);
+        }
         if (fxToggleOnCharacteristic.written() )
         {
           int channel = fxToggleOnCharacteristic.value();
