@@ -584,16 +584,16 @@ namespace KataTracks
                 case Key.D9: DeviceManagerBLE.Toggle(9); break;
                 case Key.D0: StopAndSendToBoth("|");break;
 
-                case Key.Q: DeviceManagerBLE.SideFXPreset(0); break;
-                case Key.W: DeviceManagerBLE.SideFXPreset(1); break;
-                case Key.E: DeviceManagerBLE.SideFXPreset(2); break;
-                case Key.R: DeviceManagerBLE.SideFXPreset(3); break;
-                case Key.T: DeviceManagerBLE.SideFXPreset(4); break;
-                case Key.Y: DeviceManagerBLE.SideFXPreset(5); break;
-                case Key.U: DeviceManagerBLE.SideFXPreset(6); break;
-                case Key.I: DeviceManagerBLE.SideFXPreset(7); break;
-                case Key.O: DeviceManagerBLE.SideFXPreset(8); break;
-                case Key.P: DeviceManagerBLE.SideFXPreset(9); break;
+                case Key.Q: DeviceManagerBLE.SideFXPreset(1); break;
+                case Key.W: DeviceManagerBLE.SideFXPreset(2); break;
+                case Key.E: DeviceManagerBLE.SideFXPreset(3); break;
+                case Key.R: DeviceManagerBLE.SideFXPreset(4); break;
+                case Key.T: DeviceManagerBLE.SideFXPreset(5); break;
+                case Key.Y: DeviceManagerBLE.SideFXPreset(6); break;
+                case Key.U: DeviceManagerBLE.SideFXPreset(7); break;
+                case Key.I: DeviceManagerBLE.SideFXPreset(8); break;
+                case Key.O: DeviceManagerBLE.SideFXPreset(9); break;
+                case Key.P: DeviceManagerBLE.SideFXPreset(10); break;
 
                 case Key.A: DeviceManagerBLE.Palette(150); break; //fx_palette_rbm
                 case Key.S: DeviceManagerBLE.Palette(151); break; //fx_palette_rgb
@@ -611,9 +611,9 @@ namespace KataTracks
                 case Key.V: StopAndSendToBoth("r"); break; //tail
                 case Key.B: StopAndSendToBoth("o"); break; //all
 
-                case Key.OemComma:      StopAndSendToBoth("="); break;
-                case Key.OemSemicolon:  StopAndSendToBoth("-"); break;
-                case Key.Oem2:          StopAndSendToBoth("["); break;
+                case Key.Oem1:  StopAndSendToBoth("-"); break;
+                case Key.Oem7:  StopAndSendToBoth("="); break;
+                case Key.Oem2:  StopAndSendToBoth("["); break;
 
             }
         }
