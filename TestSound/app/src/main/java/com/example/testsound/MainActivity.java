@@ -30,6 +30,31 @@ import android.widget.Toast;
 import android.Manifest;
 
 
+/*
+
+        static BluetoothUuid mainServiceUuid   = BluetoothUuid.FromGuid(new Guid("02FE4875-5056-48B5-AD15-36E30665D9B4"));
+        static BluetoothUuid mainCommandUuid   = BluetoothUuid.FromGuid(new Guid("220154BF-1DCE-4F03-85F0-7BA905D2D6B0"));
+        static BluetoothUuid mainAuthenticateUuid = BluetoothUuid.FromGuid(new Guid("4C75BB42-5365-458D-A3EA-2B91339646B7"));
+        static BluetoothUuid mainPlayUuid      = BluetoothUuid.FromGuid(new Guid("3B140EF5-0A72-4891-AD38-83B5A2595622"));
+        static BluetoothUuid mainStatusUuid    = BluetoothUuid.FromGuid(new Guid("D01C9106-91BD-4998-9554-85264D33ACB2"));
+        static BluetoothUuid mainVolumeUuid    = BluetoothUuid.FromGuid(new Guid("04E92E16-47AF-11EE-BE56-0242AC120002"));
+        static BluetoothUuid mainPaletteUuid   = BluetoothUuid.FromGuid(new Guid("7a0cca4f-9124-4831-923c-6ffdd6042ff2"));
+        static BluetoothUuid mainToggleUuid    = BluetoothUuid.FromGuid(new Guid("FBDD5000-4B48-4A1A-9E40-98E84FD69245"));
+        static BluetoothUuid mainToggleOnUuid  = BluetoothUuid.FromGuid(new Guid("9677B246-7355-4130-A770-769CD4732677"));
+        static BluetoothUuid mainToggleOffUuid = BluetoothUuid.FromGuid(new Guid("CB9B8B39-96A8-498D-8420-4C9FC558894D"));
+        static BluetoothUuid mainExciteUuid    = BluetoothUuid.FromGuid(new Guid("5549a237-ede8-4b5e-abb0-b233cebe0e52"));
+        static BluetoothUuid mainResetUuid     = BluetoothUuid.FromGuid(new Guid("a8907f1f-09ea-4caf-8f73-3acfad5ace43"));
+        static BluetoothUuid mainFxPresetUuid  = BluetoothUuid.FromGuid(new Guid("b47cb504-39df-489f-9bfa-2434082f6285"));
+        
+DeviceId=91CDE3A4B695 #LightSuitAngelA
+DeviceId=B872B08E0D8E #LightSuitAngelB
+DeviceId=F6426025BEE  #LightSuitAngelJ
+DeviceId=2198D30EA040 #LightSuitAngelD
+DeviceId=77C648CCE101 #LightSuitAngel?
+
+
+        */
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
