@@ -312,6 +312,8 @@ void DoFireworks(FxController &fxc, int strip, int state)
 
 void DoSoundBar(FxController &fxc, int strip, int state)
 {
+  int emptyColor = -2;
+  
       int len = (int)(fxc.vol * fxc.strip[strip]->numleds);
       int height = fxc.strip[strip]->numleds;
       if (fxc.strip[strip]->fxSystem.channels[2].state == 0)
@@ -322,12 +324,12 @@ void DoSoundBar(FxController &fxc, int strip, int state)
           fxc.strip[strip]->sequence[i] = i;
         }
         for (int i=len;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
+          fxc.strip[strip]->sequence[i] = emptyColor;
       }
       else if (fxc.strip[strip]->fxSystem.channels[2].state == 1)
       {
         for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
+          fxc.strip[strip]->sequence[i] = emptyColor;
         for (int i=0;i<len;i++)
         {
           float f = 255 * ((float)i/(float)1);
@@ -338,7 +340,7 @@ void DoSoundBar(FxController &fxc, int strip, int state)
       else if (fxc.strip[strip]->fxSystem.channels[2].state == 2)
       {
         for (int i=0;i<fxc.strip[strip]->numleds;i++)
-          fxc.strip[strip]->sequence[i] = -1;
+          fxc.strip[strip]->sequence[i] = emptyColor;
         for (int i=0;i<len;i++)
         {
           float f = 255 * ((float)i/(float)1);
@@ -365,6 +367,7 @@ void DoPaletteMirror(FxController &fxc, int strip)
 void DoParticles(FxController &fxc, int strip, int state)
 {  
   float boost = fxc.vol*2;              
+  int color = -3;
 
   for (int p=0;p<NUM_PARTICLES;p++)
   {
@@ -380,11 +383,11 @@ void DoParticles(FxController &fxc, int strip, int state)
     fxc.strip[strip]->particles[p].loc = fxc.strip[strip]->numleds - fxc.strip[strip]->particles[p].vel;
 
     int loc = fxc.strip[strip]->particles[p].loc;    
-    fxc.strip[strip]->sequence[loc] = -2;
+    fxc.strip[strip]->sequence[loc] = color;
     for (int i=0;i<boost*2;i++)
     {
       if (i+loc < fxc.strip[strip]->numleds)
-        fxc.strip[strip]->sequence[loc+i] = -2;
+        fxc.strip[strip]->sequence[loc+i] = color;
     }    
   }  
 }
@@ -447,8 +450,13 @@ void SideFXPollState(FxController &fxc)
     {
       DoSoundBar(fxc, strip, fxc.strip[strip]->fxSystem.channels[2].state);
     }    
+    
     if (fxc.strip[strip]->fxSystem.channels[3].on) 
-        neopixelSetBrightness(strip,(int)(fxc.vol * fxc.brightness));
+    {
+      float level = 0.33+(fxc.vol*0.66);
+      if (level > 1) level = 1;
+      neopixelSetBrightness(strip,(int)(level * fxc.brightness));
+    }
     else
         neopixelSetBrightness(strip, fxc.brightness);
     

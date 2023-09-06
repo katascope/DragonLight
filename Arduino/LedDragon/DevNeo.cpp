@@ -149,7 +149,10 @@ void neopixelSetSequencePalette(int slot, int numleds, uint32_t *palette, int pa
     switch (seq)
     {
       case -1:neopixelSetPixel(slot,offset,0x00000000); break;
-      case -2:neopixelSetPixel(slot,offset,0xFFFFFFFF); break;
+      case -2:neopixelSetPixel(slot,offset,0x3F3F3F3F); break;
+      case -3:neopixelSetPixel(slot,offset,0x7F7F7F7F); break;
+      case -4:neopixelSetPixel(slot,offset,0xAFAFAFAF); break;
+      case -5:neopixelSetPixel(slot,offset,0xFFFFFFFF); break;
       default:neopixelSetPixel(slot,offset,palette[seq]);break;
     }
      
