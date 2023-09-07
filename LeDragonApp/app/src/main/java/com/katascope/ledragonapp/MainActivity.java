@@ -3,6 +3,7 @@ package com.katascope.ledragonapp;
 import static androidx.navigation.ActivityNavigatorDestinationBuilderKt.activity;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.Intent;
@@ -66,13 +67,17 @@ DeviceId=77C648CCE101 #LightSuitAngel?
 
 public class MainActivity extends AppCompatActivity {
 
+    private String LogName = "SELF";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     //    private SoundMeter soundMeter;
     private MediaRecorder mRecorder = null;
     private BluetoothLeService bleService = null;
 
-    private BluetoothLeScanner bluetoothLeScanner = null;
+//    private BluetoothLeScanner bluetoothLeScanner = null;
+    private BluetoothLeScan bluetoothLeScanner = null;
+
+    private String arduinoUuid = "21:98:D3:0E:A0:40";
 
     private Context context;
     private Activity activity;
@@ -101,40 +106,59 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         activity = this;
 
-
-
-        /*
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permissions");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
-        }*/
-
-        /*
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permissions");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
-        } else {
-            boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
-            if (result == true) {
-                Log.d("LEDDRAGON", "Connected to BLE");
-            } else Log.d("LEDDRAGON", "NO connection to BLE");
-        }
-*/
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permission RECORD_AUDIO");
+            Log.d(LogName, "Requesting permission RECORD_AUDIO");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
         }
         else {
-            Log.d("LEDRAGON", "Requesting permission RECORD_AUDIO");
+            Log.d(LogName, "Have permission RECORD_AUDIO");
             microphoneStart();
         }
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.d(LogName, "Requesting permission BLUETOOTH_CONNECT");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
+        } else {
+            Log.d(LogName, "Have permission BLUETOOTH_CONNECT");
+            //boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
+            bleService = new BluetoothLeService();
+            boolean result = bleService.initialize(this, this);
+            if (result == true) {
+                Log.d(LogName, "Connected to BLE");
+                ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.YELLOW);
+                ((Button)findViewById(R.id.button_connect)).setText("Searching");
+                Log.d(LogName, "Checking permission BLUETOOTH_SCAN");
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LogName, "Requesting permission BLUETOOTH_SCAN");
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 10);
+                }
+                else
+                {
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        Log.d(LogName, "Requesting permission BLUETOOTH_SCAN");
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
+                    }
+                    else if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        Log.d(LogName, "Requesting permission BLUETOOTH_SCAN");
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 10);
+                    }
 
-        Button buttonFindBLE = (Button)findViewById(R.id.button_findble);
-        buttonFindBLE.setOnClickListener(new View.OnClickListener() {
+                    Log.d(LogName, "Have permission BLUETOOTH_SCAN");
+                    bluetoothLeScanner = new BluetoothLeScan();
+                    bluetoothLeScanner.initialize(this,this,bleService.getBluetoothAdapter());
+                    bluetoothLeScanner.scanLeDevice();
+                }
+            } else Log.d(LogName, "NO connection to BLE");
+        }
+
+
+        Button buttonGatt = (Button)findViewById(R.id.button_gatt);
+        buttonGatt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
                 //bleService.scanLeDevice(true);
@@ -153,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
         startTimerThread();
    }
 
+   BluetoothDevice arduinoDevice = null;
+
     private void startTimerThread()
     {
         Handler handler = new Handler();
@@ -169,6 +195,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                     handler.post(new Runnable(){
                         public void run() {
+                            if (arduinoDevice == null) {
+                                Log.d(LogName, "Searching for " + arduinoUuid);
+                                arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
+                                if (arduinoDevice != null)
+                                    Log.d(LogName, "FOUND " + arduinoUuid);
+                            }
+                            else {
+                                ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.GREEN);
+                                ((Button)findViewById(R.id.button_connect)).setText("Online");
+                            }
                             UpdateSoundLabel();
                         }
                     });
@@ -188,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void BLEConnect()
     {
-        Log.d("LEDRAGON", "Starting BLE Service");
+        Log.d(LogName, "Starting BLE Service");
         bleService = new BluetoothLeService();
         bleService.initialize(this, this);
-        Log.d("LEDRAGON", "Started BLE Service");
+        Log.d(LogName, "Started BLE Service");
         Button buttonConnect = (Button)findViewById(R.id.button_connect);
         buttonConnect.setBackgroundColor(Color.GREEN);
     }
@@ -199,16 +235,16 @@ public class MainActivity extends AppCompatActivity {
     private void GattConnect() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permission BLUETOOTH_CONNECT");
+            Log.d(LogName, "Requesting permission BLUETOOTH_CONNECT");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
         } else {
-            Log.d("LEDRAGON", "Have permission BLUETOOTH_CONNECT");
-            //boolean result = bleService.connectGatt(this, "21:98:D3:0E:A0:40");
-            boolean result = bleService.discoverGatt(this, "21:98:D3:0E:A0:40");
+            Log.d(LogName, "Have permission BLUETOOTH_CONNECT");
+            boolean result = bleService.connectGatt(this, "21:98:D3:0E:A0:40");
+            //boolean result = bleService.discoverGatt(this, "21:98:D3:0E:A0:40");
 
             if (result == true) {
-                Log.d("LEDDRAGON", "Connected GATT to BLE");
-            } else Log.d("LEDDRAGON", "NO GATT connection to BLE");
+                Log.d(LogName, "Connected GATT to BLE");
+            } else Log.d(LogName, "NO GATT connection to BLE");
         }
     }
 
@@ -216,14 +252,14 @@ public class MainActivity extends AppCompatActivity {
     private void microphoneStart()
     {
         if (mRecorder == null) {
-            Log.d("LEDRAGON", "Recording1");
+            Log.d(LogName, "Recording1");
             mRecorder = new MediaRecorder(this);
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mRecorder.setOutputFile(getExternalCacheDir().getAbsolutePath()+"/temp.3gp");
 
-            Log.d("LEDRAGON", "Recording2");
+            Log.d(LogName, "Recording2");
             try {
                 mRecorder.prepare();
             } catch (IllegalStateException e){
@@ -231,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
-            Log.d("LEDRAGON", "Recording3");
+            Log.d(LogName, "Recording3");
             try {
                 mRecorder.start();
                 Toast.makeText(getBaseContext(), "Sound sensor initiated", Toast.LENGTH_SHORT).show();
@@ -241,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            Log.d("LEDRAGON", "Sound"+getAmplitude());
+            Log.d(LogName, "Sound"+getAmplitude());
         }
     }
 
@@ -253,15 +289,15 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                      @NonNull int[] grantResults) {
-        Log.d("LEDRAGON", "onRequestPermissionsResult");
+        Log.d(LogName, "onRequestPermissionsResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 10) {
-            Log.d("LEDRAGON", "onRequestPermissionsResult " + permissions + " : " + grantResults[0]);
+            Log.d(LogName, "onRequestPermissionsResult " + permissions + " : " + grantResults[0]);
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("LEDRAGON", "onRequestPermissionsResult Good " + permissions + " : " + grantResults[0]);
+                Log.d(LogName, "onRequestPermissionsResult Good " + permissions + " : " + grantResults[0]);
             }else{
                 //User denied Permission.
-                Log.d("LEDRAGON", "onRequestPermissionsResult Denied " + permissions + " : " + grantResults[0]);
+                Log.d(LogName, "onRequestPermissionsResult Denied " + permissions + " : " + grantResults[0]);
             }
         }
     }

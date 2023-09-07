@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BluetoothLeService {
+    private String LogName = "SELF";
     public static final String TAG = "BluetoothLeService";
 
     private boolean scanning;
@@ -33,77 +34,85 @@ public class BluetoothLeService {
     private BluetoothAdapter bluetoothAdapter;
     private static final long SCAN_PERIOD = 10000;
 
+    public BluetoothAdapter getBluetoothAdapter()
+    {
+        return bluetoothAdapter;
+    }
+
     //private LeDeviceListAdapter leDeviceListAdapter = new LeDeviceListAdapter();
     public boolean initialize(Context context, Activity activity) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permissions");
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.BLUETOOTH_SCAN}, 10);
-        }
-
         handler = new Handler();
 
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
-        return false;
+        return true;
     }
 
     private final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            Log.d("LEDRAGON", "GattServerState=" + newState);
+            Log.d(LogName, "GattServerState=" + newState);
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 // successfully connected to the GATT Server
-                Log.w("LEDRAGON", "GattServerConnect");
+                Log.w(LogName, "GattServerConnect");
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 // disconnected from the GATT Server
-                Log.w("LEDRAGON", "GattServerDisconnect");
+                Log.w(LogName, "GattServerDisconnect");
             }
+        }
+
+        @Override public void onServicesDiscovered(BluetoothGatt gatt, int status)
+        {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                //broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+                Log.w(LogName, "onServicesDiscovered success: " + status);
+            }
+            else { Log.w(LogName, "onServicesDiscovered received: " + status); }
         }
     };
 
     public boolean connect(Context context, final String address) {
         if (bluetoothAdapter == null) {
-            Log.w("LEDRAGON", "Bad Bluetooth adapter");
+            Log.w(LogName, "Bad Bluetooth adapter");
             return false;
         }
         try {
             final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
         } catch (IllegalArgumentException exception) {
-            Log.w("LEDRAGON", "Device not found on address");
+            Log.w(LogName, "Device not found on address");
             return false;
         }
-        Log.d("LEDRAGON", "Successful connect to BLE on address " + address);
+        Log.d(LogName, "Successful connect to BLE on address " + address);
         return true;
     }
 
     public boolean discoverGatt(Context context, final String address) {
-        Log.d("LEDRAGON", "GATT Discovery..");
+        Log.d(LogName, "GATT Discovery..");
         final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-        Log.d("LEDRAGON", "GATT Discovery Device=" + device.getAddress());
+        Log.d(LogName, "GATT Discovery Device=" + device.getAddress());
         BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
-        Log.d("LEDRAGON", "GATT Discovery Discovering");
+        Log.d(LogName, "GATT Discovery Discovering " + bluetoothGatt);
         bluetoothGatt.discoverServices();
-        Log.d("LEDRAGON", "GATT Discovery Done");
+        Log.d(LogName, "GATT Discovery Done");
         return false;
     }
 
     public boolean connectGatt(Context context, final String address) {
-        Log.d("LEDRAGON", "GATT connecting..");
+        Log.d(LogName, "GATT connecting..");
         try {
             final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-            Log.d("LEDRAGON", "GATT Device=" + device.getAddress());
+            Log.d(LogName, "GATT Device=" + device.getAddress());
             BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
-            Log.d("LEDRAGON", "GATT=" + bluetoothGatt.toString());
+            Log.d(LogName, "GATT=" + bluetoothGatt.toString());
             bluetoothGatt.discoverServices();
-            Log.d("LEDRAGON", "GATT=" + bluetoothGatt.getServices());
+            Log.d(LogName, "GATT=" + bluetoothGatt.getServices());
             return true;
         } catch (IllegalArgumentException exception) {
-            Log.w("LEDRAGON", "GattError-Refused");
+            Log.w(LogName, "GattError-Refused");
         } catch (SecurityException exception) {
-            Log.w("LEDRAGON", "GattError-Refused");
+            Log.w(LogName, "GattError-Refused");
         }
-        Log.d("LEDRAGON", "connectGatt done");
+        Log.d(LogName, "connectGatt done");
         return false;
     }
 
@@ -111,7 +120,7 @@ public class BluetoothLeService {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            Log.d("LEDRAGON", "Adding device " + result.getDevice());
+            Log.d(LogName, "Adding device " + result.getDevice());
             //      leDeviceListAdapter.addDevice(result.getDevice());
             //leDeviceListAdapter.notifyDataSetChanged();
         }
@@ -124,18 +133,18 @@ public class BluetoothLeService {
                 @Override
                 public void run() {
                     scanning = false;
-                    Log.d("LEDRAGON", "GATT Scanning Run");
+                    Log.d(LogName, "GATT Scanning Run");
                     bluetoothAdapter.stopLeScan(mLeScanCallback);
                     //invalidateOptionsMenu();
                 }
             }, SCAN_PERIOD);
 
             scanning = true;
-            Log.d("LEDRAGON", "GATT Scanning Start");
+            Log.d(LogName, "GATT Scanning Start");
             bluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
             scanning = false;
-            Log.d("LEDRAGON", "GATT Scanning Stop");
+            Log.d(LogName, "GATT Scanning Stop");
             bluetoothAdapter.stopLeScan(mLeScanCallback);
         }
     }
@@ -153,7 +162,7 @@ public class BluetoothLeService {
                             mLeDeviceListAdapter.notifyDataSetChanged();
                         }
                     });*/
-                    Log.d("LEDRAGON", "GATT Result " + device);
+                    Log.d(LogName, "GATT Result " + device);
                 }
             };
 }

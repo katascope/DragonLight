@@ -1,6 +1,7 @@
 package com.katascope.ledragonapp;
 
 import android.bluetooth.BluetoothDevice;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import java.util.ArrayList;
@@ -18,6 +19,15 @@ class LeDeviceListAdapter  {
         if(!mLeDevices.contains(device)) {
             mLeDevices.add(device);
         }
+    }
+    public BluetoothDevice findDevice(String uuid)
+    {
+        for (int i=0;i<mLeDevices.size();i++) {
+            BluetoothDevice bd = mLeDevices.get(i);
+            //Log.d("SELF","Comparing " + bd.getAddress() + " to " + uuid);
+            if (bd.getAddress().toString().equals(uuid)) return bd;
+        }
+        return null;
     }
     public BluetoothDevice getDevice(int position) {
         return mLeDevices.get(position);
