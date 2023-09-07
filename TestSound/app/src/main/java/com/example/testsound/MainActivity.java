@@ -2,6 +2,7 @@ package com.example.testsound;
 
 import static androidx.navigation.ActivityNavigatorDestinationBuilderKt.activity;
 
+import android.bluetooth.le.BluetoothLeScanner;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 //    private SoundMeter soundMeter;
     private MediaRecorder mRecorder = null;
+    private BluetoothLeService bleService = null;
+
+    private BluetoothLeScanner bluetoothLeScanner = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("STATE", "Starting BLE Service");
+        bleService = new BluetoothLeService();
+        bleService.initialize(this, this);
+        Log.d("STATE", "Started BLE Service");
+        bleService.scanForLeDevices(this);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
             Log.d("STATE", "Requesting permissions");
@@ -96,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 while (true) {
                     try {
-                        Log.d("STATE","SOUND:"+getAmplitude());
+                        //Log.d("STATE","SOUND:"+getAmplitude());
                         sleep(1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
