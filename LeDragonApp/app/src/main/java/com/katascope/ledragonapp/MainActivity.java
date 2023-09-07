@@ -1,4 +1,4 @@
-package com.example.ledragonapp;
+package com.katascope.ledragonapp;
 
 import static androidx.navigation.ActivityNavigatorDestinationBuilderKt.activity;
 
@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 
@@ -24,7 +25,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.ledragonapp.databinding.ActivityMainBinding;
+import com.katascope.ledragonapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BluetoothLeScanner bluetoothLeScanner = null;
 
+    private Context context;
+    private Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +94,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("LEDRAGON", "Starting BLE Service");
-        bleService = new BluetoothLeService();
-        bleService.initialize(this, this);
-        Log.d("LEDRAGON", "Started BLE Service");
-        //bleService.scanForLeDevices(this);
+        context = this;
+        activity = this;
 
+
+
+        /*
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.d("LEDRAGON", "Requesting permissions");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
+        }*/
+
+        /*
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
             Log.d("LEDRAGON", "Requesting permissions");
@@ -107,46 +117,69 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("LEDDRAGON", "Connected to BLE");
             } else Log.d("LEDDRAGON", "NO connection to BLE");
         }
-
+*/
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permissions");
+            Log.d("LEDRAGON", "Requesting permission RECORD_AUDIO");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
         }
-        else microphoneStart();
+        else {
+            Log.d("LEDRAGON", "Requesting permission RECORD_AUDIO");
+            microphoneStart();
 
-        Thread audioThread = new Thread()
-        {
-            public void run() {
-                while (true) {
-                    try {
-                        //Log.d("STATE","SOUND:"+getAmplitude());
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+            Thread audioThread = new Thread() {
+                public void run() {
+                    while (true) {
+                        try {
+                            //Log.d("STATE","SOUND:"+getAmplitude());
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
-            }
-        };
-        audioThread.start();
+            };
+            audioThread.start();
+        }
 
-        Button button = (Button)findViewById(R.id.button_first);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonFindBLE = (Button)findViewById(R.id.button_findble);
+        buttonFindBLE.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                Log.d("LEDRAGON", "User pressed button");
+                //bleService.scanLeDevice(true);
                 GattConnect();
             }
         });
+
+        Button buttonConnect = (Button)findViewById(R.id.button_connect);
+        buttonConnect.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                BLEConnect();
+            }
+        });
+    }
+
+    private void BLEConnect()
+    {
+        Log.d("LEDRAGON", "Starting BLE Service");
+        bleService = new BluetoothLeService();
+        bleService.initialize(this, this);
+        Log.d("LEDRAGON", "Started BLE Service");
+        Button buttonConnect = (Button)findViewById(R.id.button_connect);
+        buttonConnect.setBackgroundColor(Color.GREEN);
     }
 
     private void GattConnect() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.d("LEDRAGON", "Requesting permissions");
+            Log.d("LEDRAGON", "Requesting permission BLUETOOTH_CONNECT");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
         } else {
-            boolean result = bleService.connectGatt(this, "21:98:D3:0E:A0:40");
+            Log.d("LEDRAGON", "Have permission BLUETOOTH_CONNECT");
+            //boolean result = bleService.connectGatt(this, "21:98:D3:0E:A0:40");
+            boolean result = bleService.discoverGatt(this, "21:98:D3:0E:A0:40");
+
             if (result == true) {
                 Log.d("LEDDRAGON", "Connected GATT to BLE");
             } else Log.d("LEDDRAGON", "NO GATT connection to BLE");
@@ -197,12 +230,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("LEDRAGON", "onRequestPermissionsResult");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 10) {
-            Log.d("LEDRAGON", "onRequestPermissionsResult1 " + grantResults[0]);
+            Log.d("LEDRAGON", "onRequestPermissionsResult " + permissions + " : " + grantResults[0]);
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("LEDRAGON", "onRequestPermissionsResult2");
-
+                Log.d("LEDRAGON", "onRequestPermissionsResult Good " + permissions + " : " + grantResults[0]);
             }else{
                 //User denied Permission.
+                Log.d("LEDRAGON", "onRequestPermissionsResult Denied " + permissions + " : " + grantResults[0]);
             }
         }
     }

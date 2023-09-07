@@ -1,14 +1,13 @@
 <resources>
-    <string name="app_name">TestSound</string>
+    <string name="app_name">LeDragonApp</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Sound</string>
+    <string name="next">Next Page</string>
     <string name="previous">Previous</string>
 
-    <string name="sound_level">Sound Level</string>
     <string name="lorem_ipsum">
-        Stuff
+        Some text
     </string>
 </resources>
