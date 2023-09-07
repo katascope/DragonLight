@@ -4,7 +4,9 @@ import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -25,7 +27,7 @@ import androidx.core.app.ActivityCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BluetoothLeService {
+public class BluetoothLeService  {
     private String LogName = "SELF";
     public static final String TAG = "BluetoothLeService";
 
@@ -55,9 +57,14 @@ public class BluetoothLeService {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 // successfully connected to the GATT Server
                 Log.w(LogName, "GattServerConnect");
+                Log.d(LogName, "GATT=" + gatt.getServices());
+
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 // disconnected from the GATT Server
                 Log.w(LogName, "GattServerDisconnect");
+            }
+            else {
+                Log.w(LogName, "GattServerUnknown");
             }
         }
 
@@ -66,6 +73,8 @@ public class BluetoothLeService {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 //broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                 Log.w(LogName, "onServicesDiscovered success: " + status);
+                Log.d(LogName, "onServicesDiscovered=" + gatt.getServices());
+
             }
             else { Log.w(LogName, "onServicesDiscovered received: " + status); }
         }
@@ -92,8 +101,8 @@ public class BluetoothLeService {
         Log.d(LogName, "GATT Discovery Device=" + device.getAddress());
         BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
         Log.d(LogName, "GATT Discovery Discovering " + bluetoothGatt);
-        bluetoothGatt.discoverServices();
-        Log.d(LogName, "GATT Discovery Done");
+        //bluetoothGatt.discoverServices();
+        //Log.d(LogName, "GATT Discovery Done");
         return false;
     }
 
@@ -105,7 +114,7 @@ public class BluetoothLeService {
             BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
             Log.d(LogName, "GATT=" + bluetoothGatt.toString());
             bluetoothGatt.discoverServices();
-            Log.d(LogName, "GATT=" + bluetoothGatt.getServices());
+            Log.d(LogName, "GATT Discovering services");
             return true;
         } catch (IllegalArgumentException exception) {
             Log.w(LogName, "GattError-Refused");
