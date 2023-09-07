@@ -5,6 +5,7 @@ import static androidx.navigation.ActivityNavigatorDestinationBuilderKt.activity
 import android.app.Activity;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.MediaRecorder;
@@ -15,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -30,6 +33,7 @@ import com.katascope.ledragonapp.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.Manifest;
@@ -126,21 +130,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             Log.d("LEDRAGON", "Requesting permission RECORD_AUDIO");
             microphoneStart();
-
-            Thread audioThread = new Thread() {
-                public void run() {
-                    while (true) {
-                        try {
-                            //Log.d("STATE","SOUND:"+getAmplitude());
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            };
-            audioThread.start();
         }
+
 
         Button buttonFindBLE = (Button)findViewById(R.id.button_findble);
         buttonFindBLE.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +149,41 @@ public class MainActivity extends AppCompatActivity {
                 BLEConnect();
             }
         });
+
+        startTimerThread();
+   }
+
+    private void startTimerThread()
+    {
+        Handler handler = new Handler();
+        Runnable runnable = new Runnable()
+        {
+            public void run()
+            {
+                while (true)
+                {
+                    try {
+                        Thread.sleep(1000);
+                    }
+                    catch (InterruptedException e){
+                    }
+                    handler.post(new Runnable(){
+                        public void run() {
+                            UpdateSoundLabel();
+                        }
+                    });
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+
+
+    private void UpdateSoundLabel()
+    {
+        TextView textSound = (TextView)findViewById(R.id.textview_sound);
+        textSound.setText("Snd="+getAmplitude());
     }
 
     private void BLEConnect()
