@@ -41,9 +41,11 @@ public class BluetoothLeService {
     private BluetoothAdapter bluetoothAdapter;
     private static final long SCAN_PERIOD = 10000;
 
+    private BluetoothGattCharacteristic characteristicCommand = null;
     private BluetoothGattCharacteristic characteristicFxPreset = null;
     private BluetoothGattCharacteristic characteristicVolume = null;
     private BluetoothGattCharacteristic characteristicPalette = null;
+    private BluetoothGattCharacteristic characteristicToggle = null;
 
 
     public BluetoothAdapter getBluetoothAdapter()
@@ -81,6 +83,33 @@ public class BluetoothLeService {
             Log.d(LogName, "writeVolume=" + volume);
             characteristicVolume.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             savedGatt.writeCharacteristic(characteristicVolume);
+        }
+    }
+
+    public void writePalette(int volume)
+    {
+        if (savedGatt != null) {
+            Log.d(LogName, "writePalette=" + volume);
+            characteristicPalette.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            savedGatt.writeCharacteristic(characteristicPalette);
+        }
+    }
+
+    public void writeToggle(int volume)
+    {
+        if (savedGatt != null) {
+            Log.d(LogName, "writeToggle=" + volume);
+            characteristicToggle.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            savedGatt.writeCharacteristic(characteristicToggle);
+        }
+    }
+
+    public void writeCommand(int volume)
+    {
+        if (savedGatt != null) {
+            Log.d(LogName, "writeToggle=" + volume);
+            characteristicCommand.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            savedGatt.writeCharacteristic(characteristicCommand);
         }
     }
 
@@ -136,8 +165,15 @@ public class BluetoothLeService {
                 if (characteristicPalette != null)
                     Log.d(LogName, "Found characteristicPalette");
 
-                //characteristicFxPreset.setValue(1, BluetoothGattCharacteristic.FORMAT_UINT8,0);
-                //gatt.writeCharacteristic(characteristicFxPreset);
+                characteristicToggle =
+                        gatt.getService(mainServiceUuid).getCharacteristic(mainToggleUuid);
+                if (characteristicToggle != null)
+                    Log.d(LogName, "Found characteristicToggle");
+
+                characteristicCommand =
+                        gatt.getService(mainServiceUuid).getCharacteristic(mainCommandUuid);
+                if (characteristicCommand != null)
+                    Log.d(LogName, "Found characteristicCommand");
 
                 foundCharacteristics = true;
 

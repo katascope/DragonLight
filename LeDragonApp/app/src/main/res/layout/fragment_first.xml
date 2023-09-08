@@ -5,73 +5,260 @@
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".FirstFragment">
 
-    <Button
-        android:id="@+id/button_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next" />
+    <LinearLayout
+        android:layout_width="117dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textview_sound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lorem_ipsum" />
+        <TextView
+            android:id="@+id/textview_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lorem_ipsum" />
 
-    <Button
-        android:id="@+id/button_connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect" />
+        <Button
+            android:id="@+id/button_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&quot;Next&quot;" />
 
-    <Button
-        android:id="@+id/button_gatt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GATT" />
+        <Button
+            android:id="@+id/button_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Online" />
 
-    <Button
-        android:id="@+id/button_preset0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset0" />
+        <Button
+            android:id="@+id/button_gatt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GATT" />
 
-    <Button
-        android:id="@+id/button_preset1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset1" />
+        <Button
+            android:id="@+id/button_speedKill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="STOP" />
 
-    <Button
-        android:id="@+id/button_preset2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset2" />
+        <Button
+            android:id="@+id/button_speedSlower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Slower" />
 
-    <Button
-        android:id="@+id/button_preset3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset3" />
+        <Button
+            android:id="@+id/button_speedMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Faster" />
 
-    <Button
-        android:id="@+id/button_preset4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset4" />
+        <Button
+            android:id="@+id/button_speedReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reset" />
 
-    <Button
-        android:id="@+id/button_preset5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset5" />
+        <Button
+            android:id="@+id/button_channel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 1" />
 
-    <Button
-        android:id="@+id/button_preset6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preset6" />
+        <Button
+            android:id="@+id/button_channel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 2" />
+
+        <Button
+            android:id="@+id/button_channel3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 3" />
+
+        <Button
+            android:id="@+id/button_channel4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 4" />
+
+        <Button
+            android:id="@+id/button_channel5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 5" />
+
+        <Button
+            android:id="@+id/button_channel6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 6" />
+
+        <Button
+            android:id="@+id/button_channel7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch 7" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="115dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_preset0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Black" />
+
+        <Button
+            android:id="@+id/button_preset1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset1" />
+
+        <Button
+            android:id="@+id/button_preset2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset2" />
+
+        <Button
+            android:id="@+id/button_preset3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset3" />
+
+        <Button
+            android:id="@+id/button_preset4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset4" />
+
+        <Button
+            android:id="@+id/button_preset5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset5" />
+
+        <Button
+            android:id="@+id/button_preset6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Preset6" />
+
+        <Button
+            android:id="@+id/button_brightHalf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BrHalf" />
+
+        <Button
+            android:id="@+id/button_brightNorm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BrNorm" />
+
+        <Button
+            android:id="@+id/button_brightMax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BrMax" />
+
+        <Button
+            android:id="@+id/button_sidefx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SideFX" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_paletteRBM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RBM" />
+
+        <Button
+            android:id="@+id/button_paletteRGB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RGB" />
+
+        <Button
+            android:id="@+id/button_paletteCMY"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CMY" />
+
+        <Button
+            android:id="@+id/button_paletteCBM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CBM" />
+
+        <Button
+            android:id="@+id/button_paletteLAVA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lava" />
+
+        <Button
+            android:id="@+id/button_paletteCLOUD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cloud" />
+
+        <Button
+            android:id="@+id/button_paletteOCEAN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ocean" />
+
+        <Button
+            android:id="@+id/button_paletteFOREST"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forest" />
+
+        <Button
+            android:id="@+id/button_paletteRAINBOW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rainbow" />
+
+        <Button
+            android:id="@+id/button_paletteRAINBOWSTRIPE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rainbow2" />
+
+        <Button
+            android:id="@+id/button_palettePARTY"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Party" />
+
+        <Button
+            android:id="@+id/button_paletteHEAT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Heat" />
+
+        <Button
+            android:id="@+id/button_paletteSEAHAWKS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seahawks" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,12 +4,9 @@ import static androidx.navigation.ActivityNavigatorDestinationBuilderKt.activity
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,13 +14,11 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.WindowCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,7 +30,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import android.Manifest;
 
@@ -79,14 +73,6 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
 
         context = this;
         activity = this;
@@ -158,6 +144,67 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) { bleService.writePreset(6); }
         });
 
+        ((Button)findViewById(R.id.button_paletteRBM)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(150); } });
+        ((Button)findViewById(R.id.button_paletteRGB)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(151); } });
+        ((Button)findViewById(R.id.button_paletteCMY)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(152); } });
+        ((Button)findViewById(R.id.button_paletteCBM)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(153); } });
+        ((Button)findViewById(R.id.button_paletteLAVA)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(201); } });
+        ((Button)findViewById(R.id.button_paletteCLOUD)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(202); } });
+        ((Button)findViewById(R.id.button_paletteOCEAN)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(203); } });
+        ((Button)findViewById(R.id.button_paletteFOREST)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(204); } });
+        ((Button)findViewById(R.id.button_paletteRAINBOW)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(205); } });
+        ((Button)findViewById(R.id.button_paletteRAINBOWSTRIPE)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(206); } });
+        ((Button)findViewById(R.id.button_palettePARTY)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(207); } });
+        ((Button)findViewById(R.id.button_paletteHEAT)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(208); } });
+        ((Button)findViewById(R.id.button_paletteSEAHAWKS)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(209); } });
+
+        ((Button)findViewById(R.id.button_channel1)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(1); } });
+        ((Button)findViewById(R.id.button_channel2)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(2); } });
+        ((Button)findViewById(R.id.button_channel3)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(3); } });
+        ((Button)findViewById(R.id.button_channel4)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(4); } });
+        ((Button)findViewById(R.id.button_channel5)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(5); } });
+        ((Button)findViewById(R.id.button_channel6)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(6); } });
+        ((Button)findViewById(R.id.button_channel7)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(7); } });
+
+        ((Button)findViewById(R.id.button_speedKill)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('|'); } });
+        ((Button)findViewById(R.id.button_speedSlower)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('-'); } });
+        ((Button)findViewById(R.id.button_speedMore)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('='); } });
+        ((Button)findViewById(R.id.button_speedReset)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('['); } });
+
+        ((Button)findViewById(R.id.button_brightHalf)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('$'); } });
+        ((Button)findViewById(R.id.button_brightNorm)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('%'); } });
+        ((Button)findViewById(R.id.button_brightMax)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('^'); } });
+
+        ((Button)findViewById(R.id.button_sidefx)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand(']'); } });
+
         Button buttonGatt = (Button)findViewById(R.id.button_gatt);
         buttonGatt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
@@ -165,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 bleService.connectGatt(context,arduinoUuid);
             }
         });
+
 
         Button buttonConnect = (Button)findViewById(R.id.button_connect);
         buttonConnect.setOnClickListener(new View.OnClickListener() {
@@ -189,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 while (true)
                 {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     }
                     catch (InterruptedException e){
                     }
@@ -210,10 +258,14 @@ public class MainActivity extends AppCompatActivity {
                                 ((Button)findViewById(R.id.button_gatt)).setBackgroundColor(Color.GREEN);
                             }
                             TextView textSound = (TextView)findViewById(R.id.textview_sound);
-                            Log.d(LogName,"Amplitude="+audioInput.getAmplitude());
-                            textSound.setText("Snd="+(int)(audioInput.getAmplitude()*100));
-                            int amplitude = (int)(audioInput.getAmplitude()*255.0);
-                            bleService.writeVolume(amplitude);
+                            double amplitude = audioInput.getAmplitude();
+                            textSound.setText("Snd="+(int)((double)amplitude*(double)100.0));
+                            double bias = 20;
+                            int writeAmplitude = (int)((double)amplitude*(double)255.0 * bias);
+                            if (writeAmplitude > 255)
+                                writeAmplitude = 255;
+                            Log.d(LogName,"WriteAmplitude2="+writeAmplitude);
+                            bleService.writeVolume(writeAmplitude);
                         }
                     });
                 }
