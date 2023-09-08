@@ -41,9 +41,20 @@ public class BluetoothLeService {
     private BluetoothAdapter bluetoothAdapter;
     private static final long SCAN_PERIOD = 10000;
 
+    private BluetoothGattCharacteristic characteristicFxPreset = null;
+    private BluetoothGattCharacteristic characteristicVolume = null;
+    private BluetoothGattCharacteristic characteristicPalette = null;
+
+
     public BluetoothAdapter getBluetoothAdapter()
     {
         return bluetoothAdapter;
+    }
+
+    private boolean foundCharacteristics = false;
+    public boolean HasCharacteristics()
+    {
+        return foundCharacteristics;
     }
 
     //private LeDeviceListAdapter leDeviceListAdapter = new LeDeviceListAdapter();
@@ -53,6 +64,24 @@ public class BluetoothLeService {
         BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         return true;
+    }
+
+    private BluetoothGatt savedGatt = null;
+    public void writePreset(int presetId)
+    {
+        if (savedGatt != null) {
+            characteristicFxPreset.setValue(presetId, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            savedGatt.writeCharacteristic(characteristicFxPreset);
+        }
+    }
+
+    public void writeVolume(int volume)
+    {
+        if (savedGatt != null) {
+            Log.d(LogName, "writeVolume=" + volume);
+            characteristicVolume.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            savedGatt.writeCharacteristic(characteristicVolume);
+        }
     }
 
     private final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
@@ -78,6 +107,7 @@ public class BluetoothLeService {
         @Override public void onServicesDiscovered(BluetoothGatt gatt, int status)
         {
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                savedGatt = gatt;
                 //broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                 Log.w(LogName, "onServicesDiscovered success: " + status);
                 Log.d(LogName, "onServicesDiscovered=" + gatt.getServices());
@@ -91,15 +121,25 @@ public class BluetoothLeService {
                     }
                 }
 
-                BluetoothGattCharacteristic characteristicFxPreset =
+                characteristicFxPreset =
                         gatt.getService(mainServiceUuid).getCharacteristic(mainFxPresetUuid);
                 if (characteristicFxPreset != null)
-                    Log.d(LogName, "Found FX Preset : "
-                            + characteristicFxPreset.getUuid().toString()
-                            + ", " + characteristicFxPreset.toString());
+                    Log.d(LogName, "Found characteristicFxPreset");
 
-                characteristicFxPreset.setValue(1, BluetoothGattCharacteristic.FORMAT_UINT8,0);
-                gatt.writeCharacteristic(characteristicFxPreset);
+                characteristicVolume =
+                        gatt.getService(mainServiceUuid).getCharacteristic(mainVolumeUuid);
+                if (characteristicVolume != null)
+                    Log.d(LogName, "Found characteristicVolume");
+
+                characteristicPalette =
+                        gatt.getService(mainServiceUuid).getCharacteristic(mainPaletteUuid);
+                if (characteristicPalette != null)
+                    Log.d(LogName, "Found characteristicPalette");
+
+                //characteristicFxPreset.setValue(1, BluetoothGattCharacteristic.FORMAT_UINT8,0);
+                //gatt.writeCharacteristic(characteristicFxPreset);
+
+                foundCharacteristics = true;
 
             }
             else { Log.w(LogName, "onServicesDiscovered received: " + status); }

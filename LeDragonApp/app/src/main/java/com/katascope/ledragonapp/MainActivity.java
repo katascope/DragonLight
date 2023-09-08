@@ -136,7 +136,27 @@ public class MainActivity extends AppCompatActivity {
             } else Log.d(LogName, "NO connection to BLE");
 
 
-
+        ((Button)findViewById(R.id.button_preset0)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(0); }
+        });
+        ((Button)findViewById(R.id.button_preset1)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(1); }
+        });
+        ((Button)findViewById(R.id.button_preset2)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(2); }
+        });
+        ((Button)findViewById(R.id.button_preset3)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(3); }
+        });
+        ((Button)findViewById(R.id.button_preset4)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(4); }
+        });
+        ((Button)findViewById(R.id.button_preset5)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(5); }
+        });
+        ((Button)findViewById(R.id.button_preset6)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePreset(6); }
+        });
 
         Button buttonGatt = (Button)findViewById(R.id.button_gatt);
         buttonGatt.setOnClickListener(new View.OnClickListener() {
@@ -185,8 +205,15 @@ public class MainActivity extends AppCompatActivity {
                                 ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.GREEN);
                                 ((Button)findViewById(R.id.button_connect)).setText("Online");
                             }
+
+                            if (bleService.HasCharacteristics()) {
+                                ((Button)findViewById(R.id.button_gatt)).setBackgroundColor(Color.GREEN);
+                            }
                             TextView textSound = (TextView)findViewById(R.id.textview_sound);
-                            textSound.setText("Snd="+audioInput.getAmplitude());
+                            Log.d(LogName,"Amplitude="+audioInput.getAmplitude());
+                            textSound.setText("Snd="+(int)(audioInput.getAmplitude()*100));
+                            int amplitude = (int)(audioInput.getAmplitude()*255.0);
+                            bleService.writeVolume(amplitude);
                         }
                     });
                 }
