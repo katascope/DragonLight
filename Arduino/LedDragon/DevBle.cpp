@@ -22,7 +22,7 @@ BLEService mainService( BLE_UUID_SERVICE );
 BLEUnsignedLongCharacteristic authenticateCharacteristic( BLE_UUID_CHARACTERISTIC_AUTHENTICATE, BLEWrite);
 BLEUnsignedLongCharacteristic statusCharacteristic( BLE_UUID_CHARACTERISTIC_STATUS, BLEWrite | BLERead | BLENotify );
 BLECharCharacteristic commandCharacteristic( BLE_UUID_CHARACTERISTIC_COMMAND, BLERead | BLEWrite  );
-BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND,  BLERead | BLEWrite | BLEWriteWithoutResponse );
+BLECharCharacteristic soundCharacteristic( BLE_UUID_CHARACTERISTIC_SOUND,  BLERead |  BLEWriteWithoutResponse );
 BLECharCharacteristic paletteCharacteristic( BLE_UUID_CHARACTERISTIC_PALETTE, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLE, BLERead | BLEWrite  );
 BLECharCharacteristic fxToggleOnCharacteristic( BLE_UUID_CHARACTERISTIC_FXTOGGLEON, BLERead | BLEWrite  );
@@ -36,8 +36,8 @@ void blePeripheralConnectHandler(BLEDevice c) {
   //central = &c;
 #if DEBUG_BLE  
   // central connected event handler
-  Serial.print(F("Connected event, central: "));
-  Serial.println(c.address());
+  //Serial.print(F("Connected event, central: "));
+  //Serial.println(c.address());
 #endif 
 }
 void blePeripheralDisconnectHandler(BLEDevice c) {
@@ -109,18 +109,18 @@ void blePoll(FxController &fxc)
   BLEDevice central = BLE.central();
 
 #if DEBUG_BLE  
-//  Serial.println(F("Waiting for connection."));
+  //Serial.println(F("Waiting for connection."));
 #endif  
 
   if ( central )
   {
 #if DEBUG_BLE  
-//    Serial.print( F("Connected to central: " ));
-//    Serial.print( central.address() );
+    //Serial.print( F("Connected to central: " ));
+    //Serial.print( central.address() );
 #endif
     if ( central.connected() )
     {
-      //if( authenticateCharacteristic.value() == 3838) //authenticated
+      if( authenticateCharacteristic.value() == 3838) //authenticated
       {
         if (commandCharacteristic.written() )
         {   
@@ -133,6 +133,8 @@ void blePoll(FxController &fxc)
         if (soundCharacteristic.written() )
         {
           fxc.vol = (float)soundCharacteristic.value() / (float)255;
+          Serial.print(F("Volume"));
+          Serial.println(fxc.vol);
         }
         if (paletteCharacteristic.written() )
         {
@@ -184,12 +186,11 @@ void blePoll(FxController &fxc)
           SideFXActivatePreset(fxc, preset);
         }
       }
-
     } // while connected
 
 #if DEBUG_BLE  
-    //Serial.print( F( "Disconnected from central: " ) );
-//    Serial.println( central->address() );
+    Serial.print( F( "Disconnected from central: " ) );
+    Serial.println( central.address() );
 #endif    
   } // if central
 } // loop
