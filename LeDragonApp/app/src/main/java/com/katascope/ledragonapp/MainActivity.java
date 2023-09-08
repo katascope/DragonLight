@@ -56,10 +56,18 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothLeService bleService = null;
     private BluetoothLeScan bluetoothLeScanner = null;
 
-    private String arduinoUuid = "21:98:D3:0E:A0:40";
+    private String arduinoUuids[] = {
+            "21:98:D3:0E:A0:40", //LedOnion
+            "B1:5B:A0:80:48:DD"  //LeDragon
+    };
+    private String arduinoUuid = null;
+
 
     private Context context;
     private Activity activity;
+
+    private boolean soundOverride = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,11 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
         bleService = new BluetoothLeService();
         boolean result = bleService.initialize(this, this);
-//        boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
             if (result == true) {
                 Log.d(LogName, "Connected to BLE");
                 ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.YELLOW);
-                ((Button)findViewById(R.id.button_connect)).setText("Searching");
+                ((Button)findViewById(R.id.button_connect)).setText("Search");
                 Log.d(LogName, "Checking permission BLUETOOTH_SCAN");
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -122,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             } else Log.d(LogName, "NO connection to BLE");
 
 
+
         ((Button)findViewById(R.id.button_preset0)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writePreset(0); }
         });
@@ -144,10 +152,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) { bleService.writePreset(6); }
         });
 
+        ((Button)findViewById(R.id.button_paletteCM)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(125); } });
+        ((Button)findViewById(R.id.button_paletteRB)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(106); } });
+        ((Button)findViewById(R.id.button_paletteWYM)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writePalette(18); } });
+
+        ((Button)findViewById(R.id.button_sound)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                soundOverride = !soundOverride;
+                if (soundOverride)
+                    ((Button)findViewById(R.id.button_sound)).setBackgroundColor(Color.GREEN);
+                else
+                    ((Button)findViewById(R.id.button_sound)).setBackgroundColor(Color.MAGENTA);
+                }
+            });
+
         ((Button)findViewById(R.id.button_paletteRBM)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writePalette(150); } });
-        ((Button)findViewById(R.id.button_paletteRGB)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(151); } });
         ((Button)findViewById(R.id.button_paletteCMY)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writePalette(152); } });
         ((Button)findViewById(R.id.button_paletteCBM)).setOnClickListener(new View.OnClickListener() {
@@ -213,6 +236,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ((Button)findViewById(R.id.button_exit)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { finishAffinity(); } });
+
 
         Button buttonConnect = (Button)findViewById(R.id.button_connect);
         buttonConnect.setOnClickListener(new View.OnClickListener() {
@@ -244,27 +270,43 @@ public class MainActivity extends AppCompatActivity {
                     handler.post(new Runnable(){
                         public void run() {
                             if (arduinoDevice == null) {
-                                Log.d(LogName, "Searching for " + arduinoUuid);
-                                arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
+                                for (int i=0;i<arduinoUuids.length;i++) {
+                                    if (arduinoDevice == null) {
+                                        Log.d(LogName, "Searching for " + arduinoUuids[i]);
+                                        arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuids[i]);
+                                        if (arduinoDevice != null)//found it
+                                        {
+                                            arduinoUuid = arduinoUuids[i];
+                                        }
+                                    }
+                                }
                                 if (arduinoDevice != null)
-                                    Log.d(LogName, "FOUND " + arduinoUuid);
+                                    Log.d(LogName, "FOUND " + arduinoDevice);
                             }
                             else {
-                                ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.GREEN);
-                                ((Button)findViewById(R.id.button_connect)).setText("Online");
+                                if ((Button)findViewById(R.id.button_connect) != null) {
+                                    ((Button) findViewById(R.id.button_connect)).setBackgroundColor(Color.GREEN);
+                                    ((Button) findViewById(R.id.button_connect)).setText("Online");
+                                }
                             }
 
                             if (bleService.HasCharacteristics()) {
-                                ((Button)findViewById(R.id.button_gatt)).setBackgroundColor(Color.GREEN);
+                                if ((Button)findViewById(R.id.button_gatt) != null)
+                                    ((Button)findViewById(R.id.button_gatt)).setBackgroundColor(Color.GREEN);
                             }
-                            TextView textSound = (TextView)findViewById(R.id.textview_sound);
+
                             double amplitude = audioInput.getAmplitude();
-                            textSound.setText("Snd="+(int)((double)amplitude*(double)100.0));
+                            if (soundOverride)
+                                amplitude = 1.0;
                             double bias = 20;
                             int writeAmplitude = (int)((double)amplitude*(double)255.0 * bias);
                             if (writeAmplitude > 255)
                                 writeAmplitude = 255;
-                            Log.d(LogName,"WriteAmplitude2="+writeAmplitude);
+                            if ((TextView)findViewById(R.id.textview_sound) != null) {
+                                TextView textSound = (TextView) findViewById(R.id.textview_sound);
+                                textSound.setText("Snd=" + (int) ((double) amplitude * (double) 100.0));
+                            }
+                            //Log.d(LogName,"WriteAmplitude2="+writeAmplitude);
                             bleService.writeVolume(writeAmplitude);
                         }
                     });
@@ -273,33 +315,7 @@ public class MainActivity extends AppCompatActivity {
         };
         new Thread(runnable).start();
     }
-/*
-    private void BLEConnect()
-    {
-        Log.d(LogName, "Starting BLE Service");
-        bleService = new BluetoothLeService();
-        bleService.initialize(this, this);
-        Log.d(LogName, "Started BLE Service");
-        Button buttonConnect = (Button)findViewById(R.id.button_connect);
-        buttonConnect.setBackgroundColor(Color.GREEN);
-    }
 
-    private void GattConnect() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LogName, "Requesting permission BLUETOOTH_CONNECT");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
-        } else {
-            Log.d(LogName, "Have permission BLUETOOTH_CONNECT");
-            boolean result = bleService.connectGatt(this, "21:98:D3:0E:A0:40");
-            //boolean result = bleService.discoverGatt(this, "21:98:D3:0E:A0:40");
-
-            if (result == true) {
-                Log.d(LogName, "Connected GATT to BLE");
-            } else Log.d(LogName, "NO GATT connection to BLE");
-        }
-    }
-*/
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                      @NonNull int[] grantResults) {
         Log.d(LogName, "onRequestPermissionsResult");

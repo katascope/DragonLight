@@ -80,7 +80,7 @@ public class BluetoothLeService {
     public void writeVolume(int volume)
     {
         if (savedGatt != null) {
-            Log.d(LogName, "writeVolume=" + volume);
+//            Log.d(LogName, "writeVolume=" + volume);
             characteristicVolume.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             savedGatt.writeCharacteristic(characteristicVolume);
         }
@@ -107,7 +107,7 @@ public class BluetoothLeService {
     public void writeCommand(int volume)
     {
         if (savedGatt != null) {
-            Log.d(LogName, "writeToggle=" + volume);
+            Log.d(LogName, "writeCommand=" + volume);
             characteristicCommand.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             savedGatt.writeCharacteristic(characteristicCommand);
         }
@@ -182,36 +182,41 @@ public class BluetoothLeService {
         }
     };
 
-    public boolean connect(Context context, final String address) {
+    public boolean connect(Context context, final String addresses[]) {
         if (bluetoothAdapter == null) {
             Log.w(LogName, "Bad Bluetooth adapter");
             return false;
         }
-        try {
-            final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-        } catch (IllegalArgumentException exception) {
-            Log.w(LogName, "Device not found on address");
-            return false;
+        for (int address = 0;address < addresses.length;address++) {
+            Log.d(LogName, "Trying connect to BLE on address " + addresses[address]);
+            try {
+                final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(addresses[address]);
+                Log.d(LogName, "Successful connect to BLE on address " + addresses[address]);
+                return true;
+            } catch (IllegalArgumentException exception) {
+                Log.w(LogName, "Device not found on address");
+            }
         }
-        Log.d(LogName, "Successful connect to BLE on address " + address);
-        return true;
+        return false;
     }
 
-    public boolean connectGatt(Context context, final String address) {
+    public String connectGatt(Context context, final String address) {
         Log.d(LogName, "GATT connecting..");
-        try {
-            final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
-            Log.d(LogName, "GATT Device=" + device.getAddress());
-            BluetoothGatt bluetoothGatt = device.connectGatt(context, true, bluetoothGattCallback);
-            Log.d(LogName, "GATT=" + bluetoothGatt.toString());
-            return true;
-        } catch (IllegalArgumentException exception) {
-            Log.w(LogName, "GattError-Refused");
-        } catch (SecurityException exception) {
-            Log.w(LogName, "GattError-Refused");
-        }
-        Log.d(LogName, "connectGatt done");
-        return false;
+            Log.d(LogName, "Trying connect to BLE on address " + address);
+            try {
+                final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+                Log.d(LogName, "GATT Device=" + device.getAddress());
+                BluetoothGatt bluetoothGatt = device.connectGatt(context, true, bluetoothGattCallback);
+                Log.d(LogName, "GATT=" + bluetoothGatt.toString());
+                return address;
+            } catch (IllegalArgumentException exception) {
+                Log.w(LogName, "GattError-Refused");
+            } catch (SecurityException exception) {
+                Log.w(LogName, "GattError-Refused");
+            }
+
+        Log.d(LogName, "connectGatt done. No valid addres found");
+        return null;
     }
 
     public ScanCallback leScanCallBack = new ScanCallback() {

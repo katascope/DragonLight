@@ -8,7 +8,7 @@
     tools:context=".FirstFragment">
 
     <LinearLayout
-        android:layout_width="117dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -17,12 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum" />
-
-        <Button
-            android:id="@+id/button_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&quot;Next&quot;" />
 
         <Button
             android:id="@+id/button_connect"
@@ -46,13 +40,13 @@
             android:id="@+id/button_speedSlower"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Slower" />
+            android:text="More" />
 
         <Button
             android:id="@+id/button_speedMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Faster" />
+            android:text="Less" />
 
         <Button
             android:id="@+id/button_speedReset"
@@ -102,78 +96,156 @@
             android:layout_height="wrap_content"
             android:text="Ch 7" />
 
+        <Button
+            android:id="@+id/button_exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exit" />
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="115dp"
+        android:layout_width="87dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/button_preset0"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Black" />
+            android:text="0" />
 
         <Button
             android:id="@+id/button_preset1"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset1" />
+            android:text="1" />
 
         <Button
             android:id="@+id/button_preset2"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset2" />
+            android:text="2" />
 
         <Button
             android:id="@+id/button_preset3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset3" />
+            android:text="3" />
 
         <Button
             android:id="@+id/button_preset4"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset4" />
+            android:text="4" />
 
         <Button
             android:id="@+id/button_preset5"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset5" />
+            android:text="5" />
 
         <Button
             android:id="@+id/button_preset6"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Preset6" />
+            android:text="6" />
 
         <Button
             android:id="@+id/button_brightHalf"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BrHalf" />
+            android:text="Half" />
 
         <Button
             android:id="@+id/button_brightNorm"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BrNorm" />
+            android:text="Max" />
 
         <Button
             android:id="@+id/button_brightMax"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BrMax" />
+            android:text="Max" />
 
         <Button
             android:id="@+id/button_sidefx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FX" />
+
+        <Button
+            android:id="@+id/button_sound"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SideFX" />
+            android:text="SND" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_paletteLAVA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lava" />
+
+        <Button
+            android:id="@+id/button_paletteCLOUD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cloud" />
+
+        <Button
+            android:id="@+id/button_paletteOCEAN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ocean" />
+
+        <Button
+            android:id="@+id/button_paletteFOREST"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forest" />
+
+        <Button
+            android:id="@+id/button_paletteRAINBOW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RGB" />
+
+        <Button
+            android:id="@+id/button_paletteRAINBOWSTRIPE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RGB2" />
+
+        <Button
+            android:id="@+id/button_palettePARTY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Party" />
+
+        <Button
+            android:id="@+id/button_paletteHEAT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Heat" />
+
+        <Button
+            android:id="@+id/button_paletteSEAHAWKS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hawks" />
+
+        <Button
+            android:id="@+id/button_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next" />
     </LinearLayout>
 
     <LinearLayout
@@ -182,16 +254,16 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/button_paletteCBM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CBM" />
+
+        <Button
             android:id="@+id/button_paletteRBM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="RBM" />
-
-        <Button
-            android:id="@+id/button_paletteRGB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="RGB" />
 
         <Button
             android:id="@+id/button_paletteCMY"
@@ -200,65 +272,22 @@
             android:text="CMY" />
 
         <Button
-            android:id="@+id/button_paletteCBM"
+            android:id="@+id/button_paletteCM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CBM" />
+            android:text="CM" />
 
         <Button
-            android:id="@+id/button_paletteLAVA"
+            android:id="@+id/button_paletteRB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lava" />
+            android:text="RB" />
 
         <Button
-            android:id="@+id/button_paletteCLOUD"
+            android:id="@+id/button_paletteWYM"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cloud" />
-
-        <Button
-            android:id="@+id/button_paletteOCEAN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ocean" />
-
-        <Button
-            android:id="@+id/button_paletteFOREST"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Forest" />
-
-        <Button
-            android:id="@+id/button_paletteRAINBOW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rainbow" />
-
-        <Button
-            android:id="@+id/button_paletteRAINBOWSTRIPE"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Rainbow2" />
-
-        <Button
-            android:id="@+id/button_palettePARTY"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Party" />
-
-        <Button
-            android:id="@+id/button_paletteHEAT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Heat" />
-
-        <Button
-            android:id="@+id/button_paletteSEAHAWKS"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Seahawks" />
-
+            android:text="WYM" />
     </LinearLayout>
 
 </LinearLayout>
