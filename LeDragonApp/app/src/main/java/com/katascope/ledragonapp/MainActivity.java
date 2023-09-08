@@ -72,10 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private AudioInput audioInput = null;
-    private BluetoothLeService bleService = null;
-
-//    private BluetoothLeScanner bluetoothLeScanner = null;
-    private BluetoothLeScan bluetoothLeScanner = null;
+    //private BluetoothLeService bleService = null;
+    //private BluetoothLeScan bluetoothLeScanner = null;
 
     private String arduinoUuid = "21:98:D3:0E:A0:40";
 
@@ -115,8 +113,9 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 10);
         } else {
             Log.d(LogName, "Have permission BLUETOOTH_CONNECT");
+        }
             //boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
-            bleService = new BluetoothLeService();
+            /*bleService = new BluetoothLeService();
             boolean result = bleService.initialize(this, this);
             if (result == true) {
                 Log.d(LogName, "Connected to BLE");
@@ -146,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothLeScanner.initialize(this,this,bleService.getBluetoothAdapter());
                     bluetoothLeScanner.scanLeDevice();
                 }
-            } else Log.d(LogName, "NO connection to BLE");
-        }
+            } else Log.d(LogName, "NO connection to BLE");*/
+
 
 
         Button buttonGatt = (Button)findViewById(R.id.button_gatt);
@@ -155,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 //bleService.scanLeDevice(true);
-                GattConnect();
+                //GattConnect();
             }
         });
 
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                BLEConnect();
+                //BLEConnect();
             }
         });
 
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             if (arduinoDevice == null) {
                                 Log.d(LogName, "Searching for " + arduinoUuid);
-                                arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
+                                //arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
                                 if (arduinoDevice != null)
                                     Log.d(LogName, "FOUND " + arduinoUuid);
                             }
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         };
         new Thread(runnable).start();
     }
-
+/*
     private void BLEConnect()
     {
         Log.d(LogName, "Starting BLE Service");
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             } else Log.d(LogName, "NO GATT connection to BLE");
         }
     }
-
+*/
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                      @NonNull int[] grantResults) {
         Log.d(LogName, "onRequestPermissionsResult");

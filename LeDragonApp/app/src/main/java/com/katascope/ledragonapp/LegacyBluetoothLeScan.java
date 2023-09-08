@@ -5,15 +5,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.Manifest.permission;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-
-public class BluetoothLeScan {
+public class LegacyBluetoothLeScan {
 
     private String LogName = "SELF";
     private BluetoothLeScanner bluetoothLeScanner = null;
@@ -30,8 +26,8 @@ public class BluetoothLeScan {
         Log.d(LogName, "BluetoothLeScan initialized");
     }
 
-    private LeDeviceListAdapter leDeviceListAdapter = new LeDeviceListAdapter();
-    public LeDeviceListAdapter GetDeviceListAdapter()
+    private LegacyLeDeviceListAdapter leDeviceListAdapter = new LegacyLeDeviceListAdapter();
+    public LegacyLeDeviceListAdapter GetDeviceListAdapter()
     {
         return leDeviceListAdapter;
     }

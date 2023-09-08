@@ -1,16 +1,15 @@
 package com.katascope.ledragonapp;
 
 import android.bluetooth.BluetoothDevice;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 
 // Adapter for holding devices found through scanning.
-class LeDeviceListAdapter  {
+class LegacyLeDeviceListAdapter {
     private ArrayList<BluetoothDevice> mLeDevices;
     private LayoutInflater mInflator;
-    public LeDeviceListAdapter() {
+    public LegacyLeDeviceListAdapter() {
         super();
         mLeDevices = new ArrayList<BluetoothDevice>();
         //mInflator = DeviceScanActivity.this.getLayoutInflater();
