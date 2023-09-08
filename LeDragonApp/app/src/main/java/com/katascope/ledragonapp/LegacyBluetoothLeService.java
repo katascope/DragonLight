@@ -1,46 +1,38 @@
 package com.katascope.ledragonapp;
 
 import android.app.Activity;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 
-import java.util.UUID;
+import java.util.List;
 
-
-public class BluetoothLeService {
-    private UUID mainServiceUuid      = UUID.fromString("02FE4875-5056-48B5-AD15-36E30665D9B4");
-    private UUID mainCommandUuid      = UUID.fromString("220154BF-1DCE-4F03-85F0-7BA905D2D6B0");
-    private UUID mainAuthenticateUuid = UUID.fromString("4C75BB42-5365-458D-A3EA-2B91339646B7");
-    private UUID mainPlayUuid         = UUID.fromString("3B140EF5-0A72-4891-AD38-83B5A2595622");
-    private UUID mainStatusUuid       = UUID.fromString("D01C9106-91BD-4998-9554-85264D33ACB2");
-    private UUID mainVolumeUuid       = UUID.fromString("04E92E16-47AF-11EE-BE56-0242AC120002");
-    private UUID mainPaletteUuid      = UUID.fromString("7a0cca4f-9124-4831-923c-6ffdd6042ff2");
-    private UUID mainToggleUuid       = UUID.fromString("FBDD5000-4B48-4A1A-9E40-98E84FD69245");
-    private UUID mainToggleOnUuid     = UUID.fromString("9677B246-7355-4130-A770-769CD4732677");
-    private UUID mainToggleOffUuid    = UUID.fromString("CB9B8B39-96A8-498D-8420-4C9FC558894D");
-    private UUID mainExciteUuid       = UUID.fromString("5549a237-ede8-4b5e-abb0-b233cebe0e52");
-    private UUID mainResetUuid        = UUID.fromString("a8907f1f-09ea-4caf-8f73-3acfad5ace43");
-    private UUID mainFxPresetUuid     = UUID.fromString("b47cb504-39df-489f-9bfa-2434082f6285");
-
+public class LegacyBluetoothLeService extends Service{
     private String LogName = "SELF";
     public static final String TAG = "BluetoothLeService";
+
+    private final IBinder mBinder = new LocalBinder();
 
     private boolean scanning;
     private Handler handler;
     private BluetoothAdapter bluetoothAdapter;
     private static final long SCAN_PERIOD = 10000;
 
+    private BluetoothGatt mBluetoothGatt;
     public BluetoothAdapter getBluetoothAdapter()
     {
         return bluetoothAdapter;
@@ -55,6 +47,31 @@ public class BluetoothLeService {
         return true;
     }
 
+    public class LocalBinder extends Binder {
+        LegacyBluetoothLeService getService() {
+            return LegacyBluetoothLeService.this;
+        }
+    }
+
+    @Override public IBinder onBind(Intent intent)
+    {
+        return mBinder;
+    }
+
+    @Override public boolean onUnbind(Intent intent)
+    {
+        close();
+        return super.onUnbind((intent));
+    }
+
+    public void close()
+    {
+        if (mBluetoothGatt == null) {
+            return;
+        }
+        mBluetoothGatt.close();
+        mBluetoothGatt = null;
+    }
     private final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -62,9 +79,8 @@ public class BluetoothLeService {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 // successfully connected to the GATT Server
                 Log.w(LogName, "GattServerConnect");
+                mBluetoothGatt = gatt;
                 Log.d(LogName, "GATT=" + gatt.getServices());
-                gatt.discoverServices();
-                Log.d(LogName, "GATT Discovering services");
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 // disconnected from the GATT Server
@@ -81,25 +97,6 @@ public class BluetoothLeService {
                 //broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                 Log.w(LogName, "onServicesDiscovered success: " + status);
                 Log.d(LogName, "onServicesDiscovered=" + gatt.getServices());
-                //BluetoothGattCharacteristic characteristic = null;
-                for (BluetoothGattService service : gatt.getServices())
-                {
-                    Log.d(LogName, "GattService: " +service.getUuid());
-                    for (BluetoothGattCharacteristic characteristic : service.getCharacteristics())
-                    {
-                        Log.d(LogName, "GattServiceCharacteristic: " +characteristic.getUuid());
-                    }
-                }
-
-                BluetoothGattCharacteristic characteristicFxPreset =
-                        gatt.getService(mainServiceUuid).getCharacteristic(mainFxPresetUuid);
-                if (characteristicFxPreset != null)
-                    Log.d(LogName, "Found FX Preset : "
-                            + characteristicFxPreset.getUuid().toString()
-                            + ", " + characteristicFxPreset.toString());
-
-                characteristicFxPreset.setValue(1, BluetoothGattCharacteristic.FORMAT_UINT8,0);
-                gatt.writeCharacteristic(characteristicFxPreset);
 
             }
             else { Log.w(LogName, "onServicesDiscovered received: " + status); }
@@ -121,13 +118,26 @@ public class BluetoothLeService {
         return true;
     }
 
+    public boolean discoverGatt(Context context, final String address) {
+        Log.d(LogName, "GATT Discovery..");
+        final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
+        Log.d(LogName, "GATT Discovery Device=" + device.getAddress());
+        BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
+        Log.d(LogName, "GATT Discovery Discovering " + bluetoothGatt);
+        //bluetoothGatt.discoverServices();
+        //Log.d(LogName, "GATT Discovery Done");
+        return false;
+    }
+
     public boolean connectGatt(Context context, final String address) {
         Log.d(LogName, "GATT connecting..");
         try {
             final BluetoothDevice device = bluetoothAdapter.getRemoteDevice(address);
             Log.d(LogName, "GATT Device=" + device.getAddress());
-            BluetoothGatt bluetoothGatt = device.connectGatt(context, true, bluetoothGattCallback);
+            BluetoothGatt bluetoothGatt = device.connectGatt(context, false, bluetoothGattCallback);
             Log.d(LogName, "GATT=" + bluetoothGatt.toString());
+            bluetoothGatt.discoverServices();
+            Log.d(LogName, "GATT Discovering services");
             return true;
         } catch (IllegalArgumentException exception) {
             Log.w(LogName, "GattError-Refused");
@@ -155,18 +165,18 @@ public class BluetoothLeService {
                 @Override
                 public void run() {
                     scanning = false;
-                    Log.d(LogName, "scanLeDevice Scanning Run");
+                    Log.d(LogName, "GATT Scanning Run");
                     bluetoothAdapter.stopLeScan(mLeScanCallback);
                     //invalidateOptionsMenu();
                 }
             }, SCAN_PERIOD);
 
             scanning = true;
-            Log.d(LogName, "scanLeDevice Scanning Start");
+            Log.d(LogName, "GATT Scanning Start");
             bluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
             scanning = false;
-            Log.d(LogName, "scanLeDevice Scanning Stop");
+            Log.d(LogName, "GATT Scanning Stop");
             bluetoothAdapter.stopLeScan(mLeScanCallback);
         }
     }
@@ -184,7 +194,57 @@ public class BluetoothLeService {
                             mLeDeviceListAdapter.notifyDataSetChanged();
                         }
                     });*/
-                    Log.d(LogName, "scanLeDevice Result " + device);
+                    Log.d(LogName, "GATT Result " + device);
                 }
             };
+
+    /**
+     * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
+     * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
+     * callback.
+     *
+     * @param characteristic The characteristic to read from.
+     */
+    public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (bluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.readCharacteristic(characteristic);
+    }
+
+    /**
+     * Enables or disables notification on a give characteristic.
+     *
+     * @param characteristic Characteristic to act on.
+     * @param enabled If true, enable notification.  False otherwise.
+     */
+    public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
+                                              boolean enabled) {
+        if (bluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+/*
+        // This is specific to Heart Rate Measurement.
+        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGatt.writeDescriptor(descriptor);
+        }*/
+    }
+
+    /**
+     * Retrieves a list of supported GATT services on the connected device. This should be
+     * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
+     *
+     * @return A {@code List} of supported services.
+     */
+    public List<BluetoothGattService> getSupportedGattServices() {
+        if (mBluetoothGatt == null) return null;
+
+        return mBluetoothGatt.getServices();
+    }
 }
