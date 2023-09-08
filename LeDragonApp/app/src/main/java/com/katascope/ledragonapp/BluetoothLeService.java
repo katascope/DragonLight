@@ -46,6 +46,7 @@ public class BluetoothLeService {
     private BluetoothGattCharacteristic characteristicVolume = null;
     private BluetoothGattCharacteristic characteristicPalette = null;
     private BluetoothGattCharacteristic characteristicToggle = null;
+    private BluetoothGattCharacteristic characteristicAuth = null;
 
 
     public BluetoothAdapter getBluetoothAdapter()
@@ -104,6 +105,14 @@ public class BluetoothLeService {
         }
     }
 
+    public void writeAuth(int auth)
+    {
+        if (savedGatt != null) {
+            Log.d(LogName, "writeAuih=" + auth);
+            characteristicAuth.setValue(auth, BluetoothGattCharacteristic.FORMAT_UINT32, 0);
+            savedGatt.writeCharacteristic(characteristicAuth);
+        }
+    }
     public void writeCommand(int volume)
     {
         if (savedGatt != null) {
@@ -174,6 +183,15 @@ public class BluetoothLeService {
                         gatt.getService(mainServiceUuid).getCharacteristic(mainCommandUuid);
                 if (characteristicCommand != null)
                     Log.d(LogName, "Found characteristicCommand");
+
+                characteristicAuth =
+                        gatt.getService(mainServiceUuid).getCharacteristic(mainAuthenticateUuid);
+                if (characteristicAuth != null) {
+                    Log.d(LogName, "Found characteristicAuth");
+                    writeAuth(3838);
+                    Log.d(LogName, "Wrote initial characteristicAuth");
+                }
+
 
                 foundCharacteristics = true;
 
