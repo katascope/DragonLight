@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using InTheHand.Net.Sockets;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Threading.Channels;
 
 namespace KataTracks
 {
@@ -410,6 +412,10 @@ namespace KataTracks
             discoverBleThread.Start();
         }
 
+        private void BleAuthButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeviceManagerBLE.Auth(3838);
+        }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {

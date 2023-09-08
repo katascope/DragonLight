@@ -57,7 +57,7 @@
             Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="612" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
         <TextBox x:Name="Log4" 
             Canvas.Top="720" Text="Not connected." TextWrapping="Wrap" Width="200" Height="36" Background="Black" Foreground="#FF59ABF0" Canvas.Left="816" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="#FF1668A7" FontSize="14"/>
-        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="Search" Height="20 " Width="78" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="48" BorderBrush="#FF120351" Canvas.Top="756" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="BleSearchButton" Click="BleSearchButton_Click"  Content="Search" Height="20 " Width="38" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="102" BorderBrush="#FF120351" Canvas.Top="756" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <ProgressBar x:Name="InputVolumeIndicator" Height="31" Canvas.Left="496" Canvas.Top="19" Width="288" Foreground="#FF01457E" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF151515"/>
         <Slider x:Name="InputVolumeTriggerSlider" Canvas.Left="496" Canvas.Top="49" Width="288" Maximum="100" Value="50" ValueChanged="InputVolumeTriggerSlider_ValueChanged" Height="36" TickPlacement="TopLeft" TickFrequency="5" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.104">
             <Slider.LayoutTransform>
@@ -197,5 +197,6 @@
         <Button Click="SendBoth" Tag="k" Content="-CMY-" FontSize="24" Canvas.Left="444" Canvas.Top="479" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="148" Height="48" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendBoth" Tag="l" Content="-RainbowUSA-" FontSize="24" Canvas.Left="444" Canvas.Top="537" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="148" Height="48" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Click="SendPal" Tag="209" Content="Seahawks" Canvas.Left="895" Canvas.Top="642" Background="#FF012461" Foreground="#FFE0E0E0" BorderBrush="Black" Width="54" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="BleAuthButton" Click="BleAuthButton_Click"  Content="Search" Height="20 " Width="38" Background="#FF012461" Foreground="#FF00807D" Canvas.Left="45" BorderBrush="#FF120351" Canvas.Top="755" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Canvas>
 </Window>

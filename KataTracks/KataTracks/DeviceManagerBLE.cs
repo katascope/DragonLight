@@ -198,6 +198,7 @@ namespace KataTracks
                         string message = "";
                         if (bleDevices[id].serviceCache.ContainsKey(mainServiceUuid))
                         {
+                            Auth(3838);
                             GattCharacteristic gattCharacteristicCommand = bleDevices[id].serviceCache[mainServiceUuid].characteristics[mainCommandUuid].gattCharacteristic;
                             bleDevices[id].sendQueue.TryDequeue(out message);
                             byte[] bytesCommand = Encoding.ASCII.GetBytes(message + "\r\n");
@@ -531,7 +532,7 @@ namespace KataTracks
                 }
             }
         }
-
+        
         public static async void Reset(ulong tc)
         {
             foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
@@ -546,6 +547,35 @@ namespace KataTracks
                             GattCharacteristic gattCharacteristicCommand = bd.serviceCache[mainServiceUuid].characteristics[mainResetUuid].gattCharacteristic;
                             byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
                             await gattCharacteristicCommand.WriteValueWithResponseAsync(bytesPlayTimecode);
+                        }
+                        else
+                        {
+                            QueryGATT(bd.bluetoothDevice.Id);
+                            bd.log = " waiting";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error unexpected! Ex[" + ex.Message + "]");
+                    }
+                }
+            }
+        }
+
+        public static async void Auth(ulong tc)
+        {
+            foreach (KeyValuePair<string, BleDevice> kvp in bleDevices)
+            {
+                BleDevice bd = kvp.Value;
+                if (bd != null && bd.bluetoothDevice != null && bd.bluetoothDevice.Gatt != null)
+                {
+                    try
+                    {
+                        if (bd.serviceCache.Count > 0)
+                        {
+                            GattCharacteristic gattCharacteristicAuth = bd.serviceCache[mainServiceUuid].characteristics[mainAuthenticateUuid].gattCharacteristic;
+                            byte[] bytesPlayTimecode = BitConverter.GetBytes(tc);
+                            await gattCharacteristicAuth.WriteValueWithResponseAsync(bytesPlayTimecode);
                         }
                         else
                         {
