@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private String LogName = "SELF";
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
-    //    private SoundMeter soundMeter;
-    private MediaRecorder mRecorder = null;
+
+    private AudioInput audioInput = null;
     private BluetoothLeService bleService = null;
 
 //    private BluetoothLeScanner bluetoothLeScanner = null;
@@ -106,15 +106,8 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         activity = this;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.d(LogName, "Requesting permission RECORD_AUDIO");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 10);
-        }
-        else {
-            Log.d(LogName, "Have permission RECORD_AUDIO");
-            microphoneStart();
-        }
+        audioInput = new AudioInput();
+        audioInput.initialize(LogName, this,this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -205,21 +198,14 @@ public class MainActivity extends AppCompatActivity {
                                 ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.GREEN);
                                 ((Button)findViewById(R.id.button_connect)).setText("Online");
                             }
-                            UpdateSoundLabel();
+                            TextView textSound = (TextView)findViewById(R.id.textview_sound);
+                            textSound.setText("Snd="+audioInput.getAmplitude());
                         }
                     });
                 }
             }
         };
         new Thread(runnable).start();
-    }
-
-
-
-    private void UpdateSoundLabel()
-    {
-        TextView textSound = (TextView)findViewById(R.id.textview_sound);
-        textSound.setText("Snd="+getAmplitude());
     }
 
     private void BLEConnect()
@@ -248,45 +234,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void microphoneStart()
-    {
-        if (mRecorder == null) {
-            Log.d(LogName, "Recording1");
-            mRecorder = new MediaRecorder(this);
-            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mRecorder.setOutputFile(getExternalCacheDir().getAbsolutePath()+"/temp.3gp");
-
-            Log.d(LogName, "Recording2");
-            try {
-                mRecorder.prepare();
-            } catch (IllegalStateException e){
-                e.printStackTrace();
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
-            Log.d(LogName, "Recording3");
-            try {
-                mRecorder.start();
-                Toast.makeText(getBaseContext(), "Sound sensor initiated", Toast.LENGTH_SHORT).show();
-            }
-            catch (IllegalStateException e) {
-                Toast.makeText(getBaseContext(), "Sound sensor FAILED", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
-            Log.d(LogName, "Sound"+getAmplitude());
-        }
-    }
-
-    public double getAmplitude()
-    {
-        if (mRecorder != null)
-            return mRecorder.getMaxAmplitude();
-        else return 0;
-    }
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                                      @NonNull int[] grantResults) {
         Log.d(LogName, "onRequestPermissionsResult");
