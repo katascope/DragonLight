@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private AudioInput audioInput = null;
-    //private BluetoothLeService bleService = null;
-    //private BluetoothLeScan bluetoothLeScanner = null;
+    private BluetoothLeService bleService = null;
+    private BluetoothLeScan bluetoothLeScanner = null;
 
     private String arduinoUuid = "21:98:D3:0E:A0:40";
 
@@ -114,9 +114,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(LogName, "Have permission BLUETOOTH_CONNECT");
         }
-            //boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
-            /*bleService = new BluetoothLeService();
-            boolean result = bleService.initialize(this, this);
+
+        bleService = new BluetoothLeService();
+        boolean result = bleService.initialize(this, this);
+//        boolean result = bleService.connect(this, "21:98:D3:0E:A0:40");
             if (result == true) {
                 Log.d(LogName, "Connected to BLE");
                 ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.YELLOW);
@@ -145,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
                     bluetoothLeScanner.initialize(this,this,bleService.getBluetoothAdapter());
                     bluetoothLeScanner.scanLeDevice();
                 }
-            } else Log.d(LogName, "NO connection to BLE");*/
+            } else Log.d(LogName, "NO connection to BLE");
+
 
 
 
@@ -153,8 +155,7 @@ public class MainActivity extends AppCompatActivity {
         buttonGatt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
             {
-                //bleService.scanLeDevice(true);
-                //GattConnect();
+                bleService.connectGatt(context,arduinoUuid);
             }
         });
 
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             if (arduinoDevice == null) {
                                 Log.d(LogName, "Searching for " + arduinoUuid);
-                                //arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
+                                arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuid);
                                 if (arduinoDevice != null)
                                     Log.d(LogName, "FOUND " + arduinoUuid);
                             }

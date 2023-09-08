@@ -9,7 +9,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-public class LegacyBluetoothLeScan {
+public class BluetoothLeScan {
 
     private String LogName = "SELF";
     private BluetoothLeScanner bluetoothLeScanner = null;
@@ -26,8 +26,8 @@ public class LegacyBluetoothLeScan {
         Log.d(LogName, "BluetoothLeScan initialized");
     }
 
-    private LegacyLeDeviceListAdapter leDeviceListAdapter = new LegacyLeDeviceListAdapter();
-    public LegacyLeDeviceListAdapter GetDeviceListAdapter()
+    private LeDeviceListAdapter leDeviceListAdapter = new LeDeviceListAdapter();
+    public LeDeviceListAdapter GetDeviceListAdapter()
     {
         return leDeviceListAdapter;
     }

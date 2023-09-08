@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import java.util.ArrayList;
 
 // Adapter for holding devices found through scanning.
-class LegacyLeDeviceListAdapter {
+class LeDeviceListAdapter {
     private ArrayList<BluetoothDevice> mLeDevices;
     private LayoutInflater mInflator;
-    public LegacyLeDeviceListAdapter() {
+    public LeDeviceListAdapter() {
         super();
         mLeDevices = new ArrayList<BluetoothDevice>();
         //mInflator = DeviceScanActivity.this.getLayoutInflater();

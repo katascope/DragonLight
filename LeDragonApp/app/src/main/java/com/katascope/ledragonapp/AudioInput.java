@@ -62,7 +62,7 @@ public class AudioInput {
     public double getAmplitude()
     {
         if (mRecorder != null)
-            return mRecorder.getMaxAmplitude();
+            return mRecorder.getMaxAmplitude()/32768.0;
         else return 0;
     }
 }
