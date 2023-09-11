@@ -30,11 +30,11 @@
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
     <string-array name="palette_array">
-        <item name="pal1">DarkRedYellow</item>
-        <item name="pal2">DarkRedGreen</item>
-        <item name="pal3">DarkRedCyan</item>
-        <item name="pal4">DarkRedBlue</item>
-        <item name="pal5">DarkRedMagenta</item>
+        <item>DarkRedYellow</item>
+        <item>DarkRedGreen</item>
+        <item>DarkRedCyan</item>
+        <item>DarkRedBlue</item>
+        <item>DarkRedMagenta</item>
         <item>WhiteRedYellow</item>
         <item>WhiteRedGreen</item>
         <item>WhiteRedCyan</item>
