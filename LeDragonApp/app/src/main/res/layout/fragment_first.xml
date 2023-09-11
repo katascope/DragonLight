@@ -180,66 +180,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SND" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_paletteLAVA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lava" />
-
-        <Button
-            android:id="@+id/button_paletteCLOUD"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cloud" />
-
-        <Button
-            android:id="@+id/button_paletteOCEAN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ocean" />
-
-        <Button
-            android:id="@+id/button_paletteFOREST"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forest" />
-
-        <Button
-            android:id="@+id/button_paletteRAINBOW"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RGB" />
-
-        <Button
-            android:id="@+id/button_paletteRAINBOWSTRIPE"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="RGB2" />
-
-        <Button
-            android:id="@+id/button_palettePARTY"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Party" />
-
-        <Button
-            android:id="@+id/button_paletteHEAT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Heat" />
-
-        <Button
-            android:id="@+id/button_paletteSEAHAWKS"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hawks" />
 
         <Button
             android:id="@+id/button_first"
@@ -253,41 +193,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_paletteCBM"
+        <Spinner
+            android:id="@+id/spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CBM" />
-
-        <Button
-            android:id="@+id/button_paletteRBM"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="RBM" />
-
-        <Button
-            android:id="@+id/button_paletteCMY"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CMY" />
-
-        <Button
-            android:id="@+id/button_paletteCM"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CM" />
-
-        <Button
-            android:id="@+id/button_paletteRB"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="RB" />
-
-        <Button
-            android:id="@+id/button_paletteWYM"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="WYM" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

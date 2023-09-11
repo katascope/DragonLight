@@ -29,4 +29,83 @@
     <string name="menu_disconnect">Disconnect</string>
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
+    <string-array name="palette_array">
+        <item name="pal1">DarkRedYellow</item>
+        <item name="pal2">DarkRedGreen</item>
+        <item name="pal3">DarkRedCyan</item>
+        <item name="pal4">DarkRedBlue</item>
+        <item name="pal5">DarkRedMagenta</item>
+        <item>WhiteRedYellow</item>
+        <item>WhiteRedGreen</item>
+        <item>WhiteRedCyan</item>
+        <item>WhiteRedBlue</item>
+        <item>WhiteRedMagenta</item>
+        <item>DarkYellowGreen</item>
+        <item>DarkYellowCyan</item>
+        <item>DarkYellowBlue</item>
+        <item>DarkYellowMagenta</item>
+        <item>WhiteYellowGreen</item>
+        <item>WhiteYellowCyan</item>
+        <item>WhiteYellowBlue</item>
+        <item>WhiteYellowMagenta</item>
+        <item>DarkGreenCyan</item>
+        <item>DarkGreenBlue</item>
+        <item>DarkGreenMagenta</item>
+        <item>WhiteGreenCyan</item>
+        <item>WhiteGreenBlue</item>
+        <item>WhiteGreenMagenta</item>
+        <item>DarkCyanBlue</item>
+        <item>DarkCyanMagenta</item>
+        <item>WhiteCyanBlue</item>
+        <item>WhiteCyanMagenta</item>
+        <item>DarkBlueMagenta</item>
+        <item>WhiteBlueMagenta</item>
+        <item>RedGreenBlue</item>
+        <item>RedBlueMagenta</item>
+        <item>CyanMagentaYellow</item>
+        <item>CyanBlueMagenta</item>
+        <item>Dark</item>
+        <item>White</item>
+        <item>DarkRed</item>
+        <item>Red</item>
+        <item>RedYellow</item>
+        <item>RedGreen</item>
+        <item>RedCyan</item>
+        <item>RedBlue</item>
+        <item>RedMagenta</item>
+        <item>WhiteRed</item>
+        <item>DarkYellow</item>
+        <item>Yellow</item>
+        <item>YellowGreen</item>
+        <item>YellowCyan</item>
+        <item>YellowBlue</item>
+        <item>YellowMagenta</item>
+        <item>WhiteYellow</item>
+        <item>DarkGreen</item>
+        <item>Green</item>
+        <item>GreenCyan</item>
+        <item>GreenBlue</item>
+        <item>GreenMagenta</item>
+        <item>WhiteGreen</item>
+        <item>DarkCyan</item>
+        <item>Cyan</item>
+        <item>CyanBlue</item>
+        <item>CyanMagenta</item>
+        <item>WhiteCyan</item>
+        <item>DarkBlue</item>
+        <item>Blue</item>
+        <item>BlueMagenta</item>
+        <item>WhiteBlue</item>
+        <item>DarkMagenta</item>
+        <item>WhiteMagenta</item>
+        <item>Lava</item>
+        <item>CLoud</item>
+        <item>Ocean</item>
+        <item>Forest</item>
+        <item>Rainbow</item>
+        <item>RainbowStripe</item>
+        <item>Party</item>
+        <item>Heat</item>
+        <item>Seahawks</item>
+    </string-array>
 </resources>

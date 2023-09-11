@@ -20,6 +20,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
+        android:id="@+id/include"
         layout="@layout/content_main"
         android:layout_height="225dp" />
 

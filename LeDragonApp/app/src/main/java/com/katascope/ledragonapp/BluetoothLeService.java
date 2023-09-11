@@ -87,11 +87,11 @@ public class BluetoothLeService {
         }
     }
 
-    public void writePalette(int volume)
+    public void writePalette(int choice)
     {
         if (savedGatt != null) {
-            Log.d(LogName, "writePalette=" + volume);
-            characteristicPalette.setValue(volume, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            Log.d(LogName, "writePalette=" + choice);
+            characteristicPalette.setValue(choice, BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             savedGatt.writeCharacteristic(characteristicPalette);
         }
     }

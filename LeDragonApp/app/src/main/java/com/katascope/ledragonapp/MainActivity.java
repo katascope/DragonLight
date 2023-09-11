@@ -28,7 +28,10 @@ import com.katascope.ledragonapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import android.Manifest;
@@ -152,12 +155,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) { bleService.writePreset(6); }
         });
 
-        ((Button)findViewById(R.id.button_paletteCM)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(125); } });
-        ((Button)findViewById(R.id.button_paletteRB)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(106); } });
-        ((Button)findViewById(R.id.button_paletteWYM)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(18); } });
+
 
         ((Button)findViewById(R.id.button_sound)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -168,31 +166,6 @@ public class MainActivity extends AppCompatActivity {
                     ((Button)findViewById(R.id.button_sound)).setBackgroundColor(Color.MAGENTA);
                 }
             });
-
-        ((Button)findViewById(R.id.button_paletteRBM)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(150); } });
-        ((Button)findViewById(R.id.button_paletteCMY)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(152); } });
-        ((Button)findViewById(R.id.button_paletteCBM)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(153); } });
-        ((Button)findViewById(R.id.button_paletteLAVA)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(201); } });
-        ((Button)findViewById(R.id.button_paletteCLOUD)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(202); } });
-        ((Button)findViewById(R.id.button_paletteOCEAN)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(203); } });
-        ((Button)findViewById(R.id.button_paletteFOREST)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(204); } });
-        ((Button)findViewById(R.id.button_paletteRAINBOW)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(205); } });
-        ((Button)findViewById(R.id.button_paletteRAINBOWSTRIPE)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(206); } });
-        ((Button)findViewById(R.id.button_palettePARTY)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(207); } });
-        ((Button)findViewById(R.id.button_paletteHEAT)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(208); } });
-        ((Button)findViewById(R.id.button_paletteSEAHAWKS)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { bleService.writePalette(209); } });
 
         ((Button)findViewById(R.id.button_channel1)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writeToggle(1); } });
@@ -245,6 +218,36 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 //BLEConnect();
+            }
+        });
+
+
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.palette_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Spinner spinner = (Spinner)findViewById(R.id.spinner);
+                spinner.setOnItemSelectedListener(this);
+                String choice = spinner.getSelectedItem().toString();
+                Log.d(LogName, "Selected " + choice);
+                switch (choice)
+                {
+                    case "DarkRedYellow":       bleService.writePalette(1); break;
+                    case "DarkRedGreen":        bleService.writePalette(2); break;
+                    case "DarkRedCyan":         bleService.writePalette(3); break;
+                    case "DarkRedBlue":         bleService.writePalette(4); break;
+                    case "DarkRedMagenta":      bleService.writePalette(5); break;
+                    case "WhiteRedYellow":      bleService.writePalette(6); break;
+                    case "WhiteRedGreen":       bleService.writePalette(7); break;
+                    case "WhiteRedCyan":        bleService.writePalette(8); break;
+                    case "WhiteRedBlue":        bleService.writePalette(9); break;
+                    case "WhiteRedMagenta":     bleService.writePalette(10); break;
+                }
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent)
+            {
             }
         });
 
