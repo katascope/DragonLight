@@ -201,6 +201,19 @@ public class MainActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.button_sidefx)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writeCommand(']'); } });
 
+        ((Button)findViewById(R.id.button_select_all)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('o'); } });
+        ((Button)findViewById(R.id.button_head)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('e'); } });
+        ((Button)findViewById(R.id.button_body)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('q'); } });
+        ((Button)findViewById(R.id.button_wings)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('w'); } });
+        ((Button)findViewById(R.id.button_tail)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('r'); } });
+        ((Button)findViewById(R.id.button_select_invert)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeCommand('p'); } });
+
         Button buttonGatt = (Button)findViewById(R.id.button_gatt);
         buttonGatt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
@@ -301,10 +314,10 @@ public class MainActivity extends AppCompatActivity {
                     case "BlueMagenta":    bleService.writePalette(129); break;
                     case "WhiteBlue":    bleService.writePalette(130); break;
                     case "DarkMagenta":    bleService.writePalette(131); break;
-                    case "DarkMagenta":    bleService.writePalette(132); break;
+                    case "Magenta":    bleService.writePalette(132); break;
                     case "WhiteMagenta":    bleService.writePalette(133); break;
                     case "Lava":    bleService.writePalette(201); break;
-                    case "CLoud":    bleService.writePalette(202); break;
+                    case "Cloud":    bleService.writePalette(202); break;
                     case "Ocean":    bleService.writePalette(203); break;
                     case "Forest":    bleService.writePalette(204); break;
                     case "Rainbow":    bleService.writePalette(205); break;
