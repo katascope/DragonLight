@@ -216,9 +216,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonGatt = (Button)findViewById(R.id.button_gatt);
         buttonGatt.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                bleService.connectGatt(context,arduinoUuid);
+            public void onClick(View v) {
+                ((Button)findViewById(R.id.button_gatt)).setBackgroundColor(Color.YELLOW);
+                bleService.connectGatt(context, arduinoUuid);
             }
         });
 
@@ -338,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
    }
 
    BluetoothDevice arduinoDevice = null;
+    int searchCount = 0;
 
     private void startTimerThread()
     {
@@ -358,13 +359,18 @@ public class MainActivity extends AppCompatActivity {
                             if (arduinoDevice == null) {
                                 for (int i=0;i<arduinoUuids.length;i++) {
                                     if (arduinoDevice == null) {
-                                        Log.d(LogName, "Searching for " + arduinoUuids[i]);
+                                        Log.d(LogName, "Searching for " + arduinoUuids[i] + " iteration" + searchCount);
                                         arduinoDevice = bluetoothLeScanner.GetDeviceListAdapter().findDevice(arduinoUuids[i]);
                                         if (arduinoDevice != null)//found it
                                         {
                                             arduinoUuid = arduinoUuids[i];
                                         }
                                     }
+                                }
+                                searchCount++;
+                                if (searchCount > 50)
+                                {
+                                    ((Button)findViewById(R.id.button_connect)).setBackgroundColor(Color.RED);
                                 }
                                 if (arduinoDevice != null)
                                     Log.d(LogName, "FOUND " + arduinoDevice);

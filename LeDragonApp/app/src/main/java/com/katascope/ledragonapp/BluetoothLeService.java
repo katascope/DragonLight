@@ -200,7 +200,7 @@ public class BluetoothLeService {
         }
     };
 
-    public boolean connect(Context context, final String addresses[]) {
+    /*public boolean connect(Context context, final String addresses[]) {
         if (bluetoothAdapter == null) {
             Log.w(LogName, "Bad Bluetooth adapter");
             return false;
@@ -216,7 +216,7 @@ public class BluetoothLeService {
             }
         }
         return false;
-    }
+    }*/
 
     public String connectGatt(Context context, final String address) {
         Log.d(LogName, "GATT connecting..");
@@ -233,7 +233,7 @@ public class BluetoothLeService {
                 Log.w(LogName, "GattError-Refused");
             }
 
-        Log.d(LogName, "connectGatt done. No valid addres found");
+        Log.d(LogName, "connectGatt done. No valid address found");
         return null;
     }
 
