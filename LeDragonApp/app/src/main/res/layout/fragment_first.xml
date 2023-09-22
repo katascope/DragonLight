@@ -8,7 +8,7 @@
     tools:context=".FirstFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="172dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -17,6 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lorem_ipsum" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/button_connect"
@@ -96,84 +101,115 @@
             android:layout_height="wrap_content"
             android:text="Ch 7" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="108dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_preset0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/button_preset1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/button_preset2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/button_preset3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/button_preset4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/button_preset5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/button_preset6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_select_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All" />
+
+        <Button
+            android:id="@+id/button_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Head" />
+
+        <Button
+            android:id="@+id/button_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Body" />
+
+        <Button
+            android:id="@+id/button_wings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wings" />
+
+        <Button
+            android:id="@+id/button_tail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tail" />
+
+        <Button
+            android:id="@+id/button_select_invert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Invert" />
+
+        <Button
+            android:id="@+id/button_brightHalf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Half" />
+
         <Button
             android:id="@+id/button_exit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Exit" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="87dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <Button
-            android:id="@+id/button_preset0"
-            android:layout_width="wrap_content"
+            android:id="@+id/button_first"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0" />
-
-        <Button
-            android:id="@+id/button_preset1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1" />
-
-        <Button
-            android:id="@+id/button_preset2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2" />
-
-        <Button
-            android:id="@+id/button_preset3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3" />
-
-        <Button
-            android:id="@+id/button_preset4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4" />
-
-        <Button
-            android:id="@+id/button_preset5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5" />
-
-        <Button
-            android:id="@+id/button_preset6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6" />
-
-        <Button
-            android:id="@+id/button_brightHalf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Half" />
-
-        <Button
-            android:id="@+id/button_brightNorm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Max" />
-
-        <Button
-            android:id="@+id/button_brightMax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Max" />
-
-        <Button
-            android:id="@+id/button_sidefx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="FX" />
+            android:text="Next" />
 
         <Button
             android:id="@+id/button_sound"
@@ -182,21 +218,22 @@
             android:text="SND" />
 
         <Button
-            android:id="@+id/button_first"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/button_sidefx"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="FX" />
+
+        <Button
+            android:id="@+id/button_brightMax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Max" />
+
+        <Button
+            android:id="@+id/button_brightNorm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Max" />
     </LinearLayout>
 
 </LinearLayout>
