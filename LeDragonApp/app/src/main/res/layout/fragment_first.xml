@@ -45,13 +45,13 @@
             android:id="@+id/button_speedSlower"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="More" />
+            android:text="Slower" />
 
         <Button
             android:id="@+id/button_speedMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Less" />
+            android:text="Faster" />
 
         <Button
             android:id="@+id/button_speedReset"
@@ -63,43 +63,49 @@
             android:id="@+id/button_channel1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 1" />
+            android:text="Ch1 Fill" />
 
         <Button
             android:id="@+id/button_channel2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 2" />
+            android:text="Ch2 SndBar" />
 
         <Button
             android:id="@+id/button_channel3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 3" />
+            android:text="Ch3 SndBrite" />
 
         <Button
             android:id="@+id/button_channel4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 4" />
+            android:text="Ch4 PalScr" />
 
         <Button
             android:id="@+id/button_channel5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 5" />
+            android:text="Ch5 SndPal" />
 
         <Button
             android:id="@+id/button_channel6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 6" />
+            android:text="Ch6 PalMir" />
 
         <Button
             android:id="@+id/button_channel7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ch 7" />
+            android:text="Ch7 Stars" />
+
+        <Button
+            android:id="@+id/button_channel8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ch8 Repeat" />
 
     </LinearLayout>
 
@@ -194,12 +200,6 @@
             android:text="Invert" />
 
         <Button
-            android:id="@+id/button_brightHalf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Half" />
-
-        <Button
             android:id="@+id/button_exit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -224,6 +224,12 @@
             android:text="FX" />
 
         <Button
+            android:id="@+id/button_brightHalf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Half" />
+
+        <Button
             android:id="@+id/button_brightMax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -233,7 +239,7 @@
             android:id="@+id/button_brightNorm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Max" />
+            android:text="Norm" />
     </LinearLayout>
 
 </LinearLayout>

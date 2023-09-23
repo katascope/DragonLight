@@ -181,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) { bleService.writeToggle(6); } });
         ((Button)findViewById(R.id.button_channel7)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writeToggle(7); } });
+        ((Button)findViewById(R.id.button_channel8)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) { bleService.writeToggle(8); } });
 
         ((Button)findViewById(R.id.button_speedKill)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) { bleService.writeCommand('|'); } });
