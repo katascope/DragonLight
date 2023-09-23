@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      1
+#define LAMP      0
 #define TESTER    0
 #define MTESTER   0
 

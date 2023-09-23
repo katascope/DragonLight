@@ -82,8 +82,8 @@ void SimpleUserCommandInput(FxController &fxc, int command)
     case 'O': FxEvent(fxc, fx_strip_inv); break;
     case 'P': FxEvent(fxc, fx_strip_all); break;
 
-    case 'z': break;
-    case 'x': break;
+    case 'z': fxc.fxState = FxState_MultiTestPattern; break;
+    case 'x': fxc.fxState = FxState_SideFX; break;
     case 'c': break;
     case 'v': break;
     case 'b': break;
