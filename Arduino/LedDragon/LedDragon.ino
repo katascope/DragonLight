@@ -53,6 +53,12 @@ void setup() {
   Serial.println(F("No NeoPixel init"));
 #endif
 
+#if LAMP
+    fxController.Toggle(1);
+    fxController.Toggle(4);
+    FxEvent(fxController, fx_palette_dr);
+#endif
+
 #if ENABLE_BLE
   Serial.println(F("BLE init"));
   bleSetup();

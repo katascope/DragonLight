@@ -5,14 +5,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #ifndef CONFIG_DEF
 #define CONFIG_DEF
 
-#define LEDDRAGON 0
+#define LEDDRAGON 1
 #define LEAD      0 //Generally LightSuit*A silver
 #define FOLLOW    0 //Generally LightSuit*B gold
 #define FOXBOT    0
 #define MREE      0
 #define PREE      0
 #define JACKET    0
-#define LAMP      1
+#define LAMP      0
 #define TESTER    0
 #define MTESTER   0
 
@@ -168,6 +168,8 @@ static const char *DeviceName = "UnkDevice";
 #define NUM_LEDS_5          86
 #define NUM_LEDS_6          86
 #define NUM_LEDS_7          86
+#undef ENABLE_BLE
+#define ENABLE_BLE          0
 #undef STARTUP_STATE
 #define STARTUP_STATE       FxState_SideFX
 #undef BRIGHTNESS

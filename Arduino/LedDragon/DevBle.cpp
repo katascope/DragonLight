@@ -133,8 +133,8 @@ void blePoll(FxController &fxc)
         if (soundCharacteristic.written() )
         {
           fxc.vol = (float)soundCharacteristic.value() / (float)255;
-          Serial.print(F("Volume"));
-          Serial.println(fxc.vol);
+          //Serial.print(F("Volume"));
+          //Serial.println(fxc.vol);
         }
         if (paletteCharacteristic.written() )
         {
